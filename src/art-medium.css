@@ -1,0 +1,330 @@
+/* ==========================================================================
+   art-medium — a component library where every component is painted.
+
+   Pick a medium with data-medium="watercolor | acrylic | charcoal" on any
+   element. It applies to that element and everything inside it, so you can
+   theme a whole page from <html> or override a single button.
+
+   Each component paints itself on a ::before layer (filtered through an SVG
+   filter from art-medium.js), so text stays crisp above the paint.
+   ========================================================================== */
+
+/* --- Mediums: tokens only ------------------------------------------------ */
+
+:root,
+[data-medium="watercolor"] {
+  --am-paper: #fbf7ee;
+  --am-paper-texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.45 0 0 0 0 0.4 0 0 0 0 0.3 0 0 0 0.16 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E");
+  --am-ink: #2d2a32;
+
+  --am-pigment-primary: #3f7cba;   /* cerulean */
+  --am-pigment-secondary: #d06a86; /* rose madder */
+  --am-pigment-accent: #e3a33b;    /* gamboge */
+  --am-pigment: var(--am-pigment-primary);
+  --am-on-pigment: var(--am-ink);
+  --am-on-accent: var(--am-ink);
+  --am-fill-core: 58%;
+  --am-fill-edge: 30%;
+
+  --am-surface: #8fb0c9;
+  --am-surface-core: 22%;
+  --am-surface-edge: 12%;
+
+  --am-stroke: 0 solid transparent;
+  --am-stroke-core: 60%;
+  --am-stroke-weight: 7px;
+  --am-texture: none;
+  --am-shadow: none;
+  --am-filter: url(#am-watercolor);
+  --am-filter-stroke: url(#am-watercolor-stroke);
+
+  --am-shape-blob: 48% 52% 46% 54% / 60% 44% 56% 40%;
+  --am-shape-panel: 26px 34px 28px 40px / 32px 24px 38px 26px;
+  --am-hover: scale(1.05) rotate(-0.8deg);
+
+  --am-font-display: "Cormorant Garamond", "Iowan Old Style", Georgia, serif;
+  --am-font-body: "Nunito", "Segoe UI", system-ui, sans-serif;
+}
+
+[data-medium="acrylic"] {
+  --am-paper: #f2ece0;
+  --am-paper-texture:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.3 0 0 0 0 0.25 0 0 0 0 0.2 0 0 0 0.12 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E"),
+    repeating-linear-gradient(0deg, rgb(60 45 30 / 0.05) 0 1px, transparent 1px 4px),
+    repeating-linear-gradient(90deg, rgb(60 45 30 / 0.05) 0 1px, transparent 1px 4px);
+  --am-ink: #1e1b24;
+
+  --am-pigment-primary: #2f5fd0;   /* ultramarine */
+  --am-pigment-secondary: #e2483d; /* cadmium red */
+  --am-pigment-accent: #f2b705;    /* cadmium yellow */
+  --am-pigment: var(--am-pigment-primary);
+  --am-on-pigment: #fffaf0;
+  --am-on-accent: var(--am-ink);
+  --am-fill-core: 100%;
+  --am-fill-edge: 100%;
+
+  --am-surface: #fffaf0;
+  --am-surface-core: 100%;
+  --am-surface-edge: 100%;
+
+  --am-stroke: 0 solid transparent;
+  --am-stroke-core: 100%;
+  --am-stroke-weight: 8px;
+  --am-texture: none;
+  --am-shadow: 3px 4px 0 rgb(30 27 36 / 0.85);
+  --am-filter: url(#am-acrylic);
+  --am-filter-stroke: url(#am-acrylic-stroke);
+
+  --am-shape-blob: 7px 12px 8px 14px;
+  --am-shape-panel: 8px 14px 10px 16px;
+  --am-hover: translate(-2px, -3px) rotate(-0.5deg);
+
+  --am-font-display: "Archivo Black", "Arial Black", Impact, sans-serif;
+  --am-font-body: "Work Sans", "Segoe UI", system-ui, sans-serif;
+}
+
+[data-medium="charcoal"] {
+  --am-paper: #f1efe9;
+  --am-paper-texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.3' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.2 0 0 0 0 0.2 0 0 0 0 0.2 0 0 0 0.2 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E");
+  --am-ink: #262626;
+
+  --am-pigment-primary: #3a3a3a;   /* vine charcoal */
+  --am-pigment-secondary: #9a5a42; /* sanguine conté */
+  --am-pigment-accent: #5b6b78;    /* graphite blue */
+  --am-pigment: var(--am-pigment-primary);
+  --am-on-pigment: var(--am-ink);
+  --am-on-accent: var(--am-ink);
+  --am-fill-core: 16%;
+  --am-fill-edge: 6%;
+
+  --am-surface: #ffffff;
+  --am-surface-core: 55%;
+  --am-surface-edge: 40%;
+
+  --am-stroke: 2.5px solid #2a2a2a;
+  --am-stroke-core: 85%;
+  --am-stroke-weight: 4px;
+  --am-texture: repeating-linear-gradient(-45deg, rgb(38 38 38 / 0.16) 0 1px, transparent 1px 6px);
+  --am-shadow: none;
+  --am-filter: url(#am-charcoal);
+  --am-filter-stroke: url(#am-charcoal);
+
+  --am-shape-blob: 4px 10px 5px 12px / 10px 5px 12px 4px;
+  --am-shape-panel: 4px 12px 6px 14px / 12px 5px 14px 6px;
+  --am-hover: rotate(-1.2deg) scale(1.02);
+
+  --am-font-display: "Caveat", "Comic Sans MS", cursive;
+  --am-font-body: "Kalam", "Comic Sans MS", cursive;
+}
+
+/* --- Canvas (page background) ------------------------------------------- */
+
+.am-canvas {
+  background-color: var(--am-paper);
+  background-image: var(--am-paper-texture);
+  color: var(--am-ink);
+  font-family: var(--am-font-body);
+}
+
+/* --- Shared paint layer -------------------------------------------------- */
+
+:where(.am-button, .am-badge, .am-card, .am-input, .am-nav, .am-modal) {
+  position: relative;
+  isolation: isolate;
+  background: transparent;
+  border: 0;
+  /* What gets painted. Components override these. */
+  --am-paint: var(--am-surface);
+  --am-core: var(--am-surface-core);
+  --am-edge: var(--am-surface-edge);
+  --am-shape: var(--am-shape-panel);
+}
+
+:where(.am-button, .am-badge, .am-card, .am-input, .am-nav, .am-modal)::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  box-sizing: border-box;
+  border-radius: var(--am-shape);
+  border: var(--am-stroke);
+  background:
+    var(--am-texture),
+    radial-gradient(ellipse at 35% 35%,
+      color-mix(in srgb, var(--am-paint) var(--am-core), transparent),
+      color-mix(in srgb, var(--am-paint) var(--am-edge), transparent) 80%);
+  box-shadow: var(--am-shadow);
+  filter: var(--am-filter);
+  transition: transform 0.3s cubic-bezier(.3, 1.4, .5, 1);
+}
+
+/* --- Button -------------------------------------------------------------- */
+
+.am-button {
+  --am-paint: var(--am-pigment);
+  --am-core: var(--am-fill-core);
+  --am-edge: var(--am-fill-edge);
+  --am-shape: var(--am-shape-blob);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.8em 1.7em;
+  color: var(--am-on-pigment);
+  font: 700 1rem/1.2 var(--am-font-body);
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  text-decoration: none;
+}
+.am-button:hover::before { transform: var(--am-hover); }
+.am-button:active::before { transform: scale(0.97); }
+.am-button:focus-visible { outline: 2px dashed var(--am-ink); outline-offset: 6px; }
+.am-button:disabled { opacity: 0.45; cursor: not-allowed; }
+.am-button:disabled::before { transform: none; }
+
+/* --- Badge --------------------------------------------------------------- */
+
+.am-badge {
+  --am-paint: var(--am-pigment);
+  --am-core: var(--am-fill-core);
+  --am-edge: var(--am-fill-edge);
+  --am-shape: var(--am-shape-blob);
+  display: inline-block;
+  padding: 0.3em 0.9em;
+  color: var(--am-on-pigment);
+  font: 700 0.75rem/1.2 var(--am-font-body);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* --- Card ---------------------------------------------------------------- */
+
+.am-card {
+  display: block;
+  padding: 1.6rem 1.8rem;
+  color: var(--am-ink);
+}
+.am-card__title {
+  margin: 0 0 0.5rem;
+  font: 400 1.6rem/1.15 var(--am-font-display);
+}
+
+/* --- Input --------------------------------------------------------------- */
+
+.am-field { display: grid; gap: 0.4rem; }
+.am-field__label { font: 700 0.85rem/1.2 var(--am-font-body); color: var(--am-ink); }
+
+.am-input { display: flex; }
+.am-input > input,
+.am-input > textarea {
+  flex: 1;
+  min-width: 0;
+  padding: 0.75em 1em;
+  border: 0;
+  background: transparent;
+  color: var(--am-ink);
+  font: 1rem/1.4 var(--am-font-body);
+  outline: none;
+}
+.am-input > input::placeholder,
+.am-input > textarea::placeholder { color: color-mix(in srgb, var(--am-ink) 50%, transparent); }
+
+/* A pigment stroke that gets "painted in" on focus. */
+.am-input::after {
+  content: "";
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  bottom: -2px;
+  height: calc(var(--am-stroke-weight) * 0.6);
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--am-pigment) var(--am-stroke-core), transparent);
+  filter: var(--am-filter-stroke);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease-out;
+}
+.am-input:focus-within::after { transform: scaleX(1); }
+
+/* --- Divider ------------------------------------------------------------- */
+
+.am-divider {
+  height: var(--am-stroke-weight);
+  margin: 2rem 0;
+  border: 0;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--am-pigment) var(--am-stroke-core), transparent);
+  filter: var(--am-filter-stroke);
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+
+/* --- Nav ----------------------------------------------------------------- */
+
+.am-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0.9rem 1.6rem;
+}
+.am-nav__brand {
+  margin-right: auto;
+  color: var(--am-ink);
+  font: 400 1.5rem/1 var(--am-font-display);
+  text-decoration: none;
+}
+.am-nav__links { display: flex; flex-wrap: wrap; gap: 1.2rem; margin: 0; padding: 0; list-style: none; }
+.am-nav__link {
+  position: relative;
+  padding: 0.2em 0;
+  color: var(--am-ink);
+  font-weight: 700;
+  text-decoration: none;
+}
+.am-nav__link::after {
+  content: "";
+  position: absolute;
+  left: -4%;
+  right: -4%;
+  bottom: -0.25em;
+  height: calc(var(--am-stroke-weight) * 0.7);
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--am-pigment) var(--am-stroke-core), transparent);
+  filter: var(--am-filter-stroke);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s ease-out;
+}
+.am-nav__link:hover::after,
+.am-nav__link[aria-current="page"]::after { transform: scaleX(1); }
+
+/* --- Modal (<dialog>) ---------------------------------------------------- */
+
+.am-modal {
+  --am-surface: var(--am-paper);
+  --am-surface-core: 100%;
+  --am-surface-edge: 100%;
+  width: min(32rem, calc(100vw - 2rem));
+  padding: 2rem 2.2rem;
+  overflow: visible;
+  color: var(--am-ink);
+  font-family: var(--am-font-body);
+}
+.am-modal::backdrop {
+  background: rgb(30 25 20 / 0.35);
+  backdrop-filter: blur(2px);
+}
+.am-modal__title { margin: 0 0 0.75rem; font: 400 1.8rem/1.1 var(--am-font-display); }
+.am-modal__actions { display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem; }
+
+/* --- Pigment variants (after mediums so they win on the same element) ---- */
+
+.am--secondary { --am-pigment: var(--am-pigment-secondary); }
+.am--accent { --am-pigment: var(--am-pigment-accent); --am-on-pigment: var(--am-on-accent); }
+
+/* --- Motion -------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  :where(.am-button, .am-badge, .am-card, .am-input, .am-nav, .am-modal)::before,
+  .am-input::after,
+  .am-nav__link::after { transition: none; }
+}

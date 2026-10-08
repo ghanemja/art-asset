@@ -1,0 +1,26 @@
+{
+  "name": "art-medium",
+  "version": "0.1.0",
+  "description": "A UI component library where every component is painted: watercolor, acrylic, charcoal.",
+  "type": "module",
+  "main": "./src/art-medium.js",
+  "exports": {
+    ".": "./src/art-medium.js",
+    "./css": "./src/art-medium.css",
+    "./art-medium.css": "./src/art-medium.css",
+    "./react": "./src/react.js"
+  },
+  "files": ["src"],
+  "sideEffects": ["./src/art-medium.js", "*.css"],
+  "peerDependencies": {
+    "react": ">=17"
+  },
+  "peerDependenciesMeta": {
+    "react": { "optional": true }
+  },
+  "scripts": {
+    "demo": "python3 -m http.server 8080"
+  },
+  "keywords": ["ui", "components", "watercolor", "acrylic", "charcoal", "design-system", "svg-filters"],
+  "license": "MIT"
+}
