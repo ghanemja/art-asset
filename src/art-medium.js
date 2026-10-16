@@ -5,7 +5,13 @@
 export const MEDIUMS = ['watercolor', 'acrylic', 'charcoal', 'paper', 'marker'];
 export const THEMES = ['light', 'dark', 'auto'];
 /** Styles of the acrylic medium. Impasto is the default. */
-export const STYLES = ['impasto', 'impressionist', 'realism'];
+/** Styles per medium. The first one is the default. */
+export const MEDIUM_STYLES = {
+  acrylic: ['impasto', 'impressionist', 'realism'],
+  charcoal: ['newsprint', 'sketchbook', 'kraft'],
+  marker: ['plain', 'notebook', 'parchment'],
+};
+export const STYLES = Object.values(MEDIUM_STYLES).flat();
 
 const FILTERS = `
 <svg id="am-filters" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"
@@ -427,8 +433,9 @@ export function setMedium(el, medium) {
   el.setAttribute('data-medium', medium);
 }
 
-/** Switch the acrylic style for an element and everything inside it. Put it
- *  on the acrylic element itself or an ancestor; other mediums ignore it. */
+/** Switch the style (acrylic: impasto | impressionist | realism, charcoal:
+ *  newsprint | sketchbook | kraft, marker: plain | notebook | parchment) for an
+ *  element and everything inside it. Each medium ignores other mediums' styles. */
 export function setStyle(el, style) {
   if (!STYLES.includes(style)) throw new Error(`Unknown style "${style}". Use one of: ${STYLES.join(', ')}`);
   el.setAttribute('data-style', style);

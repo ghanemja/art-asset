@@ -108,7 +108,26 @@ import { setStyle, STYLES } from 'art-medium';
 setStyle(document.documentElement, 'realism');
 ```
 
-A style only changes acrylic: inside a watercolor, charcoal, paper or marker subtree, `data-style` does nothing. In React, pass `artStyle` (named so it doesn't clash with React's `style`): `<MediumProvider medium="acrylic" artStyle="realism">`.
+A style only changes its own medium: an acrylic style inside a watercolor, charcoal, paper or marker subtree does nothing. In React, pass `artStyle` (named so it doesn't clash with React's `style`): `<MediumProvider medium="acrylic" artStyle="realism">`.
+
+### Paper styles for charcoal and marker
+
+Charcoal and marker take `data-style` too, to pick the paper they're drawn on:
+
+| Medium | Style | Paper |
+| --- | --- | --- |
+| `charcoal` | `newsprint` (default) | Gray newsprint (chalk on slate in dark mode) |
+| | `sketchbook` | Warm cream drawing paper with a fine tooth |
+| | `kraft` | Brown kraft paper with short fibers |
+| `marker` | `plain` (default) | Clean white paper |
+| | `notebook` | Ruled notebook paper with a red margin line |
+| | `parchment` | Warm aged parchment with soft mottling and darker edges |
+
+```html
+<body class="am-canvas" data-medium="marker" data-style="notebook">
+```
+
+`MEDIUM_STYLES` lists the styles for each medium (the first is the default), and `STYLES` is all of them. The paper textures are CSS gradients and small PNGs, so they look the same in every browser.
 
 ### Light and dark
 

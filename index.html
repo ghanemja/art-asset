@@ -18,18 +18,25 @@
     // Restore the visitor's last medium/style/theme before first paint.
     (function () {
       var root = document.documentElement, m, s, t;
-      try { m = localStorage.getItem('am-medium'); s = localStorage.getItem('am-style'); t = localStorage.getItem('am-theme'); } catch (e) {}
+      var styles = window.amStyles = { acrylic: ['impasto', 'impressionist', 'realism'], charcoal: ['newsprint', 'sketchbook', 'kraft'], marker: ['plain', 'notebook', 'parchment'] };
+      try {
+        m = localStorage.getItem('am-medium');
+        s = localStorage.getItem('am-style:' + m) || (m === 'acrylic' ? localStorage.getItem('am-style') : null);
+        t = localStorage.getItem('am-theme');
+      } catch (e) {}
       if (['watercolor', 'acrylic', 'charcoal', 'paper', 'marker'].indexOf(m) > -1) root.setAttribute('data-medium', m);
-      if (['impasto', 'impressionist', 'realism'].indexOf(s) > -1) root.setAttribute('data-style', s);
+      if (styles[m] && styles[m].indexOf(s) > -1) root.setAttribute('data-style', s);
       if (t !== 'light' && t !== 'dark') t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
       root.setAttribute('data-theme', t);
     })();
     // The hero headline's verb follows the page medium (and acrylic style).
     window.amHeadline = function () {
       var verbs = { watercolor: 'painted', impasto: 'brushed', impressionist: 'painted', realism: 'rendered',
-                    charcoal: 'sketched', paper: 'cut out', marker: 'scribbled' };
-      var root = document.documentElement, m = root.getAttribute('data-medium');
-      var key = m === 'acrylic' ? (root.getAttribute('data-style') || 'impasto') : m;
+                    newsprint: 'sketched', sketchbook: 'sketched', kraft: 'sketched', paper: 'cut out',
+                    plain: 'scribbled', notebook: 'doodled', parchment: 'inked' };
+      var root = document.documentElement, m = root.getAttribute('data-medium'), s = root.getAttribute('data-style');
+      var list = window.amStyles[m];
+      var key = list ? (list.indexOf(s) > -1 ? s : list[0]) : m;
       var em = document.querySelector('.hero h1 em');
       if (em && verbs[key]) em.textContent = verbs[key] + '.';
     };
@@ -87,7 +94,10 @@
     .palette .am-button[aria-pressed="true"]::before { transform: var(--am-hover); }
     .palette .am-button[aria-pressed="true"]::after { content: "✓"; }
     .palette__styles { display: grid; gap: .75rem; justify-items: center; margin-top: .5rem; }
-    html:not([data-medium="acrylic"]) .palette__styles { display: none; }
+    .palette__styles[data-for] { display: none; }
+    html[data-medium="acrylic"] .palette__styles[data-for="acrylic"],
+    html[data-medium="charcoal"] .palette__styles[data-for="charcoal"],
+    html[data-medium="marker"] .palette__styles[data-for="marker"] { display: grid; }
     .plate__styles { gap: .4rem; }
     .plate__style { padding: .3em .7em; border: 1px solid color-mix(in srgb, var(--am-ink) 30%, transparent); border-radius: 999px;
                     background: transparent; color: inherit; font: 700 .75rem/1.2 var(--am-font-body); letter-spacing: .04em; cursor: pointer; }
@@ -179,12 +189,28 @@
           <button class="am-button" data-medium="paper" data-set="paper" aria-pressed="false">Paper</button>
           <button class="am-button am--accent" data-medium="marker" data-set="marker" aria-pressed="false">Marker</button>
         </div>
-        <div class="palette__styles">
+        <div class="palette__styles" data-for="acrylic">
           <span class="palette__label">Acrylic style</span>
           <div class="row" role="group" aria-label="Acrylic style">
             <button class="am-button" data-medium="acrylic" data-style="impasto" data-set-style="impasto" aria-pressed="false">Impasto</button>
             <button class="am-button am--secondary" data-medium="acrylic" data-style="impressionist" data-set-style="impressionist" aria-pressed="false">Impressionist</button>
             <button class="am-button am--accent" data-medium="acrylic" data-style="realism" data-set-style="realism" aria-pressed="false">Realism</button>
+          </div>
+        </div>
+        <div class="palette__styles" data-for="charcoal">
+          <span class="palette__label">Charcoal paper</span>
+          <div class="row" role="group" aria-label="Charcoal paper">
+            <button class="am-button" data-medium="charcoal" data-set-style="newsprint" aria-pressed="false">Newsprint</button>
+            <button class="am-button am--secondary" data-medium="charcoal" data-set-style="sketchbook" aria-pressed="false">Sketchbook</button>
+            <button class="am-button am--accent" data-medium="charcoal" data-set-style="kraft" aria-pressed="false">Kraft</button>
+          </div>
+        </div>
+        <div class="palette__styles" data-for="marker">
+          <span class="palette__label">Marker paper</span>
+          <div class="row" role="group" aria-label="Marker paper">
+            <button class="am-button" data-medium="marker" data-set-style="plain" aria-pressed="false">Plain</button>
+            <button class="am-button am--secondary" data-medium="marker" data-set-style="notebook" aria-pressed="false">Notebook</button>
+            <button class="am-button am--accent" data-medium="marker" data-set-style="parchment" aria-pressed="false">Parchment</button>
           </div>
         </div>
       </div>
@@ -212,15 +238,20 @@
             <button class="plate__style" data-plate-style="realism" aria-pressed="false">Realism</button>
           </div>
           <div class="row"><button class="am-button">Button</button><span class="am-badge am--accent">Badge</span></div>
-          <code id="acrylic-plate-code">data-medium="acrylic" data-style="impasto"</code>
+          <code data-plate-code>data-medium="acrylic" data-style="impasto"</code>
           <div><button class="am-button am--secondary" data-set="acrylic">Paint the page</button></div>
         </article>
-        <article class="plate am-canvas" data-medium="charcoal">
+        <article class="plate am-canvas" data-medium="charcoal" data-style="newsprint">
           <span class="am-splash am--accent" aria-hidden="true"></span>
           <h3>Charcoal</h3>
-          <p>Shaky hand-drawn outlines, gritty broken lines and cross-hatching. In dark mode it turns to chalk on slate.</p>
+          <p>Shaky hand-drawn outlines, gritty broken lines and cross-hatching, on newsprint, a cream sketchbook or brown kraft paper. In dark mode it turns to chalk on slate.</p>
+          <div class="row plate__styles" role="group" aria-label="Charcoal paper for this plate">
+            <button class="plate__style" data-plate-style="newsprint" aria-pressed="true">Newsprint</button>
+            <button class="plate__style" data-plate-style="sketchbook" aria-pressed="false">Sketchbook</button>
+            <button class="plate__style" data-plate-style="kraft" aria-pressed="false">Kraft</button>
+          </div>
           <div class="row"><button class="am-button">Button</button><span class="am-badge am--secondary">Badge</span></div>
-          <code>data-medium="charcoal"</code>
+          <code data-plate-code>data-medium="charcoal" data-style="newsprint"</code>
           <div><button class="am-button" data-set="charcoal">Paint the page</button></div>
         </article>
         <article class="plate am-canvas" data-medium="paper">
@@ -231,12 +262,17 @@
           <code>data-medium="paper"</code>
           <div><button class="am-button am--secondary" data-set="paper">Paint the page</button></div>
         </article>
-        <article class="plate am-canvas" data-medium="marker">
+        <article class="plate am-canvas" data-medium="marker" data-style="plain">
           <span class="am-splash" aria-hidden="true"></span>
           <h3>Marker</h3>
-          <p>A few fat felt-tip strokes in one back-and-forth scribble, with rounded hairpin turns and translucent ink that darkens where it overlaps.</p>
+          <p>A few fat felt-tip strokes in one back-and-forth scribble, with rounded hairpin turns and translucent ink that darkens where it overlaps. On plain paper, a ruled notebook or parchment.</p>
+          <div class="row plate__styles" role="group" aria-label="Marker paper for this plate">
+            <button class="plate__style" data-plate-style="plain" aria-pressed="true">Plain</button>
+            <button class="plate__style" data-plate-style="notebook" aria-pressed="false">Notebook</button>
+            <button class="plate__style" data-plate-style="parchment" aria-pressed="false">Parchment</button>
+          </div>
           <div class="row"><button class="am-button am--accent">Button</button><span class="am-badge am--secondary">Badge</span></div>
-          <code>data-medium="marker"</code>
+          <code data-plate-code>data-medium="marker" data-style="plain"</code>
           <div><button class="am-button" data-set="marker">Paint the page</button></div>
         </article>
       </div>
@@ -489,15 +525,23 @@ import { MediumProvider, Button, Card }
         b.setAttribute('aria-pressed', String(b.dataset.set === root.dataset.medium));
       }
     };
-    // Acrylic style for the whole page
+    // Style for the whole page (acrylic, charcoal and marker each remember their own)
+    const load = (k) => { try { return localStorage.getItem(k); } catch (e) { return null; } };
     const syncStyle = () => {
-      const current = root.dataset.style || 'impasto';
+      const list = window.amStyles[root.dataset.medium] ?? [];
+      const current = list.includes(root.dataset.style) ? root.dataset.style : list[0];
       for (const b of document.querySelectorAll('[data-set-style]')) {
         b.setAttribute('aria-pressed', String(b.dataset.setStyle === current));
       }
       window.amHeadline();
     };
-    const applyStyle = (style) => { setStyle(root, style); save('am-style', style); syncStyle(); };
+    const applyStyle = (style) => { setStyle(root, style); save(`am-style:${root.dataset.medium}`, style); syncStyle(); };
+    const restoreStyle = () => {
+      const list = window.amStyles[root.dataset.medium];
+      const saved = load(`am-style:${root.dataset.medium}`);
+      if (list && list.includes(saved)) root.setAttribute('data-style', saved);
+      else root.removeAttribute('data-style');
+    };
     for (const btn of document.querySelectorAll('[data-set-style]')) {
       btn.addEventListener('click', () => applyStyle(btn.dataset.setStyle));
     }
@@ -506,9 +550,10 @@ import { MediumProvider, Button, Card }
       btn.addEventListener('click', () => {
         setMedium(root, btn.dataset.set);
         save('am-medium', btn.dataset.set);
-        // "Paint the page" on the acrylic plate also takes that plate's style.
+        // "Paint the page" on a plate with a style switcher takes that plate's style.
         const plate = btn.closest('.plate[data-style]');
-        if (plate) applyStyle(plate.dataset.style);
+        if (plate) applyStyle(plate.dataset.style); else restoreStyle();
+        syncStyle();
         syncMedium();
         window.amHeadline();
         if (!btn.closest('.hero')) document.querySelector('.hero').scrollIntoView();
@@ -517,14 +562,15 @@ import { MediumProvider, Button, Card }
     syncMedium();
     syncStyle();
 
-    // Style switcher on the acrylic plate
-    const plate = document.getElementById('acrylic-plate');
-    for (const btn of plate.querySelectorAll('[data-plate-style]')) {
-      btn.addEventListener('click', () => {
-        setStyle(plate, btn.dataset.plateStyle);
-        document.getElementById('acrylic-plate-code').textContent = `data-medium="acrylic" data-style="${btn.dataset.plateStyle}"`;
-        for (const b of plate.querySelectorAll('[data-plate-style]')) b.setAttribute('aria-pressed', String(b === btn));
-      });
+    // Style switchers on the plates
+    for (const plate of document.querySelectorAll('.plate[data-style]')) {
+      for (const btn of plate.querySelectorAll('[data-plate-style]')) {
+        btn.addEventListener('click', () => {
+          setStyle(plate, btn.dataset.plateStyle);
+          plate.querySelector('[data-plate-code]').textContent = `data-medium="${plate.dataset.medium}" data-style="${btn.dataset.plateStyle}"`;
+          for (const b of plate.querySelectorAll('[data-plate-style]')) b.setAttribute('aria-pressed', String(b === btn));
+        });
+      }
     }
 
     // Theme. The "after dark" plates always show the opposite of the page.

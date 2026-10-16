@@ -1,8 +1,9 @@
 // Optional React wrappers. Plain createElement so no build step is needed.
 // Each component accepts `medium` (overrides the surrounding medium: "watercolor"
-// | "acrylic" | "charcoal" | "paper" | "marker"), `artStyle` (the acrylic style:
-// "impasto" | "impressionist" | "realism"; named so it doesn't clash with
-// React's `style`) and,
+// | "acrylic" | "charcoal" | "paper" | "marker"), `artStyle` (acrylic:
+// "impasto" | "impressionist" | "realism"; charcoal: "newsprint" | "sketchbook"
+// | "kraft"; marker: "plain" | "notebook" | "parchment"; named so it doesn't
+// clash with React's `style`) and,
 // where it makes sense, `variant` ("primary" | "secondary" | "accent").
 import { createElement as h, forwardRef, useEffect, useRef } from 'react';
 import { installFilters } from './art-medium.js';
@@ -10,7 +11,7 @@ import { installFilters } from './art-medium.js';
 const cx = (...c) => c.filter(Boolean).join(' ');
 const variantClass = (v) => (v && v !== 'primary' ? `am--${v}` : null);
 
-/** Sets the medium (and optionally artStyle for acrylic, and theme: light | dark | auto) for a subtree and paints the paper background. */
+/** Sets the medium (and optionally artStyle and theme: light | dark | auto) for a subtree and paints the paper background. */
 export function MediumProvider({ medium = 'watercolor', artStyle, theme, as = 'div', canvas = true, className, children, ...rest }) {
   useEffect(() => installFilters(), []);
   return h(as, { 'data-medium': medium, 'data-style': artStyle, 'data-theme': theme, className: cx(canvas && 'am-canvas', className), ...rest }, children);
