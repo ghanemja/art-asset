@@ -121,7 +121,7 @@ Charcoal and marker take `data-style` too, to pick the paper they're drawn on:
 | | `kraft` | Brown kraft paper with short fibers |
 | `marker` | `plain` (default) | Clean white paper |
 | | `notebook` | Ruled notebook paper with a red margin line |
-| | `parchment` | Warm aged parchment with soft mottling and darker edges |
+| | `parchment` | Fibrous aged parchment with scorched edges, inked in lapis, cinnabar and gold ochre with an iron-gall outline |
 
 ```html
 <body class="am-canvas" data-medium="marker" data-style="notebook">

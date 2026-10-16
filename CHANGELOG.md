@@ -7,6 +7,7 @@
 - Acrylic repainted as thick broken-color impasto: short directional dabs of several related tints, lit ridges and gloss, and edges made of staggered stroke ends instead of a flat fill with a streak texture.
 - Acrylic styles with `data-style="impasto | impressionist | realism"` (impasto stays the default): impressionist is flat matte planes in broad strokes over a warm terracotta ground; realism is smooth, softly lit, blended paint in a muted earthy palette with a varnish sheen. `STYLES` and `setStyle()` in the JS module, and an `artStyle` prop on the React wrappers.
 - Paper styles for charcoal (`newsprint` default, `sketchbook`, `kraft`) and marker (`plain` default, `notebook`, `parchment`) with the same `data-style` attribute. `MEDIUM_STYLES` lists each medium's styles.
+- Marker's `parchment` style now has a fine fibrous grain instead of blurry blotches, scorched side edges instead of a whole-page vignette, and its own manuscript inks (lapis, cinnabar, gold ochre, iron-gall outline, ochre highlighter), via new `--am-mkp-ink`, `--am-mkp-pigment-*`, `--am-mkp-surface` and `--am-mkp-outline` values.
 - New tokens: `--am-filter-panel` and `--am-filter-splash` (per-medium filters for panels and splashes), `--am-panel-stroke` (outline for cards, inputs, nav and modals), `--am-label-shadow`.
 - Inputs inside a modal keep their own surface instead of taking the modal's paper color.
 
