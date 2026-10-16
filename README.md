@@ -8,7 +8,7 @@ A UI component library where the components are made of art. Buttons, cards, inp
 | `acrylic` | Thick impasto in short directional dabs of broken color (several tints side by side), lit ridges and gloss, stroke ends for edges, primed canvas weave |
 | `charcoal` | Wobbly hand-drawn outlines, gritty broken lines, cross-hatching, newsprint (chalk on slate in dark mode) |
 | `paper` | Cut and torn construction-paper collage: fibrous torn edges, paper grain, soft layered shadows, washi tape on cards |
-| `marker` | Felt-tip scribbles: diagonal back-and-forth strokes with rounded ends, translucent ink that darkens where strokes cross, streaky nibs |
+| `marker` | Felt-tip scribbles: a few fat strokes in one back-and-forth zig-zag with rounded hairpin turns, translucent ink that darkens where it overlaps, streaky nibs; panels get a wobbly marker outline and a highlighter swipe |
 
 ![art-medium demo](docs/screenshot.png)
 
@@ -133,7 +133,7 @@ import { MediumProvider, Button, Card, Input, Badge, Divider, Nav, Modal, Splash
   - Acrylic drags the paint into short horizontal strokes with band-shaped displacement noise, then splits it into hard-edged dabs using posterized noise masks: some hue-rotated cooler or warmer, some lighter or darker. The dab map becomes a height map for `feDiffuseLighting` and `feSpecularLighting`, so each dab is a lit ridge of paint.
   - Charcoal combines a light wobble with a high-frequency grit mask.
   - Paper tears the shape with displacement noise, puts it on a slightly larger, fibrous, lighter core (the paper's own color, lightened, so it works on any stock), adds lit grain and a soft drop shadow. Cards and modals get a strip of washi tape.
-  - Marker paints diagonal hatching with CSS gradients (two passes at slightly different angles plus a light-pressure pass, multiplied so crossings darken). The filter shifts the hatching along its own stroke direction, which leaves the inside alone but makes every stroke overshoot or stop short of the edge, then rounds the stroke ends with a blur-and-threshold mask.
+  - Marker masks the paint with inline SVG scribbles: fat round-capped strokes in one zig-zag with hairpin turns that poke past the edge (a few variants, so neighbouring buttons differ). Each stroke is drawn at partial opacity, so overlaps and hairpins get denser ink. An SVG filter inside the mask adds wobble, dry grainy edges, lengthwise streaks and a denser rim. Panels draw a wobbly outline at a fixed pixel inset instead of a fill.
 - **Tokens.** Each medium is just CSS custom properties: pigments, fill strength, shapes, stroke, texture, filter and fonts. Components only read tokens, which is why one `data-medium` attribute can restyle anything.
 - **Dark mode.** Color tokens are `light-dark(light, dark)` pairs, and `data-theme` sets `color-scheme`, so one attribute flips every color in a subtree.
 

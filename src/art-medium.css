@@ -46,6 +46,9 @@
   --am-panel-stroke: var(--am-stroke);
   --am-blend: normal;
   --am-label-shadow: none;
+  --am-label-shadow-accent: none;
+  --am-line-mask: initial;
+  --am-underline-mask: initial;
   --am-tape: none;
   --am-if-marker: initial;
   --am-filter: url(#am-watercolor);
@@ -91,6 +94,9 @@
   --am-panel-stroke: var(--am-stroke);
   --am-blend: normal;
   --am-label-shadow: 0 1px 2px rgb(0 0 0 / 0.45);
+  --am-label-shadow-accent: none;
+  --am-line-mask: initial;
+  --am-underline-mask: initial;
   --am-tape: none;
   --am-if-marker: initial;
   --am-filter: url(#am-acrylic);
@@ -134,6 +140,9 @@
   --am-panel-stroke: var(--am-stroke);
   --am-blend: normal;
   --am-label-shadow: none;
+  --am-label-shadow-accent: none;
+  --am-line-mask: initial;
+  --am-underline-mask: initial;
   --am-tape: none;
   --am-if-marker: initial;
   --am-filter: url(#am-charcoal);
@@ -180,6 +189,9 @@
   --am-panel-stroke: var(--am-stroke);
   --am-blend: normal;
   --am-label-shadow: none;
+  --am-label-shadow-accent: none;
+  --am-line-mask: initial;
+  --am-underline-mask: initial;
   --am-tape: "";
   --am-if-marker: initial;
   --am-filter: url(#am-paper);
@@ -196,51 +208,75 @@
   --am-font-body: "Figtree", "Segoe UI", system-ui, sans-serif;
 }
 
-/* Felt-tip markers scribbled on clean paper: diagonal back-and-forth
-   strokes, translucent ink that darkens where strokes cross. In the dark,
-   bright paint markers on black. */
+/* Felt-tip markers scribbled on clean paper: a few fat, translucent strokes
+   in one back-and-forth zig-zag with rounded hairpin turns, darker where
+   they overlap. Panels get a wobbly marker outline and a loose highlighter
+   scribble. In the dark, bright paint markers on black. */
 [data-medium="marker"] {
   --am-paper: light-dark(#fdfdfb, #161619);
   --am-paper-texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0.07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E");
   --am-ink: light-dark(#1f1f24, #f2f2ef);
 
-  --am-pigment-primary: light-dark(#009ddc, #22b4f0);   /* blue */
-  --am-pigment-secondary: light-dark(#e03a3e, #ff5a5e); /* red */
-  --am-pigment-accent: light-dark(#fdb827, #ffc53d);    /* yellow */
+  --am-pigment-primary: light-dark(#009ddc, #1fa8e6);   /* blue */
+  --am-pigment-secondary: light-dark(#e03a3e, #f04c50); /* red */
+  --am-pigment-accent: light-dark(#fdb827, #ffc23a);    /* yellow */
   --am-pigment: var(--am-pigment-primary);
-  --am-on-pigment: #18181c;
-  --am-on-accent: #18181c;
-  --am-fill-core: 84%;
-  --am-fill-edge: 84%;
+  /* Dark labels with a paper halo by day; white labels with an ink halo at night. */
+  --am-on-pigment: light-dark(#18181c, #ffffff);
+  --am-on-accent: light-dark(#18181c, #ffffff);
+  --am-fill-core: 100%;
+  --am-fill-edge: 100%;
 
-  /* Alpha lives in the color so light and dark can differ. */
-  --am-surface: light-dark(rgb(253 184 39 / 0.2), rgb(150 61 151 / 0.3));
+  /* Highlighter behind panels. Alpha lives in the color so light and dark can differ. */
+  --am-surface: light-dark(rgb(253 196 50 / 0.62), rgb(170 80 175 / 0.75));
   --am-surface-core: 100%;
   --am-surface-edge: 100%;
+  --am-marker-outline: light-dark(rgb(31 31 36 / 0.9), rgb(242 242 239 / 0.88));
 
   --am-stroke: 0 solid transparent;
-  --am-stroke-core: 92%;
-  --am-stroke-weight: 8px;
+  --am-stroke-core: 100%;
+  --am-stroke-weight: 16px;
   --am-texture: none;
   --am-shadow: none;
-  --am-panel-stroke: 3px solid light-dark(rgb(31 31 36 / 0.82), rgb(242 242 239 / 0.85));
-  --am-blend: multiply;
-  --am-label-shadow: 0 0 3px light-dark(rgb(255 255 255 / 0.85), transparent), 0 0 1px light-dark(rgb(255 255 255 / 0.9), transparent);
+  /* A band of ink the outline is drawn in (see the panel scribbles). */
+  --am-panel-stroke: 7px solid var(--am-marker-outline);
+  --am-blend: normal;
+  --am-label-shadow: 0 0 3px light-dark(rgb(255 255 255 / 0.95), rgb(0 0 0 / 0.9)), 0 0 1px light-dark(rgb(255 255 255 / 0.95), rgb(0 0 0 / 0.9));
+  --am-label-shadow-accent: var(--am-label-shadow);
+  --am-line-mask: var(--am-scribble-divider);
+  --am-underline-mask: var(--am-scribble-underline);
   --am-tape: none;
   --am-if-marker: ;
   --am-filter: url(#am-marker);
-  --am-filter-splash: var(--am-filter);
-  --am-filter-panel: url(#am-marker-panel);
-  --am-filter-stroke: url(#am-marker-stroke);
+  --am-filter-splash: url(#am-marker-splash);
+  --am-filter-panel: none;
+  --am-filter-stroke: url(#am-marker);
   --am-splash-opacity: 1;
 
-  --am-shape-blob: 40% 46% 38% 50% / 50% 44% 56% 46%;
-  --am-shape-panel: 14px 22px 12px 26px / 20px 12px 24px 14px;
+  --am-shape-blob: 0;
+  --am-shape-panel: 19px;
   --am-hover: rotate(-1.5deg) scale(1.04);
 
   --am-font-display: "Permanent Marker", "Marker Felt", "Comic Sans MS", cursive;
   --am-font-body: "Varela Round", "Segoe UI", system-ui, sans-serif;
 }
+
+/* @scribbles:start (generated) */
+/* Marker scribble masks. Inert unless --am-if-marker is on. Each stroke is
+   drawn at partial opacity, so where strokes overlap or double back at a
+   hairpin, the mask (and so the ink) gets denser. */
+:root {
+  --am-scribble-a: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 -4 200 68' preserveAspectRatio='none'%3E%3Cdefs%3E%3Cfilter id='t' x='-8%25' y='-8%25' width='116%25' height='116%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.03' numOctaves='2' seed='11' result='w'/%3E%3CfeDisplacementMap in='SourceGraphic' in2='w' scale='3' xChannelSelector='R' yChannelSelector='G' result='a'/%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='1' seed='12' result='g'/%3E%3CfeDisplacementMap in='a' in2='g' scale='1.6' xChannelSelector='R' yChannelSelector='G' result='d'/%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.01 0.4' numOctaves='1' seed='13' result='s'/%3E%3CfeColorMatrix in='s' type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1 1.35' result='sa'/%3E%3CfeComposite in='d' in2='sa' operator='in' result='streak'/%3E%3CfeComponentTransfer in='d' result='bin'%3E%3CfeFuncA type='discrete' tableValues='0 1 1 1 1 1 1 1 1 1'/%3E%3C/feComponentTransfer%3E%3CfeMorphology in='bin' operator='erode' radius='1.6' result='core'/%3E%3CfeComposite in='d' in2='core' operator='out' result='rim0'/%3E%3CfeColorMatrix in='rim0' type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.75 0' result='rim'/%3E%3CfeMerge%3E%3CfeMergeNode in='streak'/%3E%3CfeMergeNode in='rim'/%3E%3C/feMerge%3E%3C/filter%3E%3C/defs%3E%3Cg fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round' filter='url(%23t)'%3E%3Cpath d='M26 50 C70 53 128 47 168 39 C186 35 188 23 172 25' stroke-width='20' stroke-opacity='0.6'/%3E%3Cpath d='M172 25 C128 30 72 35 30 34 C12 34 12 20 28 19' stroke-width='20' stroke-opacity='0.6'/%3E%3Cpath d='M28 19 C76 16 122 12 176 6' stroke-width='20' stroke-opacity='0.6'/%3E%3Cpath d='M44 54 C90 55 130 52 158 48' stroke-width='9' stroke-opacity='0.4'/%3E%3C/g%3E%3C/svg%3E");
+  --am-scribble-b: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 -4 200 68' preserveAspectRatio='none'%3E%3Cdefs%3E%3Cfilter id='t' x='-8%25' y='-8%25' width='116%25' height='116%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.03' numOctaves='2' seed='13' result='w'/%3E%3CfeDisplacementMap in='SourceGraphic' in2='w' scale='3' xChannelSelector='R' yChannelSelector='G' result='a'/%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='1' seed='14' result='g'/%3E%3CfeDisplacementMap in='a' in2='g' scale='1.6' xChannelSelector='R' yChannelSelector='G' result='d'/%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.01 0.4' numOctaves='1' seed='15' result='s'/%3E%3CfeColorMatrix in='s' type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1 1.35' result='sa'/%3E%3CfeComposite in='d' in2='sa' operator='in' result='streak'/%3E%3CfeComponentTransfer in='d' result='bin'%3E%3CfeFuncA type='discrete' tableValues='0 1 1 1 1 1 1 1 1 1'/%3E%3C/feComponentTransfer%3E%3CfeMorphology in='bin' operator='erode' radius='1.6' result='core'/%3E%3CfeComposite in='d' in2='core' operator='out' result='rim0'/%3E%3CfeColorMatrix in='rim0' type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.75 0' result='rim'/%3E%3CfeMerge%3E%3CfeMergeNode in='streak'/%3E%3CfeMergeNode in='rim'/%3E%3C/feMerge%3E%3C/filter%3E%3C/defs%3E%3Cg fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round' filter='url(%23t)'%3E%3Cpath d='M176 52 C140 54 80 52 32 45 C14 42 16 29 32 30' stroke-width='20' stroke-opacity='0.6'/%3E%3Cpath d='M32 30 C84 31 134 27 168 22 C186 19 184 7 168 9' stroke-width='20' stroke-opacity='0.6'/%3E%3Cpath d='M168 9 C120 11 70 12 22 10' stroke-width='20' stroke-opacity='0.6'/%3E%3Cpath d='M40 6 C80 4 130 4 160 5' stroke-width='8' stroke-opacity='0.38'/%3E%3C/g%3E%3C/svg%3E");
+  --am-scribble-c: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 -4 200 68' preserveAspectRatio='none'%3E%3Cdefs%3E%3Cfilter id='t' x='-8%25' y='-8%25' width='116%25' height='116%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.03' numOctaves='2' seed='17' result='w'/%3E%3CfeDisplacementMap in='SourceGraphic' in2='w' scale='3' xChannelSelector='R' yChannelSelector='G' result='a'/%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='1' seed='18' result='g'/%3E%3CfeDisplacementMap in='a' in2='g' scale='1.6' xChannelSelector='R' yChannelSelector='G' result='d'/%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.01 0.4' numOctaves='1' seed='19' result='s'/%3E%3CfeColorMatrix in='s' type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1 1.35' result='sa'/%3E%3CfeComposite in='d' in2='sa' operator='in' result='streak'/%3E%3CfeComponentTransfer in='d' result='bin'%3E%3CfeFuncA type='discrete' tableValues='0 1 1 1 1 1 1 1 1 1'/%3E%3C/feComponentTransfer%3E%3CfeMorphology in='bin' operator='erode' radius='1.6' result='core'/%3E%3CfeComposite in='d' in2='core' operator='out' result='rim0'/%3E%3CfeColorMatrix in='rim0' type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.75 0' result='rim'/%3E%3CfeMerge%3E%3CfeMergeNode in='streak'/%3E%3CfeMergeNode in='rim'/%3E%3C/feMerge%3E%3C/filter%3E%3C/defs%3E%3Cg fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round' filter='url(%23t)'%3E%3Cpath d='M18 53 C56 52 118 49 170 44 C188 42 190 30 174 30' stroke-width='20' stroke-opacity='0.6'/%3E%3Cpath d='M174 30 C126 33 70 36 34 36 C16 36 16 23 32 23' stroke-width='18' stroke-opacity='0.6'/%3E%3Cpath d='M32 23 C82 21 136 17 178 11 C192 9 190 0 176 3' stroke-width='19' stroke-opacity='0.6'/%3E%3Cpath d='M176 3 C140 6 96 9 50 12' stroke-width='12' stroke-opacity='0.42'/%3E%3C/g%3E%3C/svg%3E");
+  --am-scribble-splash: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 200 200' preserveAspectRatio='none'%3E%3Cdefs%3E%3Cfilter id='t' x='-8%25' y='-8%25' width='116%25' height='116%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.025' numOctaves='2' seed='21' result='w'/%3E%3CfeDisplacementMap in='SourceGraphic' in2='w' scale='3' xChannelSelector='R' yChannelSelector='G' result='a'/%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='1' seed='22' result='g'/%3E%3CfeDisplacementMap in='a' in2='g' scale='1.6' xChannelSelector='R' yChannelSelector='G' result='d'/%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012 0.4' numOctaves='1' seed='23' result='s'/%3E%3CfeColorMatrix in='s' type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1 1.35' result='sa'/%3E%3CfeComposite in='d' in2='sa' operator='in' result='streak'/%3E%3CfeComponentTransfer in='d' result='bin'%3E%3CfeFuncA type='discrete' tableValues='0 1 1 1 1 1 1 1 1 1'/%3E%3C/feComponentTransfer%3E%3CfeMorphology in='bin' operator='erode' radius='1.6' result='core'/%3E%3CfeComposite in='d' in2='core' operator='out' result='rim0'/%3E%3CfeColorMatrix in='rim0' type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.75 0' result='rim'/%3E%3CfeMerge%3E%3CfeMergeNode in='streak'/%3E%3CfeMergeNode in='rim'/%3E%3C/feMerge%3E%3C/filter%3E%3C/defs%3E%3Cg transform='rotate(-35 100 100)'%3E%3Cg fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round' filter='url(%23t)'%3E%3Cpath d='M63 35 C92 36 122 34 147 35 C161 35 170 52 156 52' stroke-width='21' stroke-opacity='0.6'/%3E%3Cpath d='M156 52 C116 51 76 53 42 52 C28 52 7 68 21 68' stroke-width='19' stroke-opacity='0.6'/%3E%3Cpath d='M21 68 C73 69 124 68 169 68 C183 68 204 87 190 87' stroke-width='21' stroke-opacity='0.6'/%3E%3Cpath d='M190 87 C128 87 66 87 13 87 C-1 87 14 98 28 98' stroke-width='25' stroke-opacity='0.6'/%3E%3Cpath d='M28 98 C79 101 130 95 174 98 C188 98 190 112 176 112' stroke-width='25' stroke-opacity='0.6'/%3E%3Cpath d='M176 112 C123 112 71 111 26 112 C12 112 14 134 28 134' stroke-width='25' stroke-opacity='0.6'/%3E%3Cpath d='M28 134 C79 133 130 136 173 134 C187 134 183 145 169 145' stroke-width='21' stroke-opacity='0.6'/%3E%3Cpath d='M169 145 C122 148 75 142 35 145' stroke-width='21' stroke-opacity='0.6'/%3E%3Cpath d='M62 168 C90 171 120 170 146 165 C156 163 154 156 144 157 C120 161 96 163 74 162' stroke-width='10' stroke-opacity='0.42'/%3E%3C/g%3E%3C/g%3E%3Cg fill='%23000' fill-opacity='0.7'%3E%3Ccircle cx='182' cy='30' r='6'/%3E%3Ccircle cx='24' cy='178' r='7'/%3E%3Ccircle cx='192' cy='150' r='3.5'/%3E%3Ccircle cx='30' cy='26' r='3'/%3E%3C/g%3E%3C/svg%3E");
+  --am-scribble-card: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Cdefs%3E%3Cfilter id='t' x='-8%25' y='-8%25' width='116%25' height='116%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.03' numOctaves='2' seed='31' result='w'/%3E%3CfeDisplacementMap in='SourceGraphic' in2='w' scale='3' xChannelSelector='R' yChannelSelector='G' result='a'/%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='1' seed='32' result='g'/%3E%3CfeDisplacementMap in='a' in2='g' scale='1.6' xChannelSelector='R' yChannelSelector='G' result='d'/%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.01 0.4' numOctaves='1' seed='33' result='s'/%3E%3CfeColorMatrix in='s' type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1 1.35' result='sa'/%3E%3CfeComposite in='d' in2='sa' operator='in' result='streak'/%3E%3CfeComponentTransfer in='d' result='bin'%3E%3CfeFuncA type='discrete' tableValues='0 1 1 1 1 1 1 1 1 1'/%3E%3C/feComponentTransfer%3E%3CfeMorphology in='bin' operator='erode' radius='1.6' result='core'/%3E%3CfeComposite in='d' in2='core' operator='out' result='rim0'/%3E%3CfeColorMatrix in='rim0' type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.75 0' result='rim'/%3E%3CfeMerge%3E%3CfeMergeNode in='streak'/%3E%3CfeMergeNode in='rim'/%3E%3C/feMerge%3E%3C/filter%3E%3Cfilter id='o' x='-8%25' y='-8%25' width='116%25' height='116%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.02' numOctaves='2' seed='41' result='w'/%3E%3CfeDisplacementMap in='SourceGraphic' in2='w' scale='3.2' xChannelSelector='R' yChannelSelector='G' result='a'/%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='1' seed='42' result='g'/%3E%3CfeDisplacementMap in='a' in2='g' scale='1.2' xChannelSelector='R' yChannelSelector='G' result='d'/%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.01 0.5' numOctaves='1' seed='43' result='s'/%3E%3CfeColorMatrix in='s' type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1 1.35' result='sa'/%3E%3CfeComposite in='d' in2='sa' operator='in' result='streak'/%3E%3CfeComponentTransfer in='d' result='bin'%3E%3CfeFuncA type='discrete' tableValues='0 1 1 1 1 1 1 1 1 1'/%3E%3C/feComponentTransfer%3E%3CfeMorphology in='bin' operator='erode' radius='0.8' result='core'/%3E%3CfeComposite in='d' in2='core' operator='out' result='rim0'/%3E%3CfeColorMatrix in='rim0' type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.75 0' result='rim'/%3E%3CfeMerge%3E%3CfeMergeNode in='streak'/%3E%3CfeMergeNode in='rim'/%3E%3C/feMerge%3E%3C/filter%3E%3C/defs%3E%3Csvg x='12' y='12' style='width:min(62%25, 22rem);height:min(46%25, 6.5rem)' viewBox='0 0 200 60' preserveAspectRatio='none' overflow='visible'%3E%3Cg fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round' filter='url(%23t)'%3E%3Cpath d='M14 44 C60 46 120 42 176 37 C192 36 192 25 178 25' stroke-width='20' stroke-opacity='0.6'/%3E%3Cpath d='M178 25 C130 26 70 29 16 28 C4 28 6 16 18 15' stroke-width='19' stroke-opacity='0.6'/%3E%3Cpath d='M18 15 C70 13 120 11 170 8' stroke-width='16' stroke-opacity='0.45'/%3E%3C/g%3E%3C/svg%3E%3Crect x='3.5' y='3.5' rx='16' ry='14' style='width:calc(100%25 - 7px);height:calc(100%25 - 7px)' fill='none' stroke='%23000' stroke-width='2.6' stroke-opacity='0.92' filter='url(%23o)'/%3E%3C/svg%3E");
+  --am-scribble-panel: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Cdefs%3E%3Cfilter id='o' x='-8%25' y='-8%25' width='116%25' height='116%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.02' numOctaves='2' seed='41' result='w'/%3E%3CfeDisplacementMap in='SourceGraphic' in2='w' scale='3.2' xChannelSelector='R' yChannelSelector='G' result='a'/%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='1' seed='42' result='g'/%3E%3CfeDisplacementMap in='a' in2='g' scale='1.2' xChannelSelector='R' yChannelSelector='G' result='d'/%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.01 0.5' numOctaves='1' seed='43' result='s'/%3E%3CfeColorMatrix in='s' type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1 1.35' result='sa'/%3E%3CfeComposite in='d' in2='sa' operator='in' result='streak'/%3E%3CfeComponentTransfer in='d' result='bin'%3E%3CfeFuncA type='discrete' tableValues='0 1 1 1 1 1 1 1 1 1'/%3E%3C/feComponentTransfer%3E%3CfeMorphology in='bin' operator='erode' radius='0.8' result='core'/%3E%3CfeComposite in='d' in2='core' operator='out' result='rim0'/%3E%3CfeColorMatrix in='rim0' type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.75 0' result='rim'/%3E%3CfeMerge%3E%3CfeMergeNode in='streak'/%3E%3CfeMergeNode in='rim'/%3E%3C/feMerge%3E%3C/filter%3E%3C/defs%3E%3Crect x='3.5' y='3.5' rx='16' ry='14' style='width:calc(100%25 - 7px);height:calc(100%25 - 7px)' fill='none' stroke='%23000' stroke-width='2.6' stroke-opacity='0.92' filter='url(%23o)'/%3E%3C/svg%3E");
+  --am-scribble-sheet: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Cdefs%3E%3Cfilter id='o' x='-8%25' y='-8%25' width='116%25' height='116%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.02' numOctaves='2' seed='41' result='w'/%3E%3CfeDisplacementMap in='SourceGraphic' in2='w' scale='3.2' xChannelSelector='R' yChannelSelector='G' result='a'/%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='1' seed='42' result='g'/%3E%3CfeDisplacementMap in='a' in2='g' scale='1.2' xChannelSelector='R' yChannelSelector='G' result='d'/%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.01 0.5' numOctaves='1' seed='43' result='s'/%3E%3CfeColorMatrix in='s' type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1 1.35' result='sa'/%3E%3CfeComposite in='d' in2='sa' operator='in' result='streak'/%3E%3CfeComponentTransfer in='d' result='bin'%3E%3CfeFuncA type='discrete' tableValues='0 1 1 1 1 1 1 1 1 1'/%3E%3C/feComponentTransfer%3E%3CfeMorphology in='bin' operator='erode' radius='0.8' result='core'/%3E%3CfeComposite in='d' in2='core' operator='out' result='rim0'/%3E%3CfeColorMatrix in='rim0' type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.75 0' result='rim'/%3E%3CfeMerge%3E%3CfeMergeNode in='streak'/%3E%3CfeMergeNode in='rim'/%3E%3C/feMerge%3E%3C/filter%3E%3C/defs%3E%3Crect x='7' y='7' rx='13' style='width:calc(100%25 - 14px);height:calc(100%25 - 14px)'/%3E%3Crect x='3.5' y='3.5' rx='16' ry='14' style='width:calc(100%25 - 7px);height:calc(100%25 - 7px)' fill='none' stroke='%23000' stroke-width='2.6' stroke-opacity='0.92' filter='url(%23o)'/%3E%3C/svg%3E");
+  --am-scribble-divider: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 400 18' preserveAspectRatio='none'%3E%3Cdefs%3E%3Cfilter id='t' x='-8%25' y='-8%25' width='116%25' height='116%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.02' numOctaves='2' seed='51' result='w'/%3E%3CfeDisplacementMap in='SourceGraphic' in2='w' scale='1.2' xChannelSelector='R' yChannelSelector='G' result='a'/%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='1' seed='52' result='g'/%3E%3CfeDisplacementMap in='a' in2='g' scale='0.8' xChannelSelector='R' yChannelSelector='G' result='d'/%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.004 0.5' numOctaves='1' seed='53' result='s'/%3E%3CfeColorMatrix in='s' type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1 1.35' result='sa'/%3E%3CfeComposite in='d' in2='sa' operator='in' result='streak'/%3E%3CfeComponentTransfer in='d' result='bin'%3E%3CfeFuncA type='discrete' tableValues='0 1 1 1 1 1 1 1 1 1'/%3E%3C/feComponentTransfer%3E%3CfeMorphology in='bin' operator='erode' radius='0.9' result='core'/%3E%3CfeComposite in='d' in2='core' operator='out' result='rim0'/%3E%3CfeColorMatrix in='rim0' type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.75 0' result='rim'/%3E%3CfeMerge%3E%3CfeMergeNode in='streak'/%3E%3CfeMergeNode in='rim'/%3E%3C/feMerge%3E%3C/filter%3E%3C/defs%3E%3Cg fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round' filter='url(%23t)'%3E%3Cpath d='M8 12 C120 13 260 10 376 9 C392 9 396 2 388 2 C381 2 378 8 374 14' stroke-width='8' stroke-opacity='0.72' vector-effect='non-scaling-stroke'/%3E%3C/g%3E%3C/svg%3E");
+  --am-scribble-underline: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 200 9' preserveAspectRatio='none'%3E%3Cdefs%3E%3Cfilter id='t' x='-8%25' y='-8%25' width='116%25' height='116%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.02' numOctaves='2' seed='51' result='w'/%3E%3CfeDisplacementMap in='SourceGraphic' in2='w' scale='1.2' xChannelSelector='R' yChannelSelector='G' result='a'/%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='1' seed='52' result='g'/%3E%3CfeDisplacementMap in='a' in2='g' scale='0.8' xChannelSelector='R' yChannelSelector='G' result='d'/%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.004 0.5' numOctaves='1' seed='53' result='s'/%3E%3CfeColorMatrix in='s' type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1 1.35' result='sa'/%3E%3CfeComposite in='d' in2='sa' operator='in' result='streak'/%3E%3CfeComponentTransfer in='d' result='bin'%3E%3CfeFuncA type='discrete' tableValues='0 1 1 1 1 1 1 1 1 1'/%3E%3C/feComponentTransfer%3E%3CfeMorphology in='bin' operator='erode' radius='0.9' result='core'/%3E%3CfeComposite in='d' in2='core' operator='out' result='rim0'/%3E%3CfeColorMatrix in='rim0' type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.75 0' result='rim'/%3E%3CfeMerge%3E%3CfeMergeNode in='streak'/%3E%3CfeMergeNode in='rim'/%3E%3C/feMerge%3E%3C/filter%3E%3C/defs%3E%3Cg fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round' filter='url(%23t)'%3E%3Cpath d='M4 6 C60 7 130 5 182 4 C194 4 196 1 190 1 C186 1 183 3 181 6' stroke-width='5' stroke-opacity='0.78' vector-effect='non-scaling-stroke'/%3E%3C/g%3E%3C/svg%3E");
+}
+/* @scribbles:end */
 
 /* --- Theme ----------------------------------------------------------------
    Light by default. data-theme="dark" | "light" | "auto" (follows the OS)
@@ -273,14 +309,17 @@
   --am-shape: var(--am-shape-panel);
   --am-border: var(--am-stroke);
   --am-layer-filter: var(--am-filter);
-  --am-nib: 7px;       /* marker: stroke width */
-  --am-nib-gap: 2.5px; /* marker: paper showing between strokes */
-  --am-under: 0%;      /* marker: solid paint under the scribble */
-  --am-under-dark: var(--am-under); /* ...in dark mode, so labels stay readable on black */
-  --am-scribble: var(--am-core); /* marker: ink strength of the scribble */
+  --am-mk-shape: var(--am-scribble-a); /* marker: which scribble mask */
+  --am-mk-bleed: -5px -10px;           /* marker: hairpins poke past the edge */
 }
+/* Marker: vary the scribble so neighbouring buttons aren't identical. */
+:where(.am-button, .am-badge):nth-of-type(3n+2) { --am-mk-shape: var(--am-scribble-b); }
+:where(.am-button, .am-badge):nth-of-type(3n) { --am-mk-shape: var(--am-scribble-c); }
+
 /* Panels can take a different outline than filled shapes. */
 :where(.am-card, .am-input, .am-nav, .am-modal) {
+  --am-mk-shape: var(--am-scribble-panel);
+  --am-mk-bleed: 0px;
   --am-border: var(--am-panel-stroke);
   --am-layer-filter: var(--am-filter-panel);
 }
@@ -288,42 +327,22 @@
 :where(.am-button, .am-badge, .am-card, .am-input, .am-nav, .am-modal, .am-splash)::before {
   content: "";
   position: absolute;
-  inset: 0;
   z-index: -1;
   pointer-events: none;
   box-sizing: border-box;
   border-radius: var(--am-shape);
   border: var(--am-border);
 
-  /* Marker: two passes of diagonal hatching at slightly different angles,
-     plus a lighter-pressure pass. Each stroke has darker edges and a lighter
-     streak down the middle; multiply darkens where strokes cross. */
-  --am-mk: color-mix(in srgb, var(--am-paint) var(--am-scribble), transparent);
-  --am-mk-edge: color-mix(in srgb, color-mix(in oklab, var(--am-paint), #000 24%) var(--am-scribble), transparent);
-  --am-mk-hi: color-mix(in srgb, color-mix(in oklab, var(--am-paint), #fff 26%) var(--am-scribble), transparent);
-  --am-mk-soft: color-mix(in srgb, var(--am-paint) calc(var(--am-scribble) * 0.55), transparent);
-  --am-mk-under: light-dark(
-    color-mix(in srgb, var(--am-paint) var(--am-under), transparent),
-    color-mix(in srgb, var(--am-paint) var(--am-under-dark), transparent));
-  --am-bg-marker: var(--am-if-marker)
-    repeating-linear-gradient(146deg,
-      transparent 0 var(--am-nib-gap),
-      var(--am-mk-edge) var(--am-nib-gap),
-      var(--am-mk) calc(var(--am-nib-gap) + var(--am-nib) * 0.2),
-      var(--am-mk-hi) calc(var(--am-nib-gap) + var(--am-nib) * 0.5),
-      var(--am-mk) calc(var(--am-nib-gap) + var(--am-nib) * 0.8),
-      var(--am-mk-edge) calc(var(--am-nib-gap) + var(--am-nib))),
-    repeating-linear-gradient(155deg,
-      transparent 0 calc(var(--am-nib-gap) * 1.6),
-      var(--am-mk-edge) calc(var(--am-nib-gap) * 1.6),
-      var(--am-mk) calc(var(--am-nib-gap) * 1.6 + var(--am-nib) * 0.2),
-      var(--am-mk-hi) calc(var(--am-nib-gap) * 1.6 + var(--am-nib) * 0.45),
-      var(--am-mk) calc(var(--am-nib-gap) * 1.6 + var(--am-nib) * 0.75),
-      var(--am-mk-edge) calc(var(--am-nib-gap) * 1.6 + var(--am-nib) * 0.9)),
-    repeating-linear-gradient(138deg,
-      transparent 0 calc(var(--am-nib) * 2.4),
-      var(--am-mk-soft) calc(var(--am-nib) * 2.4) calc(var(--am-nib) * 2.9)),
-    linear-gradient(var(--am-mk-under), var(--am-mk-under));
+  /* Marker: the paint is masked by a scribble (see the masks above the
+     Theme section). Panels have a 7px border band of ink, which is where
+     their outline stroke sits in the mask. */
+  --am-mk: color-mix(in srgb, var(--am-paint) var(--am-core), transparent);
+  --am-bg-marker: var(--am-if-marker) linear-gradient(var(--am-mk), var(--am-mk)) padding-box;
+  --am-inset-marker: var(--am-if-marker) var(--am-mk-bleed);
+  inset: var(--am-inset-marker, 0);
+  --am-mask-marker: var(--am-if-marker) var(--am-mk-shape) center / 100% 100% no-repeat;
+  -webkit-mask: var(--am-mask-marker, none);
+  mask: var(--am-mask-marker, none);
 
   background: var(--am-bg-marker,
     var(--am-texture),
@@ -343,7 +362,6 @@
   --am-core: var(--am-fill-core);
   --am-edge: var(--am-fill-edge);
   --am-shape: var(--am-shape-blob);
-  --am-under-dark: 70%;
   display: inline-flex;
   align-items: center;
   gap: 0.5em;
@@ -368,10 +386,6 @@
   --am-core: var(--am-fill-core);
   --am-edge: var(--am-fill-edge);
   --am-shape: var(--am-shape-blob);
-  --am-nib: 5px;
-  --am-nib-gap: 2px;
-  --am-under: 30%;
-  --am-under-dark: 70%;
   display: inline-block;
   padding: 0.3em 0.9em;
   color: var(--am-on-pigment);
@@ -384,6 +398,7 @@
 /* --- Card ---------------------------------------------------------------- */
 
 .am-card {
+  --am-mk-shape: var(--am-scribble-card);
   display: block;
   padding: 1.6rem 1.8rem;
   color: var(--am-ink);
@@ -424,6 +439,8 @@
   border-radius: 50%;
   background: color-mix(in srgb, var(--am-pigment) var(--am-stroke-core), transparent);
   filter: var(--am-filter-stroke);
+  -webkit-mask: var(--am-underline-mask, none) center / 100% 100% no-repeat;
+  mask: var(--am-underline-mask, none) center / 100% 100% no-repeat;
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.4s ease-out;
@@ -439,7 +456,8 @@
   border-radius: 50%;
   background: color-mix(in srgb, var(--am-pigment) var(--am-stroke-core), transparent);
   filter: var(--am-filter-stroke);
-  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  -webkit-mask: var(--am-line-mask, linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent)) center / 100% 100% no-repeat;
+  mask: var(--am-line-mask, linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent)) center / 100% 100% no-repeat;
 }
 
 /* --- Nav ----------------------------------------------------------------- */
@@ -474,6 +492,8 @@
   border-radius: 50%;
   background: color-mix(in srgb, var(--am-pigment) var(--am-stroke-core), transparent);
   filter: var(--am-filter-stroke);
+  -webkit-mask: var(--am-underline-mask, none) center / 100% 100% no-repeat;
+  mask: var(--am-underline-mask, none) center / 100% 100% no-repeat;
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.35s ease-out;
@@ -489,8 +509,7 @@
   --am-paint: var(--am-paper);
   --am-core: 100%;
   --am-edge: 100%;
-  --am-under: 100%;
-  --am-scribble: 0%;
+  --am-mk-shape: var(--am-scribble-sheet);
   width: min(32rem, calc(100vw - 2rem));
   padding: 2rem 2.2rem;
   overflow: visible;
@@ -532,8 +551,8 @@
   --am-paint: var(--am-pigment);
   --am-core: var(--am-fill-core);
   --am-edge: var(--am-fill-edge);
-  --am-nib: max(4px, 4.2%);
-  --am-nib-gap: max(1.5px, 1.3%);
+  --am-mk-shape: var(--am-scribble-splash);
+  --am-mk-bleed: 0px;
   display: block;
   width: 12rem;
   aspect-ratio: 1;
@@ -547,14 +566,15 @@
   filter: none;
   border-radius: 0;
   border: 0;
-  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cpath d='M104 18c20-2 28 12 44 16s34 2 38 24-12 28-8 46 20 30 6 48-34 8-48 20-24 24-46 16-16-24-36-30-38-2-42-26 14-30 10-50-14-32 2-48 30-4 42-12 18-12 38-4z'/%3E%3Ccircle cx='182' cy='26' r='7'/%3E%3Ccircle cx='22' cy='176' r='9'/%3E%3Ccircle cx='190' cy='150' r='4'/%3E%3Ccircle cx='40' cy='22' r='4'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cpath d='M104 18c20-2 28 12 44 16s34 2 38 24-12 28-8 46 20 30 6 48-34 8-48 20-24 24-46 16-16-24-36-30-38-2-42-26 14-30 10-50-14-32 2-48 30-4 42-12 18-12 38-4z'/%3E%3Ccircle cx='182' cy='26' r='7'/%3E%3Ccircle cx='22' cy='176' r='9'/%3E%3Ccircle cx='190' cy='150' r='4'/%3E%3Ccircle cx='40' cy='22' r='4'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+  --am-splat: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cpath d='M104 18c20-2 28 12 44 16s34 2 38 24-12 28-8 46 20 30 6 48-34 8-48 20-24 24-46 16-16-24-36-30-38-2-42-26 14-30 10-50-14-32 2-48 30-4 42-12 18-12 38-4z'/%3E%3Ccircle cx='182' cy='26' r='7'/%3E%3Ccircle cx='22' cy='176' r='9'/%3E%3Ccircle cx='190' cy='150' r='4'/%3E%3Ccircle cx='40' cy='22' r='4'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+  -webkit-mask: var(--am-mask-marker, var(--am-splat));
+  mask: var(--am-mask-marker, var(--am-splat));
 }
 
 /* --- Pigment variants (after mediums so they win on the same element) ---- */
 
 .am--secondary { --am-pigment: var(--am-pigment-secondary); }
-.am--accent { --am-pigment: var(--am-pigment-accent); --am-on-pigment: var(--am-on-accent); --am-label-shadow: none; }
+.am--accent { --am-pigment: var(--am-pigment-accent); --am-on-pigment: var(--am-on-accent); --am-label-shadow: var(--am-label-shadow-accent); }
 
 /* --- Motion -------------------------------------------------------------- */
 

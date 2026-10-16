@@ -221,43 +221,23 @@ const FILTERS = `
       <feMerge><feMergeNode in="shadow"/><feMergeNode in="core"/><feMergeNode in="piece"/></feMerge>
     </filter>
 
-    <!-- Marker: the hatching is shifted along its own stroke direction by
-         noise, which leaves the inside untouched (stripes don't change along
-         their length) but makes each stroke overshoot or stop short of the
-         edge. Then hand wobble, and a blurred-and-thresholded mask that
-         rounds every stroke end like a felt tip, keeping the ink's own
-         translucency. Panels skip the end shift so their outline stays a line. -->
-    <filter id="am-marker" x="-8%" y="-20%" width="116%" height="140%" color-interpolation-filters="sRGB">
-      <feTurbulence type="fractalNoise" baseFrequency="0.11" numOctaves="1" seed="31" result="endNoise"/>
-      <feColorMatrix in="endNoise" type="matrix" values="1 0 0 0 0  -0.67 0 0 0 0.835  0 0 0 0 0  0 0 0 0 1" result="along"/>
-      <feDisplacementMap in="SourceGraphic" in2="along" scale="16" xChannelSelector="R" yChannelSelector="G" result="ends"/>
-      <feTurbulence type="fractalNoise" baseFrequency="0.022" numOctaves="2" seed="14" result="wobble"/>
-      <feDisplacementMap in="ends" in2="wobble" scale="5" xChannelSelector="R" yChannelSelector="G" result="drawn"/>
-      <feColorMatrix in="drawn" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 5 0" result="solid"/>
-      <feGaussianBlur in="solid" stdDeviation="1.5" result="solidBlur"/>
-      <feComponentTransfer in="solidBlur" result="mask"><feFuncA type="linear" slope="4" intercept="-1.6"/></feComponentTransfer>
-      <feGaussianBlur in="drawn" stdDeviation="0.45" result="soft"/>
-      <feComposite in="soft" in2="mask" operator="in"/>
+    <!-- Marker: the stroke shapes, overlap darkening and felt-tip edges live
+         in the scribble masks (art-medium.css). This adds faint lighter
+         streaks to the ink along the stroke direction. -->
+    <filter id="am-marker" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.006 0.3" numOctaves="1" seed="14" result="streak"/>
+      <feColorMatrix in="streak" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.5 -0.18" result="sheen"/>
+      <feComposite in="sheen" in2="SourceGraphic" operator="in" result="sheenIn"/>
+      <feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="sheenIn"/></feMerge>
     </filter>
-    <filter id="am-marker-panel" x="-8%" y="-20%" width="116%" height="140%" color-interpolation-filters="sRGB">
-      <feTurbulence type="fractalNoise" baseFrequency="0.022" numOctaves="2" seed="14" result="wobble"/>
-      <feDisplacementMap in="SourceGraphic" in2="wobble" scale="5" xChannelSelector="R" yChannelSelector="G" result="drawn"/>
-      <feColorMatrix in="drawn" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 5 0" result="solid"/>
-      <feGaussianBlur in="solid" stdDeviation="1.5" result="solidBlur"/>
-      <feComponentTransfer in="solidBlur" result="mask"><feFuncA type="linear" slope="4" intercept="-1.6"/></feComponentTransfer>
-      <feGaussianBlur in="drawn" stdDeviation="0.45" result="soft"/>
-      <feComposite in="soft" in2="mask" operator="in"/>
-    </filter>
-    <filter id="am-marker-stroke" x="-5%" y="-150%" width="110%" height="400%" color-interpolation-filters="sRGB">
-      <feTurbulence type="fractalNoise" baseFrequency="0.02 0.05" numOctaves="2" seed="15" result="wobble"/>
-      <feDisplacementMap in="SourceGraphic" in2="wobble" scale="4" xChannelSelector="R" yChannelSelector="G" result="drawn"/>
-      <feTurbulence type="fractalNoise" baseFrequency="0.004 0.7" numOctaves="1" seed="16" result="streak"/>
-      <feColorMatrix in="streak" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.7 0.5" result="streakA"/>
-      <feComposite in="drawn" in2="streakA" operator="in" result="streaky"/>
-      <feMorphology in="drawn" operator="erode" radius="1.2" result="inner"/>
-      <feComposite in="drawn" in2="inner" operator="out" result="rim"/>
-      <feColorMatrix in="rim" type="matrix" values="0.7 0 0 0 0  0 0.7 0 0 0  0 0 0.7 0 0  0 0 0 0.6 0" result="rimDark"/>
-      <feMerge><feMergeNode in="streaky"/><feMergeNode in="rimDark"/></feMerge>
+    <!-- Splashes are masked on ::before and filtered on the element, so
+         here ink can pool: overlaps get deeper, not just more opaque. -->
+    <filter id="am-marker-splash" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+      <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="a"/>
+      <feComponentTransfer in="a" result="deep"><feFuncA type="linear" slope="2.4" intercept="-1.25"/></feComponentTransfer>
+      <feColorMatrix in="SourceGraphic" type="matrix" values="0.68 0 0 0 0  0 0.68 0 0 0  0 0 0.72 0 0  0 0 0 0.45 0" result="darker"/>
+      <feComposite in="darker" in2="deep" operator="in" result="shade"/>
+      <feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="shade"/></feMerge>
     </filter>
 
   </defs>

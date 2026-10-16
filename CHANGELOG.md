@@ -3,7 +3,7 @@
 ## Unreleased
 
 - New medium: `paper`, cut and torn construction-paper collage with fibrous torn edges, paper grain, layered shadows and washi tape on cards and modals. Dark mode is bright scraps on black card stock.
-- New medium: `marker`, felt-tip scribbles with diagonal back-and-forth strokes, rounded overshooting stroke ends and translucent ink that darkens where strokes cross. Dark mode is paint markers on black paper.
+- New medium: `marker`, felt-tip scribbles: a few fat strokes in one back-and-forth zig-zag with rounded hairpin turns, translucent ink that darkens where it overlaps, and a wobbly marker outline with a highlighter swipe on panels. Dark mode is paint markers on black paper with white labels.
 - Acrylic repainted as thick broken-color impasto: short directional dabs of several related tints, lit ridges and gloss, and edges made of staggered stroke ends instead of a flat fill with a streak texture.
 - New tokens: `--am-filter-panel` and `--am-filter-splash` (per-medium filters for panels and splashes), `--am-panel-stroke` (outline for cards, inputs, nav and modals), `--am-label-shadow`.
 - Inputs inside a modal keep their own surface instead of taking the modal's paper color.
