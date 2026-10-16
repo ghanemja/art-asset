@@ -1,7 +1,8 @@
 // Renders promo/index.html to an MP4, one frame at a time.
 // Usage: node promo/render.mjs <out-dir> [--stills t1,t2,...]
 // Needs the repo served at http://localhost:8765 (python3 -m http.server 8765),
-// Playwright, and ffmpeg with libx264.
+// Playwright, ffmpeg with libx264, and Python with numpy + scipy for the
+// soundtrack (promo/soundtrack.py, synthesized from scratch, no samples).
 import { chromium } from 'playwright';
 import { execFileSync } from 'node:child_process';
 import { mkdirSync, rmSync } from 'node:fs';
@@ -37,6 +38,10 @@ if (stillsArg > 0) {
   execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-framerate', String(FPS), '-i', join(frames, '%05d.png'),
     '-c:v', 'libx264', '-preset', 'slow', '-crf', '18', '-pix_fmt', 'yuv420p', '-movflags', '+faststart',
     join(out, 'art-medium-promo.mp4')], { stdio: 'inherit' });
-  console.log('wrote', join(out, 'art-medium-promo.mp4'));
+  execFileSync('python3', [new URL('./soundtrack.py', import.meta.url).pathname, join(out, 'soundtrack.wav')], { stdio: 'inherit' });
+  execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-i', join(out, 'art-medium-promo.mp4'), '-i', join(out, 'soundtrack.wav'),
+    '-map', '0:v', '-map', '1:a', '-c:v', 'copy', '-af', 'loudnorm=I=-14:TP=-1.5:LRA=11,aresample=48000',
+    '-c:a', 'aac', '-b:a', '192k', '-shortest', '-movflags', '+faststart', join(out, 'art-medium-promo-music.mp4')], { stdio: 'inherit' });
+  console.log('wrote', join(out, 'art-medium-promo.mp4'), 'and', join(out, 'art-medium-promo-music.mp4'));
 }
 await browser.close();
