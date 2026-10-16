@@ -5,7 +5,7 @@ A UI component library where the components are made of art. Buttons, cards, inp
 | Medium | Looks like |
 | --- | --- |
 | `watercolor` | Translucent washes, bleeding edges, pigment granulation, darker pooled rims, cold-press paper |
-| `acrylic` | Thick impasto in short directional dabs of broken color (several tints side by side), lit ridges and gloss, stroke ends for edges, primed canvas weave |
+| `acrylic` | Thick impasto in short directional dabs of broken color (several tints side by side), lit ridges and gloss, stroke ends for edges, primed canvas weave. Also `impressionist` and `realism` styles (see [Acrylic styles](#acrylic-styles)) |
 | `charcoal` | Wobbly hand-drawn outlines, gritty broken lines, cross-hatching, newsprint (chalk on slate in dark mode) |
 | `paper` | Cut and torn construction-paper collage: fibrous torn edges, paper grain, soft layered shadows, washi tape on cards |
 | `marker` | Felt-tip scribbles: a few fat strokes in one back-and-forth zig-zag with rounded hairpin turns, translucent ink that darkens where it overlaps, streaky nibs; panels get a wobbly marker outline and a highlighter swipe |
@@ -86,6 +86,29 @@ To switch at runtime:
 import { setMedium } from 'art-medium';
 setMedium(document.documentElement, 'acrylic');
 ```
+
+### Acrylic styles
+
+Acrylic comes in three styles, picked with `data-style` on the acrylic element or any ancestor (like `<html>`):
+
+| Style | Looks like |
+| --- | --- |
+| `impasto` (default) | Thick broken-color dabs with lit ridges and a little gloss |
+| `impressionist` | Flat, matte planes of light, mid and shadow tones laid in broad strokes, a warm terracotta ground glowing at the edges, dry-brush breakup and a chalky, warm palette |
+| `realism` | Smooth, blended paint softly lit from the top left, muted earthy colors (olive, brick, ochre), a faint varnish sheen, very fine canvas and soft shadows |
+
+```html
+<html data-medium="acrylic" data-style="impressionist">
+  …
+  <button class="am-button" data-medium="acrylic" data-style="realism">Just this one</button>
+```
+
+```js
+import { setStyle, STYLES } from 'art-medium';
+setStyle(document.documentElement, 'realism');
+```
+
+A style only changes acrylic: inside a watercolor, charcoal, paper or marker subtree, `data-style` does nothing. In React, pass `artStyle` (named so it doesn't clash with React's `style`): `<MediumProvider medium="acrylic" artStyle="realism">`.
 
 ### Light and dark
 

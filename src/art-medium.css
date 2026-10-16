@@ -51,6 +51,7 @@
   --am-underline-mask: initial;
   --am-tape: none;
   --am-if-marker: initial;
+  --am-if-acrylic: initial;
   --am-filter: url(#am-watercolor);
   --am-filter-splash: var(--am-filter);
   --am-filter-panel: var(--am-filter);
@@ -65,24 +66,119 @@
   --am-font-body: "Nunito", "Segoe UI", system-ui, sans-serif;
 }
 
-[data-medium="acrylic"] {
-  --am-paper: light-dark(#f2ece0, #16141a);
-  --am-paper-texture:
+/* Acrylic styles: data-style="impasto | impressionist | realism" on the
+   acrylic element or any ancestor (e.g. <html>). A style only sets
+   --am-acr-* values (and its own toggles), which nothing but the acrylic
+   medium reads, so data-style is inert in every other medium. Impasto is
+   the default. */
+:root,
+[data-style="impasto"] {
+  --am-acr-paper: light-dark(#f2ece0, #16141a);
+  --am-acr-paper-texture:
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.3 0 0 0 0 0.25 0 0 0 0 0.2 0 0 0 0.12 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E"),
     repeating-linear-gradient(0deg, light-dark(rgb(60 45 30 / 0.05), rgb(255 240 220 / 0.035)) 0 1px, transparent 1px 4px),
     repeating-linear-gradient(90deg, light-dark(rgb(60 45 30 / 0.05), rgb(255 240 220 / 0.035)) 0 1px, transparent 1px 4px);
-  --am-ink: light-dark(#1e1b24, #f3eee4);
+  --am-acr-ink: light-dark(#1e1b24, #f3eee4);
+  --am-acr-pigment-primary: light-dark(#2f5fd0, #4a7dff);  /* ultramarine */
+  --am-acr-pigment-secondary: light-dark(#e2483d, #ff5a4c);  /* cadmium red */
+  --am-acr-pigment-accent: light-dark(#f2b705, #ffc81a);  /* cadmium yellow */
+  --am-acr-on-pigment: #fffaf0;
+  --am-acr-on-accent: #1e1b24;
+  --am-acr-surface: light-dark(#fffaf0, #2a2631);
+  --am-acr-label-shadow: 0 1px 2px rgb(0 0 0 / 0.45);
+  --am-acr-label-shadow-accent: none;
+  --am-acr-filter: url(#am-acrylic);
+  --am-acr-filter-splash: url(#am-acrylic-splash);
+  --am-acr-filter-panel: url(#am-acrylic-panel);
+  --am-acr-filter-stroke: url(#am-acrylic-stroke);
+  --am-acr-splash-opacity: 0.95;
+  --am-acr-shape-blob: 7px 12px 8px 14px;
+  --am-acr-shape-panel: 8px 14px 10px 16px;
+  --am-acr-hover: translate(-2px, -3px) rotate(-0.5deg);
+  --am-acr-font-display: "Archivo Black", "Arial Black", Impact, sans-serif;
+  --am-acr-font-body: "Work Sans", "Segoe UI", system-ui, sans-serif;
+  --am-if-impressionist: initial;
+  --am-if-realism: initial;
+}
 
-  --am-pigment-primary: light-dark(#2f5fd0, #4a7dff);   /* ultramarine */
-  --am-pigment-secondary: light-dark(#e2483d, #ff5a4c); /* cadmium red */
-  --am-pigment-accent: light-dark(#f2b705, #ffc81a);    /* cadmium yellow */
+/* Impressionist: flat, matte, chalky planes of color in broad strokes over
+   a warm terracotta ground. */
+[data-style="impressionist"] {
+  --am-acr-paper: light-dark(#efe4d0, #211914);
+  --am-acr-paper-texture:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.4 0 0 0 0 0.26 0 0 0 0 0.15 0 0 0 0.16 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E"),
+    repeating-linear-gradient(0deg, light-dark(rgb(90 55 30 / 0.07), rgb(255 230 200 / 0.045)) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(90deg, light-dark(rgb(90 55 30 / 0.07), rgb(255 230 200 / 0.045)) 0 1px, transparent 1px 3px);
+  --am-acr-ink: light-dark(#2e231c, #f1e6d3);
+  --am-acr-pigment-primary: light-dark(#56709f, #6a84b4);   /* dusty lilac-blue */
+  --am-acr-pigment-secondary: light-dark(#bb5a35, #bd6440); /* terracotta */
+  --am-acr-pigment-accent: light-dark(#a3b56b, #b6c785);    /* sage-lime */
+  --am-acr-on-pigment: #fff8ec;
+  --am-acr-on-accent: #2e231c;
+  --am-acr-surface: light-dark(#f5ead6, #3a2e26);
+  --am-acr-label-shadow: 0 1px 1px rgb(45 22 10 / 0.5);
+  --am-acr-label-shadow-accent: none;
+  --am-acr-filter: url(#am-acrylic-impressionist);
+  --am-acr-filter-splash: url(#am-acrylic-impressionist-splash);
+  --am-acr-filter-panel: url(#am-acrylic-impressionist-panel);
+  --am-acr-filter-stroke: url(#am-acrylic-impressionist-stroke);
+  --am-acr-splash-opacity: 1;
+  --am-acr-shape-blob: 3px 8px 4px 9px;
+  --am-acr-shape-panel: 3px 6px 4px 8px;
+  --am-acr-hover: translate(-1px, -2px) rotate(-0.6deg);
+  --am-acr-font-display: "Archivo Black", "Arial Black", Impact, sans-serif;
+  --am-acr-font-body: "Work Sans", "Segoe UI", system-ui, sans-serif;
+  --am-if-impressionist: ;
+  --am-if-realism: initial;
+}
+
+/* Realism: smooth, blended, softly lit paint in a muted earthy palette, with
+   a faint varnish sheen and very fine canvas. */
+[data-style="realism"] {
+  --am-acr-paper: light-dark(#ece2cf, #1c1611);
+  --am-acr-paper-texture:
+    radial-gradient(ellipse 120% 90% at 50% 35%, transparent 60%, light-dark(rgb(70 45 20 / 0.1), rgb(0 0 0 / 0.3))),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='1' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.27 0 0 0 0 0.18 0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E"),
+    repeating-linear-gradient(0deg, light-dark(rgb(80 55 30 / 0.025), rgb(255 235 210 / 0.02)) 0 1px, transparent 1px 2px),
+    repeating-linear-gradient(90deg, light-dark(rgb(80 55 30 / 0.025), rgb(255 235 210 / 0.02)) 0 1px, transparent 1px 2px);
+  --am-acr-ink: light-dark(#2b2118, #efe3cd);
+  --am-acr-pigment-primary: light-dark(#5b6838, #6c7a43);   /* olive */
+  --am-acr-pigment-secondary: light-dark(#94432e, #a9563c); /* brick */
+  --am-acr-pigment-accent: light-dark(#c39343, #d9ad5c);    /* ochre */
+  --am-acr-on-pigment: #fbf3e2;
+  --am-acr-on-accent: #2b2118;
+  --am-acr-surface: light-dark(#f4ebd8, #33291f);
+  --am-acr-label-shadow: 0 1px 1px rgb(30 15 5 / 0.45);
+  --am-acr-label-shadow-accent: 0 1px 0 rgb(255 242 214 / 0.45);
+  --am-acr-filter: url(#am-acrylic-realism);
+  --am-acr-filter-splash: url(#am-acrylic-realism-splash);
+  --am-acr-filter-panel: url(#am-acrylic-realism-panel);
+  --am-acr-filter-stroke: url(#am-acrylic-realism-stroke);
+  --am-acr-splash-opacity: 1;
+  --am-acr-shape-blob: 16px;
+  --am-acr-shape-panel: 12px;
+  --am-acr-hover: translateY(-2px) scale(1.02);
+  --am-acr-font-display: "Cormorant Garamond", "Iowan Old Style", Georgia, serif;
+  --am-acr-font-body: "Work Sans", "Segoe UI", system-ui, sans-serif;
+  --am-if-impressionist: initial;
+  --am-if-realism: ;
+}
+
+[data-medium="acrylic"] {
+  --am-paper: var(--am-acr-paper);
+  --am-paper-texture: var(--am-acr-paper-texture);
+  --am-ink: var(--am-acr-ink);
+
+  --am-pigment-primary: var(--am-acr-pigment-primary);
+  --am-pigment-secondary: var(--am-acr-pigment-secondary);
+  --am-pigment-accent: var(--am-acr-pigment-accent);
   --am-pigment: var(--am-pigment-primary);
-  --am-on-pigment: #fffaf0;
-  --am-on-accent: #1e1b24;
+  --am-on-pigment: var(--am-acr-on-pigment);
+  --am-on-accent: var(--am-acr-on-accent);
   --am-fill-core: 100%;
   --am-fill-edge: 100%;
 
-  --am-surface: light-dark(#fffaf0, #2a2631);
+  --am-surface: var(--am-acr-surface);
   --am-surface-core: 100%;
   --am-surface-edge: 100%;
 
@@ -93,24 +189,25 @@
   --am-shadow: none;
   --am-panel-stroke: var(--am-stroke);
   --am-blend: normal;
-  --am-label-shadow: 0 1px 2px rgb(0 0 0 / 0.45);
-  --am-label-shadow-accent: none;
+  --am-label-shadow: var(--am-acr-label-shadow);
+  --am-label-shadow-accent: var(--am-acr-label-shadow-accent);
   --am-line-mask: initial;
   --am-underline-mask: initial;
   --am-tape: none;
   --am-if-marker: initial;
-  --am-filter: url(#am-acrylic);
-  --am-filter-splash: url(#am-acrylic-splash);
-  --am-filter-panel: url(#am-acrylic-panel);
-  --am-filter-stroke: url(#am-acrylic-stroke);
-  --am-splash-opacity: 0.95;
+  --am-if-acrylic: ;
+  --am-filter: var(--am-acr-filter);
+  --am-filter-splash: var(--am-acr-filter-splash);
+  --am-filter-panel: var(--am-acr-filter-panel);
+  --am-filter-stroke: var(--am-acr-filter-stroke);
+  --am-splash-opacity: var(--am-acr-splash-opacity);
 
-  --am-shape-blob: 7px 12px 8px 14px;
-  --am-shape-panel: 8px 14px 10px 16px;
-  --am-hover: translate(-2px, -3px) rotate(-0.5deg);
+  --am-shape-blob: var(--am-acr-shape-blob);
+  --am-shape-panel: var(--am-acr-shape-panel);
+  --am-hover: var(--am-acr-hover);
 
-  --am-font-display: "Archivo Black", "Arial Black", Impact, sans-serif;
-  --am-font-body: "Work Sans", "Segoe UI", system-ui, sans-serif;
+  --am-font-display: var(--am-acr-font-display);
+  --am-font-body: var(--am-acr-font-body);
 }
 
 /* In the dark, charcoal becomes chalk on a slate board. */
@@ -145,6 +242,7 @@
   --am-underline-mask: initial;
   --am-tape: none;
   --am-if-marker: initial;
+  --am-if-acrylic: initial;
   --am-filter: url(#am-charcoal);
   --am-filter-splash: var(--am-filter);
   --am-filter-panel: var(--am-filter);
@@ -194,6 +292,7 @@
   --am-underline-mask: initial;
   --am-tape: "";
   --am-if-marker: initial;
+  --am-if-acrylic: initial;
   --am-filter: url(#am-paper);
   --am-filter-splash: var(--am-filter);
   --am-filter-panel: var(--am-filter);
@@ -247,6 +346,7 @@
   --am-underline-mask: var(--am-scribble-underline) center / 100% 100% no-repeat, var(--am-marker-tex-h) 0 0 / 192px 64px repeat;
   --am-tape: none;
   --am-if-marker: ;
+  --am-if-acrylic: initial;
   --am-filter: url(#am-marker);
   --am-filter-splash: url(#am-marker-splash);
   --am-filter-panel: none;
@@ -317,6 +417,11 @@
   --am-border: var(--am-stroke);
   --am-layer-filter: var(--am-filter);
   --am-mk-shape: var(--am-scribble-a); /* marker: which scribble mask */
+  --am-extra-planes: initial;          /* acrylic impressionist: extra strokes (splash) */
+  --am-plane-angle: 112deg;            /* acrylic impressionist: direction of the planes */
+  --am-depth: 16%;                     /* acrylic: how far light and shadow tones stray */
+  --am-accent-at: 120%;                /* acrylic impressionist: dark accent stroke (off for panels) */
+  --am-varnish: light-dark(rgb(255 246 226 / 0.14), rgb(255 238 205 / 0.05)); /* acrylic realism */
   --am-mk-bleed: -5px -10px;           /* marker: hairpins poke past the edge */
   --am-mk-tex: var(--am-marker-tex-h) 0 0 / 192px 64px repeat; /* marker: felt-tip streaks */
 }
@@ -354,11 +459,34 @@
   -webkit-mask-composite: source-in;
   mask-composite: intersect;
 
-  background: var(--am-bg-marker,
+  /* Acrylic impressionist: three flat planes of one hue (light, mid,
+     shadow) with crisp edges; the filter turns their edges into strokes. */
+  --am-p-mid: color-mix(in srgb, var(--am-paint) var(--am-core), transparent);
+  --am-p-light: color-mix(in oklab, var(--am-p-mid), #fff3dc calc(var(--am-depth) * 0.7));
+  --am-p-shadow: color-mix(in oklab, var(--am-p-mid), #3b1f12 calc(var(--am-depth) * 0.75));
+  --am-p-deep: color-mix(in oklab, var(--am-p-mid), #2a150c 62%);
+  /* Splashes add a few more blocky strokes of the same tones (cloud-like). */
+  --am-p-extra: var(--am-extra-planes)
+    linear-gradient(24deg, transparent 0 47%, var(--am-p-light) 47% 57%, transparent 57%),
+    linear-gradient(168deg, transparent 0 58%, var(--am-p-mid) 58% 67%, transparent 67%),
+    linear-gradient(72deg, transparent 0 18%, var(--am-p-shadow) 18% 26%, transparent 26%),
+    linear-gradient(140deg, transparent 0 30%, var(--am-p-light) 30% 37%, transparent 37%),;
+  --am-bg-impressionist: var(--am-if-acrylic) var(--am-if-impressionist) var(--am-p-extra,)
+    linear-gradient(var(--am-plane-angle), transparent 0 var(--am-accent-at), var(--am-p-deep) var(--am-accent-at) calc(var(--am-accent-at) + 3%), transparent calc(var(--am-accent-at) + 3%)),
+    linear-gradient(var(--am-plane-angle), var(--am-p-light) 0 31%, var(--am-p-mid) 31% 66%, var(--am-p-shadow) 66%);
+  /* Acrylic realism: one smooth, blended light-to-shadow modelling, lit
+     from the top left, with a soft varnish highlight. */
+  --am-r-high: color-mix(in oklab, var(--am-p-mid), #fff2d6 24%);
+  --am-r-shadow: color-mix(in oklab, var(--am-p-mid), #2b1a0f var(--am-depth));
+  --am-bg-realism: var(--am-if-acrylic) var(--am-if-realism)
+    radial-gradient(55% 50% at 28% 22%, var(--am-varnish), transparent 72%),
+    radial-gradient(135% 150% at 30% 18%, var(--am-r-high), var(--am-p-mid) 50%, var(--am-r-shadow) 100%);
+
+  background: var(--am-bg-impressionist, var(--am-bg-realism, var(--am-bg-marker,
     var(--am-texture),
     radial-gradient(ellipse at 35% 35%,
       color-mix(in srgb, var(--am-paint) var(--am-core), transparent),
-      color-mix(in srgb, var(--am-paint) var(--am-edge), transparent) 80%));
+      color-mix(in srgb, var(--am-paint) var(--am-edge), transparent) 80%))));
   background-blend-mode: var(--am-blend);
   box-shadow: var(--am-shadow);
   filter: var(--am-layer-filter);
@@ -372,6 +500,10 @@
   --am-core: var(--am-fill-core);
   --am-edge: var(--am-fill-edge);
   --am-shape: var(--am-shape-blob);
+  --am-plane-angle: 176deg;
+  --am-depth: 40%;
+  --am-accent-at: 88%;
+  --am-varnish: light-dark(rgb(255 246 226 / 0.28), rgb(255 240 210 / 0.18));
   display: inline-flex;
   align-items: center;
   gap: 0.5em;
@@ -396,6 +528,10 @@
   --am-core: var(--am-fill-core);
   --am-edge: var(--am-fill-edge);
   --am-shape: var(--am-shape-blob);
+  --am-plane-angle: 176deg;
+  --am-depth: 40%;
+  --am-accent-at: 88%;
+  --am-varnish: light-dark(rgb(255 246 226 / 0.28), rgb(255 240 210 / 0.18));
   display: inline-block;
   padding: 0.3em 0.9em;
   color: var(--am-on-pigment);
@@ -569,6 +705,11 @@
   --am-core: var(--am-fill-core);
   --am-edge: var(--am-fill-edge);
   --am-mk-shape: var(--am-scribble-splash);
+  --am-plane-angle: 135deg;
+  --am-extra-planes: ;
+  --am-depth: 42%;
+  --am-accent-at: 84%;
+  --am-varnish: light-dark(rgb(255 246 226 / 0.3), rgb(255 240 210 / 0.2));
   --am-mk-tex: var(--am-marker-tex-d) 0 0 / 200px 140px repeat;
   --am-mk-bleed: 0px;
   display: block;

@@ -1,6 +1,8 @@
 // Optional React wrappers. Plain createElement so no build step is needed.
 // Each component accepts `medium` (overrides the surrounding medium: "watercolor"
-// | "acrylic" | "charcoal" | "paper" | "marker") and,
+// | "acrylic" | "charcoal" | "paper" | "marker"), `artStyle` (the acrylic style:
+// "impasto" | "impressionist" | "realism"; named so it doesn't clash with
+// React's `style`) and,
 // where it makes sense, `variant` ("primary" | "secondary" | "accent").
 import { createElement as h, forwardRef, useEffect, useRef } from 'react';
 import { installFilters } from './art-medium.js';
@@ -8,40 +10,40 @@ import { installFilters } from './art-medium.js';
 const cx = (...c) => c.filter(Boolean).join(' ');
 const variantClass = (v) => (v && v !== 'primary' ? `am--${v}` : null);
 
-/** Sets the medium (and optionally theme: light | dark | auto) for a subtree and paints the paper background. */
-export function MediumProvider({ medium = 'watercolor', theme, as = 'div', canvas = true, className, children, ...rest }) {
+/** Sets the medium (and optionally artStyle for acrylic, and theme: light | dark | auto) for a subtree and paints the paper background. */
+export function MediumProvider({ medium = 'watercolor', artStyle, theme, as = 'div', canvas = true, className, children, ...rest }) {
   useEffect(() => installFilters(), []);
-  return h(as, { 'data-medium': medium, 'data-theme': theme, className: cx(canvas && 'am-canvas', className), ...rest }, children);
+  return h(as, { 'data-medium': medium, 'data-style': artStyle, 'data-theme': theme, className: cx(canvas && 'am-canvas', className), ...rest }, children);
 }
 
-export const Button = forwardRef(function Button({ variant, medium, className, ...rest }, ref) {
-  return h('button', { ref, 'data-medium': medium, className: cx('am-button', variantClass(variant), className), ...rest });
+export const Button = forwardRef(function Button({ variant, medium, artStyle, className, ...rest }, ref) {
+  return h('button', { ref, 'data-medium': medium, 'data-style': artStyle, className: cx('am-button', variantClass(variant), className), ...rest });
 });
 
-export function Badge({ variant, medium, className, ...rest }) {
-  return h('span', { 'data-medium': medium, className: cx('am-badge', variantClass(variant), className), ...rest });
+export function Badge({ variant, medium, artStyle, className, ...rest }) {
+  return h('span', { 'data-medium': medium, 'data-style': artStyle, className: cx('am-badge', variantClass(variant), className), ...rest });
 }
 
-export function Card({ title, medium, className, children, ...rest }) {
-  return h('article', { 'data-medium': medium, className: cx('am-card', className), ...rest },
+export function Card({ title, medium, artStyle, className, children, ...rest }) {
+  return h('article', { 'data-medium': medium, 'data-style': artStyle, className: cx('am-card', className), ...rest },
     title != null && h('h3', { className: 'am-card__title' }, title),
     children);
 }
 
-export const Input = forwardRef(function Input({ label, medium, className, multiline, ...rest }, ref) {
+export const Input = forwardRef(function Input({ label, medium, artStyle, className, multiline, ...rest }, ref) {
   const control = h('span', { className: 'am-input' }, h(multiline ? 'textarea' : 'input', { ref, ...rest }));
-  return h('label', { 'data-medium': medium, className: cx('am-field', className) },
+  return h('label', { 'data-medium': medium, 'data-style': artStyle, className: cx('am-field', className) },
     label != null && h('span', { className: 'am-field__label' }, label),
     control);
 });
 
-export function Divider({ variant, medium, className, ...rest }) {
-  return h('hr', { 'data-medium': medium, className: cx('am-divider', variantClass(variant), className), ...rest });
+export function Divider({ variant, medium, artStyle, className, ...rest }) {
+  return h('hr', { 'data-medium': medium, 'data-style': artStyle, className: cx('am-divider', variantClass(variant), className), ...rest });
 }
 
 /** links: [{ href, label, current? }] */
-export function Nav({ brand, brandHref = '/', links = [], medium, className, ...rest }) {
-  return h('nav', { 'data-medium': medium, className: cx('am-nav', className), ...rest },
+export function Nav({ brand, brandHref = '/', links = [], medium, artStyle, className, ...rest }) {
+  return h('nav', { 'data-medium': medium, 'data-style': artStyle, className: cx('am-nav', className), ...rest },
     brand != null && h('a', { className: 'am-nav__brand', href: brandHref }, brand),
     h('ul', { className: 'am-nav__links' },
       links.map((l) => h('li', { key: l.href },
@@ -49,12 +51,12 @@ export function Nav({ brand, brandHref = '/', links = [], medium, className, ...
 }
 
 /** Decorative paint blob. Position it yourself (e.g. absolutely behind a hero). */
-export function Splash({ variant, medium, className, ...rest }) {
-  return h('span', { 'aria-hidden': true, 'data-medium': medium, className: cx('am-splash', variantClass(variant), className), ...rest });
+export function Splash({ variant, medium, artStyle, className, ...rest }) {
+  return h('span', { 'aria-hidden': true, 'data-medium': medium, 'data-style': artStyle, className: cx('am-splash', variantClass(variant), className), ...rest });
 }
 
 /** A native <dialog>, opened modally while `open` is true. */
-export function Modal({ open, onClose, title, medium, className, children, ...rest }) {
+export function Modal({ open, onClose, title, medium, artStyle, className, children, ...rest }) {
   const ref = useRef(null);
   useEffect(() => {
     const d = ref.current;
@@ -62,7 +64,7 @@ export function Modal({ open, onClose, title, medium, className, children, ...re
     if (open && !d.open) d.showModal();
     if (!open && d.open) d.close();
   }, [open]);
-  return h('dialog', { ref, onClose, 'data-medium': medium, className: cx('am-modal', className), ...rest },
+  return h('dialog', { ref, onClose, 'data-medium': medium, 'data-style': artStyle, className: cx('am-modal', className), ...rest },
     title != null && h('h2', { className: 'am-modal__title' }, title),
     children);
 }

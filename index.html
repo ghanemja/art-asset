@@ -15,14 +15,24 @@
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M14 18c8-12 30-12 38 0s8 26-4 34-30 6-36-6-6-20 2-28z' fill='%233f7cba' opacity='.85'/%3E%3Ccircle cx='44' cy='42' r='12' fill='%23d06a86' opacity='.85'/%3E%3Ccircle cx='22' cy='44' r='8' fill='%23e3a33b' opacity='.9'/%3E%3C/svg%3E">
   <script>
-    // Restore the visitor's last medium/theme before first paint.
+    // Restore the visitor's last medium/style/theme before first paint.
     (function () {
-      var root = document.documentElement, m, t;
-      try { m = localStorage.getItem('am-medium'); t = localStorage.getItem('am-theme'); } catch (e) {}
+      var root = document.documentElement, m, s, t;
+      try { m = localStorage.getItem('am-medium'); s = localStorage.getItem('am-style'); t = localStorage.getItem('am-theme'); } catch (e) {}
       if (['watercolor', 'acrylic', 'charcoal', 'paper', 'marker'].indexOf(m) > -1) root.setAttribute('data-medium', m);
+      if (['impasto', 'impressionist', 'realism'].indexOf(s) > -1) root.setAttribute('data-style', s);
       if (t !== 'light' && t !== 'dark') t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
       root.setAttribute('data-theme', t);
     })();
+    // The hero headline's verb follows the page medium (and acrylic style).
+    window.amHeadline = function () {
+      var verbs = { watercolor: 'painted', impasto: 'brushed', impressionist: 'painted', realism: 'rendered',
+                    charcoal: 'sketched', paper: 'cut out', marker: 'scribbled' };
+      var root = document.documentElement, m = root.getAttribute('data-medium');
+      var key = m === 'acrylic' ? (root.getAttribute('data-style') || 'impasto') : m;
+      var em = document.querySelector('.hero h1 em');
+      if (em && verbs[key]) em.textContent = verbs[key] + '.';
+    };
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -76,6 +86,13 @@
     .palette__label { font-size: .85rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; opacity: .7; }
     .palette .am-button[aria-pressed="true"]::before { transform: var(--am-hover); }
     .palette .am-button[aria-pressed="true"]::after { content: "✓"; }
+    .palette__styles { display: grid; gap: .75rem; justify-items: center; margin-top: .5rem; }
+    html:not([data-medium="acrylic"]) .palette__styles { display: none; }
+    .plate__styles { gap: .4rem; }
+    .plate__style { padding: .3em .7em; border: 1px solid color-mix(in srgb, var(--am-ink) 30%, transparent); border-radius: 999px;
+                    background: transparent; color: inherit; font: 700 .75rem/1.2 var(--am-font-body); letter-spacing: .04em; cursor: pointer; }
+    .plate__style[aria-pressed="true"] { background: var(--am-ink); color: var(--am-paper); border-color: var(--am-ink); }
+    .plate__style:focus-visible { outline: 2px dashed var(--am-ink); outline-offset: 3px; }
 
     /* Medium plates: framed like prints on a gallery wall */
     .plates { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 1.5rem; }
@@ -147,6 +164,7 @@
       </div>
       <span class="am-badge am--secondary">v0.1 · MIT · no build step</span>
       <h1>Components,<br><em>painted.</em></h1>
+      <script>amHeadline();</script>
       <p class="hero__lede">A UI library where every button, card and input is made of a real art medium. One attribute paints your whole site in watercolor, acrylic, charcoal, torn paper or marker. Light or dark.</p>
       <div class="row">
         <a class="am-button" href="#start">Get started</a>
@@ -160,6 +178,14 @@
           <button class="am-button am--accent" data-medium="charcoal" data-set="charcoal" aria-pressed="false">Charcoal</button>
           <button class="am-button" data-medium="paper" data-set="paper" aria-pressed="false">Paper</button>
           <button class="am-button am--accent" data-medium="marker" data-set="marker" aria-pressed="false">Marker</button>
+        </div>
+        <div class="palette__styles">
+          <span class="palette__label">Acrylic style</span>
+          <div class="row" role="group" aria-label="Acrylic style">
+            <button class="am-button" data-medium="acrylic" data-style="impasto" data-set-style="impasto" aria-pressed="false">Impasto</button>
+            <button class="am-button am--secondary" data-medium="acrylic" data-style="impressionist" data-set-style="impressionist" aria-pressed="false">Impressionist</button>
+            <button class="am-button am--accent" data-medium="acrylic" data-style="realism" data-set-style="realism" aria-pressed="false">Realism</button>
+          </div>
         </div>
       </div>
     </header>
@@ -176,12 +202,17 @@
           <code>data-medium="watercolor"</code>
           <div><button class="am-button am--accent" data-set="watercolor">Paint the page</button></div>
         </article>
-        <article class="plate am-canvas" data-medium="acrylic">
+        <article class="plate am-canvas" data-medium="acrylic" data-style="impasto" id="acrylic-plate">
           <span class="am-splash am--secondary" aria-hidden="true"></span>
           <h3>Acrylic</h3>
-          <p>Thick impasto in short, directional dabs of broken color, with lit ridges, a little gloss and stroke ends for edges.</p>
+          <p>Three styles: thick impasto dabs of broken color, flat impressionist planes over a warm ground, or smooth, softly lit realism.</p>
+          <div class="row plate__styles" role="group" aria-label="Acrylic style for this plate">
+            <button class="plate__style" data-plate-style="impasto" aria-pressed="true">Impasto</button>
+            <button class="plate__style" data-plate-style="impressionist" aria-pressed="false">Impressionist</button>
+            <button class="plate__style" data-plate-style="realism" aria-pressed="false">Realism</button>
+          </div>
           <div class="row"><button class="am-button">Button</button><span class="am-badge am--accent">Badge</span></div>
-          <code>data-medium="acrylic"</code>
+          <code id="acrylic-plate-code">data-medium="acrylic" data-style="impasto"</code>
           <div><button class="am-button am--secondary" data-set="acrylic">Paint the page</button></div>
         </article>
         <article class="plate am-canvas" data-medium="charcoal">
@@ -435,7 +466,7 @@ import { MediumProvider, Button, Card }
   </dialog>
 
   <script type="module">
-    import { setMedium, setTheme } from './src/art-medium.js?v=dev';
+    import { setMedium, setTheme, setStyle } from './src/art-medium.js?v=dev';
 
     const root = document.documentElement;
     const save = (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} };
@@ -458,15 +489,43 @@ import { MediumProvider, Button, Card }
         b.setAttribute('aria-pressed', String(b.dataset.set === root.dataset.medium));
       }
     };
+    // Acrylic style for the whole page
+    const syncStyle = () => {
+      const current = root.dataset.style || 'impasto';
+      for (const b of document.querySelectorAll('[data-set-style]')) {
+        b.setAttribute('aria-pressed', String(b.dataset.setStyle === current));
+      }
+      window.amHeadline();
+    };
+    const applyStyle = (style) => { setStyle(root, style); save('am-style', style); syncStyle(); };
+    for (const btn of document.querySelectorAll('[data-set-style]')) {
+      btn.addEventListener('click', () => applyStyle(btn.dataset.setStyle));
+    }
+
     for (const btn of document.querySelectorAll('[data-set]')) {
       btn.addEventListener('click', () => {
         setMedium(root, btn.dataset.set);
         save('am-medium', btn.dataset.set);
+        // "Paint the page" on the acrylic plate also takes that plate's style.
+        const plate = btn.closest('.plate[data-style]');
+        if (plate) applyStyle(plate.dataset.style);
         syncMedium();
+        window.amHeadline();
         if (!btn.closest('.hero')) document.querySelector('.hero').scrollIntoView();
       });
     }
     syncMedium();
+    syncStyle();
+
+    // Style switcher on the acrylic plate
+    const plate = document.getElementById('acrylic-plate');
+    for (const btn of plate.querySelectorAll('[data-plate-style]')) {
+      btn.addEventListener('click', () => {
+        setStyle(plate, btn.dataset.plateStyle);
+        document.getElementById('acrylic-plate-code').textContent = `data-medium="acrylic" data-style="${btn.dataset.plateStyle}"`;
+        for (const b of plate.querySelectorAll('[data-plate-style]')) b.setAttribute('aria-pressed', String(b === btn));
+      });
+    }
 
     // Theme. The "after dark" plates always show the opposite of the page.
     const toggle = document.getElementById('theme-toggle');

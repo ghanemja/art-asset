@@ -4,6 +4,8 @@
 
 export const MEDIUMS = ['watercolor', 'acrylic', 'charcoal', 'paper', 'marker'];
 export const THEMES = ['light', 'dark', 'auto'];
+/** Styles of the acrylic medium. Impasto is the default. */
+export const STYLES = ['impasto', 'impressionist', 'realism'];
 
 const FILTERS = `
 <svg id="am-filters" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"
@@ -176,6 +178,174 @@ const FILTERS = `
       <feComposite in="lit" in2="shape" operator="in"/>
     </filter>
 
+    <!-- Acrylic, impressionist style: flat matte planes laid in broad
+         strokes (band noise drags the plane edges into stroke ends), a warm
+         terracotta ground showing at the edges and in thin gaps between
+         strokes, dry-brush breakup at the rim and matte canvas tooth. -->
+    <filter id="am-acrylic-impressionist" x="-8%" y="-25%" width="116%" height="150%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.07" numOctaves="2" seed="7" result="strokes"/>
+      <feDisplacementMap in="SourceGraphic" in2="strokes" scale="16" xChannelSelector="R" yChannelSelector="G" result="paint"/>
+      <!-- warm terracotta underpainting, torn a little wider than the paint -->
+      <feMorphology in="SourceAlpha" operator="dilate" radius="2.5" result="grown"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.02 0.08" numOctaves="2" seed="3" result="groundNoise"/>
+      <feDisplacementMap in="grown" in2="groundNoise" scale="12" xChannelSelector="R" yChannelSelector="G" result="groundShape"/>
+      <feFlood flood-color="#c2633a"/>
+      <feComposite in2="groundShape" operator="in" result="ground"/>
+      <!-- thin gaps between broad strokes, where the ground shows -->
+      <feTurbulence type="fractalNoise" baseFrequency="0.004 0.035" numOctaves="1" seed="19" result="gapNoise"/>
+      <feColorMatrix in="gapNoise" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1 0 0 0 0" result="bandField"/>
+      <feComponentTransfer in="bandField" result="gaps"><feFuncA type="discrete" tableValues="1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1"/></feComponentTransfer>
+      <feComposite in="paint" in2="gaps" operator="in" result="gapped"/>
+      <!-- dry-brush breakup where strokes end: bristle noise eats the rim -->
+      <feMorphology in="gapped" operator="erode" radius="2.2" result="core"/>
+      <feComposite in="gapped" in2="core" operator="out" result="rim"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.05 0.9" numOctaves="1" seed="11" result="bristle"/>
+      <feComponentTransfer in="bristle" result="dry"><feFuncA type="discrete" tableValues="0 0 0 0 1 1 1 1 1 1"/></feComponentTransfer>
+      <feComposite in="rim" in2="dry" operator="in" result="dryRim"/>
+      <feMerge result="brushed"><feMergeNode in="core"/><feMergeNode in="dryRim"/></feMerge>
+      <!-- matte canvas tooth -->
+      <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="1" seed="5" result="tooth"/>
+      <feComposite in="brushed" in2="tooth" operator="arithmetic" k1="0.14" k2="0.93" result="matte"/>
+      <feComposite in="matte" in2="brushed" operator="in" result="painted"/>
+      <feMerge><feMergeNode in="ground"/><feMergeNode in="painted"/></feMerge>
+    </filter>
+    <filter id="am-acrylic-impressionist-panel" x="-4%" y="-8%" width="108%" height="116%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.006 0.035" numOctaves="2" seed="7" result="strokes"/>
+      <feDisplacementMap in="SourceGraphic" in2="strokes" scale="18" xChannelSelector="R" yChannelSelector="G" result="paint"/>
+      <!-- warm terracotta underpainting, torn a little wider than the paint -->
+      <feMorphology in="SourceAlpha" operator="dilate" radius="2" result="grown"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.05" numOctaves="2" seed="3" result="groundNoise"/>
+      <feDisplacementMap in="grown" in2="groundNoise" scale="14" xChannelSelector="R" yChannelSelector="G" result="groundShape"/>
+      <feFlood flood-color="#c2633a"/>
+      <feComposite in2="groundShape" operator="in" result="ground"/>
+      <!-- thin gaps between broad strokes, where the ground shows -->
+      <feTurbulence type="fractalNoise" baseFrequency="0.004 0.03" numOctaves="1" seed="19" result="gapNoise"/>
+      <feColorMatrix in="gapNoise" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1 0 0 0 0" result="bandField"/>
+      <feComponentTransfer in="bandField" result="gaps"><feFuncA type="discrete" tableValues="1"/></feComponentTransfer>
+      <feComposite in="paint" in2="gaps" operator="in" result="gapped"/>
+      <!-- dry-brush breakup where strokes end: bristle noise eats the rim -->
+      <feMorphology in="gapped" operator="erode" radius="2.5" result="core"/>
+      <feComposite in="gapped" in2="core" operator="out" result="rim"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.05 0.9" numOctaves="1" seed="11" result="bristle"/>
+      <feComponentTransfer in="bristle" result="dry"><feFuncA type="discrete" tableValues="0 0 0 0 1 1 1 1 1 1"/></feComponentTransfer>
+      <feComposite in="rim" in2="dry" operator="in" result="dryRim"/>
+      <feMerge result="brushed"><feMergeNode in="core"/><feMergeNode in="dryRim"/></feMerge>
+      <!-- matte canvas tooth -->
+      <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="1" seed="5" result="tooth"/>
+      <feComposite in="brushed" in2="tooth" operator="arithmetic" k1="0.14" k2="0.93" result="matte"/>
+      <feComposite in="matte" in2="brushed" operator="in" result="painted"/>
+      <feMerge><feMergeNode in="ground"/><feMergeNode in="painted"/></feMerge>
+    </filter>
+    <filter id="am-acrylic-impressionist-splash" x="-8%" y="-8%" width="116%" height="116%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.014 0.1" numOctaves="2" seed="7" result="strokes"/>
+      <feDisplacementMap in="SourceGraphic" in2="strokes" scale="18" xChannelSelector="R" yChannelSelector="G" result="paint"/>
+      <!-- warm terracotta underpainting, torn a little wider than the paint -->
+      <feMorphology in="SourceAlpha" operator="dilate" radius="3" result="grown"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.016 0.06" numOctaves="2" seed="3" result="groundNoise"/>
+      <feDisplacementMap in="grown" in2="groundNoise" scale="16" xChannelSelector="R" yChannelSelector="G" result="groundShape"/>
+      <feFlood flood-color="#c2633a"/>
+      <feComposite in2="groundShape" operator="in" result="ground"/>
+      <!-- thin gaps between broad strokes, where the ground shows -->
+      <feTurbulence type="fractalNoise" baseFrequency="0.004 0.03" numOctaves="1" seed="19" result="gapNoise"/>
+      <feColorMatrix in="gapNoise" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1 0 0 0 0" result="bandField"/>
+      <feComponentTransfer in="bandField" result="gaps"><feFuncA type="discrete" tableValues="1"/></feComponentTransfer>
+      <feComposite in="paint" in2="gaps" operator="in" result="gapped"/>
+      <!-- dry-brush breakup where strokes end: bristle noise eats the rim -->
+      <feMorphology in="gapped" operator="erode" radius="3" result="core"/>
+      <feComposite in="gapped" in2="core" operator="out" result="rim"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.05 0.9" numOctaves="1" seed="11" result="bristle"/>
+      <feComponentTransfer in="bristle" result="dry"><feFuncA type="discrete" tableValues="0 0 0 0 1 1 1 1 1 1"/></feComponentTransfer>
+      <feComposite in="rim" in2="dry" operator="in" result="dryRim"/>
+      <feMerge result="brushed"><feMergeNode in="core"/><feMergeNode in="dryRim"/></feMerge>
+      <!-- matte canvas tooth -->
+      <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="1" seed="5" result="tooth"/>
+      <feComposite in="brushed" in2="tooth" operator="arithmetic" k1="0.14" k2="0.93" result="matte"/>
+      <feComposite in="matte" in2="brushed" operator="in" result="painted"/>
+      <feMerge><feMergeNode in="ground"/><feMergeNode in="painted"/></feMerge>
+    </filter>
+    <filter id="am-acrylic-impressionist-stroke" x="-4%" y="-200%" width="108%" height="500%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.01 0.2" numOctaves="2" seed="7" result="strokes"/>
+      <feDisplacementMap in="SourceGraphic" in2="strokes" scale="6" xChannelSelector="R" yChannelSelector="G" result="paint"/>
+      <!-- warm terracotta underpainting, torn a little wider than the paint -->
+      <feMorphology in="SourceAlpha" operator="dilate" radius="1.5" result="grown"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.02 0.2" numOctaves="2" seed="3" result="groundNoise"/>
+      <feDisplacementMap in="grown" in2="groundNoise" scale="5" xChannelSelector="R" yChannelSelector="G" result="groundShape"/>
+      <feFlood flood-color="#c2633a"/>
+      <feComposite in2="groundShape" operator="in" result="ground"/>
+      <!-- thin gaps between broad strokes, where the ground shows -->
+      <feTurbulence type="fractalNoise" baseFrequency="0.004 0.03" numOctaves="1" seed="19" result="gapNoise"/>
+      <feColorMatrix in="gapNoise" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1 0 0 0 0" result="bandField"/>
+      <feComponentTransfer in="bandField" result="gaps"><feFuncA type="discrete" tableValues="1"/></feComponentTransfer>
+      <feComposite in="paint" in2="gaps" operator="in" result="gapped"/>
+      <!-- dry-brush breakup where strokes end: bristle noise eats the rim -->
+      <feMorphology in="gapped" operator="erode" radius="1" result="core"/>
+      <feComposite in="gapped" in2="core" operator="out" result="rim"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.05 0.9" numOctaves="1" seed="11" result="bristle"/>
+      <feComponentTransfer in="bristle" result="dry"><feFuncA type="discrete" tableValues="0 0 0 0 1 1 1 1 1 1"/></feComponentTransfer>
+      <feComposite in="rim" in2="dry" operator="in" result="dryRim"/>
+      <feMerge result="brushed"><feMergeNode in="core"/><feMergeNode in="dryRim"/></feMerge>
+      <!-- matte canvas tooth -->
+      <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="1" seed="5" result="tooth"/>
+      <feComposite in="brushed" in2="tooth" operator="arithmetic" k1="0.14" k2="0.93" result="matte"/>
+      <feComposite in="matte" in2="brushed" operator="in" result="painted"/>
+      <feMerge><feMergeNode in="ground"/><feMergeNode in="painted"/></feMerge>
+    </filter>
+    <!-- Acrylic, realism style: smooth blended paint. Soft edges, a faint
+         varnish sheen from a lit dome of the shape, very fine canvas grain
+         and a soft warm cast shadow. The modelling gradient is CSS. -->
+    <filter id="am-acrylic-realism" x="-12%" y="-30%" width="124%" height="180%" color-interpolation-filters="sRGB">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="0.7" result="softA"/>
+      <feComposite in="SourceGraphic" in2="softA" operator="in" result="soft"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.95" numOctaves="1" seed="4" result="weave"/>
+      <feComposite in="soft" in2="weave" operator="arithmetic" k1="0.08" k2="0.960" result="grainy"/>
+      <feComposite in="grainy" in2="soft" operator="in" result="grained"/>
+      <feDropShadow in="grained" dx="1" dy="3" stdDeviation="3" flood-color="#2a1a0e" flood-opacity="0.3" result="shadowed"/>
+      <feGaussianBlur in="SourceAlpha" stdDeviation="5" result="dome"/>
+      <feSpecularLighting in="dome" surfaceScale="4" specularConstant="0.45" specularExponent="20" lighting-color="#fff4e2" result="spec">
+        <feDistantLight azimuth="225" elevation="42"/>
+      </feSpecularLighting>
+      <feComposite in="spec" in2="soft" operator="in" result="sheen"/>
+      <feMerge><feMergeNode in="shadowed"/><feMergeNode in="sheen"/></feMerge>
+    </filter>
+    <filter id="am-acrylic-realism-panel" x="-6%" y="-10%" width="112%" height="125%" color-interpolation-filters="sRGB">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="0.6" result="softA"/>
+      <feComposite in="SourceGraphic" in2="softA" operator="in" result="soft"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.95" numOctaves="1" seed="4" result="weave"/>
+      <feComposite in="soft" in2="weave" operator="arithmetic" k1="0.06" k2="0.970" result="grainy"/>
+      <feComposite in="grainy" in2="soft" operator="in" result="grained"/>
+      <feDropShadow in="grained" dx="0" dy="4" stdDeviation="8" flood-color="#2a1a0e" flood-opacity="0.22" result="shadowed"/>
+      <feMerge><feMergeNode in="shadowed"/></feMerge>
+    </filter>
+    <filter id="am-acrylic-realism-splash" x="-40%" y="-40%" width="180%" height="200%" color-interpolation-filters="sRGB">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="1" result="softA"/>
+      <feComposite in="SourceGraphic" in2="softA" operator="in" result="soft"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.95" numOctaves="1" seed="4" result="weave"/>
+      <feComposite in="soft" in2="weave" operator="arithmetic" k1="0.08" k2="0.960" result="grainy"/>
+      <feComposite in="grainy" in2="soft" operator="in" result="grained"/>
+      <feDropShadow in="grained" dx="3" dy="8" stdDeviation="7" flood-color="#2a1a0e" flood-opacity="0.32" result="shadowed"/>
+      <feGaussianBlur in="SourceAlpha" stdDeviation="10" result="dome"/>
+      <feSpecularLighting in="dome" surfaceScale="4" specularConstant="0.55" specularExponent="20" lighting-color="#fff4e2" result="spec">
+        <feDistantLight azimuth="225" elevation="42"/>
+      </feSpecularLighting>
+      <feComposite in="spec" in2="soft" operator="in" result="sheen"/>
+      <feMerge><feMergeNode in="shadowed"/><feMergeNode in="sheen"/></feMerge>
+    </filter>
+    <filter id="am-acrylic-realism-stroke" x="-4%" y="-200%" width="108%" height="500%" color-interpolation-filters="sRGB">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="0.8" result="softA"/>
+      <feComposite in="SourceGraphic" in2="softA" operator="in" result="soft"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.95" numOctaves="1" seed="4" result="weave"/>
+      <feComposite in="soft" in2="weave" operator="arithmetic" k1="0.04" k2="0.980" result="grainy"/>
+      <feComposite in="grainy" in2="soft" operator="in" result="grained"/>
+      <feMerge result="shadowed"><feMergeNode in="grained"/></feMerge>
+      <feGaussianBlur in="SourceAlpha" stdDeviation="1.5" result="dome"/>
+      <feSpecularLighting in="dome" surfaceScale="4" specularConstant="0.4" specularExponent="20" lighting-color="#fff4e2" result="spec">
+        <feDistantLight azimuth="225" elevation="42"/>
+      </feSpecularLighting>
+      <feComposite in="spec" in2="soft" operator="in" result="sheen"/>
+      <feMerge><feMergeNode in="shadowed"/><feMergeNode in="sheen"/></feMerge>
+    </filter>
+
+
     <!-- Charcoal: wobbly hand-drawn line, gritty broken coverage -->
     <filter id="am-charcoal" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">
       <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="2" result="wobble"/>
@@ -255,6 +425,13 @@ export function installFilters(doc = globalThis.document) {
 export function setMedium(el, medium) {
   if (!MEDIUMS.includes(medium)) throw new Error(`Unknown medium "${medium}". Use one of: ${MEDIUMS.join(', ')}`);
   el.setAttribute('data-medium', medium);
+}
+
+/** Switch the acrylic style for an element and everything inside it. Put it
+ *  on the acrylic element itself or an ancestor; other mediums ignore it. */
+export function setStyle(el, style) {
+  if (!STYLES.includes(style)) throw new Error(`Unknown style "${style}". Use one of: ${STYLES.join(', ')}`);
+  el.setAttribute('data-style', style);
 }
 
 /** Switch light/dark for an element and everything inside it. "auto" follows the OS. */
