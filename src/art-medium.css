@@ -1,8 +1,8 @@
 /* ==========================================================================
    art-medium — a component library where every component is painted.
 
-   Pick a medium with data-medium="watercolor | acrylic | charcoal" on any
-   element. It applies to that element and everything inside it, so you can
+   Pick a medium with data-medium="watercolor | acrylic | charcoal" and a theme
+   with data-theme="light | dark | auto" on any element. It applies to that element and everything inside it, so you can
    theme a whole page from <html> or override a single button.
 
    Each component paints itself on a ::before layer (filtered through an SVG
@@ -10,23 +10,24 @@
    ========================================================================== */
 
 /* --- Mediums: tokens only ------------------------------------------------ */
+/* Colors are light-dark(light, dark) pairs, resolved by data-theme below.   */
 
 :root,
 [data-medium="watercolor"] {
-  --am-paper: #fbf7ee;
+  --am-paper: light-dark(#fbf7ee, #1b1c24);
   --am-paper-texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.45 0 0 0 0 0.4 0 0 0 0 0.3 0 0 0 0.16 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E");
-  --am-ink: #2d2a32;
+  --am-ink: light-dark(#2d2a32, #ece6da);
 
-  --am-pigment-primary: #3f7cba;   /* cerulean */
-  --am-pigment-secondary: #d06a86; /* rose madder */
-  --am-pigment-accent: #e3a33b;    /* gamboge */
+  --am-pigment-primary: light-dark(#3f7cba, #6aa6e0);   /* cerulean */
+  --am-pigment-secondary: light-dark(#d06a86, #e48aa3); /* rose madder */
+  --am-pigment-accent: light-dark(#e3a33b, #f0b955);    /* gamboge */
   --am-pigment: var(--am-pigment-primary);
   --am-on-pigment: var(--am-ink);
   --am-on-accent: var(--am-ink);
   --am-fill-core: 58%;
   --am-fill-edge: 30%;
 
-  --am-surface: #8fb0c9;
+  --am-surface: light-dark(#8fb0c9, #7fa3c4);
   --am-surface-core: 22%;
   --am-surface-edge: 12%;
 
@@ -37,6 +38,7 @@
   --am-shadow: none;
   --am-filter: url(#am-watercolor);
   --am-filter-stroke: url(#am-watercolor-stroke);
+  --am-splash-opacity: 0.85;
 
   --am-shape-blob: 48% 52% 46% 54% / 60% 44% 56% 40%;
   --am-shape-panel: 26px 34px 28px 40px / 32px 24px 38px 26px;
@@ -47,23 +49,23 @@
 }
 
 [data-medium="acrylic"] {
-  --am-paper: #f2ece0;
+  --am-paper: light-dark(#f2ece0, #16141a);
   --am-paper-texture:
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.3 0 0 0 0 0.25 0 0 0 0 0.2 0 0 0 0.12 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E"),
-    repeating-linear-gradient(0deg, rgb(60 45 30 / 0.05) 0 1px, transparent 1px 4px),
-    repeating-linear-gradient(90deg, rgb(60 45 30 / 0.05) 0 1px, transparent 1px 4px);
-  --am-ink: #1e1b24;
+    repeating-linear-gradient(0deg, light-dark(rgb(60 45 30 / 0.05), rgb(255 240 220 / 0.035)) 0 1px, transparent 1px 4px),
+    repeating-linear-gradient(90deg, light-dark(rgb(60 45 30 / 0.05), rgb(255 240 220 / 0.035)) 0 1px, transparent 1px 4px);
+  --am-ink: light-dark(#1e1b24, #f3eee4);
 
-  --am-pigment-primary: #2f5fd0;   /* ultramarine */
-  --am-pigment-secondary: #e2483d; /* cadmium red */
-  --am-pigment-accent: #f2b705;    /* cadmium yellow */
+  --am-pigment-primary: light-dark(#2f5fd0, #4a7dff);   /* ultramarine */
+  --am-pigment-secondary: light-dark(#e2483d, #ff5a4c); /* cadmium red */
+  --am-pigment-accent: light-dark(#f2b705, #ffc81a);    /* cadmium yellow */
   --am-pigment: var(--am-pigment-primary);
   --am-on-pigment: #fffaf0;
-  --am-on-accent: var(--am-ink);
+  --am-on-accent: #1e1b24;
   --am-fill-core: 100%;
   --am-fill-edge: 100%;
 
-  --am-surface: #fffaf0;
+  --am-surface: light-dark(#fffaf0, #2a2631);
   --am-surface-core: 100%;
   --am-surface-edge: 100%;
 
@@ -71,9 +73,10 @@
   --am-stroke-core: 100%;
   --am-stroke-weight: 8px;
   --am-texture: none;
-  --am-shadow: 3px 4px 0 rgb(30 27 36 / 0.85);
+  --am-shadow: 3px 4px 0 light-dark(rgb(30 27 36 / 0.85), rgb(0 0 0 / 0.9));
   --am-filter: url(#am-acrylic);
   --am-filter-stroke: url(#am-acrylic-stroke);
+  --am-splash-opacity: 0.95;
 
   --am-shape-blob: 7px 12px 8px 14px;
   --am-shape-panel: 8px 14px 10px 16px;
@@ -83,31 +86,33 @@
   --am-font-body: "Work Sans", "Segoe UI", system-ui, sans-serif;
 }
 
+/* In the dark, charcoal becomes chalk on a slate board. */
 [data-medium="charcoal"] {
-  --am-paper: #f1efe9;
-  --am-paper-texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.3' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.2 0 0 0 0 0.2 0 0 0 0 0.2 0 0 0 0.2 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E");
-  --am-ink: #262626;
+  --am-paper: light-dark(#f1efe9, #23282b);
+  --am-paper-texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.3' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0.2 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E");
+  --am-ink: light-dark(#262626, #ebe7de);
 
-  --am-pigment-primary: #3a3a3a;   /* vine charcoal */
-  --am-pigment-secondary: #9a5a42; /* sanguine conté */
-  --am-pigment-accent: #5b6b78;    /* graphite blue */
+  --am-pigment-primary: light-dark(#3a3a3a, #e9e5dc);   /* vine charcoal / white chalk */
+  --am-pigment-secondary: light-dark(#9a5a42, #e8a48a); /* sanguine conté / pink chalk */
+  --am-pigment-accent: light-dark(#5b6b78, #9cc3d9);    /* graphite / blue chalk */
   --am-pigment: var(--am-pigment-primary);
   --am-on-pigment: var(--am-ink);
   --am-on-accent: var(--am-ink);
   --am-fill-core: 16%;
   --am-fill-edge: 6%;
 
-  --am-surface: #ffffff;
+  --am-surface: light-dark(#ffffff, #2e3539);
   --am-surface-core: 55%;
   --am-surface-edge: 40%;
 
-  --am-stroke: 2.5px solid #2a2a2a;
+  --am-stroke: 2.5px solid light-dark(#2a2a2a, #e9e5dc);
   --am-stroke-core: 85%;
   --am-stroke-weight: 4px;
-  --am-texture: repeating-linear-gradient(-45deg, rgb(38 38 38 / 0.16) 0 1px, transparent 1px 6px);
+  --am-texture: repeating-linear-gradient(-45deg, light-dark(rgb(38 38 38 / 0.16), rgb(235 231 222 / 0.14)) 0 1px, transparent 1px 6px);
   --am-shadow: none;
   --am-filter: url(#am-charcoal);
   --am-filter-stroke: url(#am-charcoal);
+  --am-splash-opacity: 1;
 
   --am-shape-blob: 4px 10px 5px 12px / 10px 5px 12px 4px;
   --am-shape-panel: 4px 12px 6px 14px / 12px 5px 14px 6px;
@@ -116,6 +121,14 @@
   --am-font-display: "Caveat", "Comic Sans MS", cursive;
   --am-font-body: "Kalam", "Comic Sans MS", cursive;
 }
+
+/* --- Theme ----------------------------------------------------------------
+   Light by default. data-theme="dark" | "light" | "auto" (follows the OS)
+   on any element switches it and everything inside it.                      */
+
+[data-theme="light"] { color-scheme: light; }
+[data-theme="dark"] { color-scheme: dark; }
+[data-theme="auto"] { color-scheme: light dark; }
 
 /* --- Canvas (page background) ------------------------------------------- */
 
@@ -128,7 +141,7 @@
 
 /* --- Shared paint layer -------------------------------------------------- */
 
-:where(.am-button, .am-badge, .am-card, .am-input, .am-nav, .am-modal) {
+:where(.am-button, .am-badge, .am-card, .am-input, .am-nav, .am-modal, .am-splash) {
   position: relative;
   isolation: isolate;
   background: transparent;
@@ -140,7 +153,7 @@
   --am-shape: var(--am-shape-panel);
 }
 
-:where(.am-button, .am-badge, .am-card, .am-input, .am-nav, .am-modal)::before {
+:where(.am-button, .am-badge, .am-card, .am-input, .am-nav, .am-modal, .am-splash)::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -316,6 +329,29 @@
 .am-modal__title { margin: 0 0 0.75rem; font: 400 1.8rem/1.1 var(--am-font-display); }
 .am-modal__actions { display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem; }
 
+/* --- Splash (decorative paint blob) ------------------------------------ */
+
+.am-splash {
+  --am-paint: var(--am-pigment);
+  --am-core: var(--am-fill-core);
+  --am-edge: var(--am-fill-edge);
+  display: block;
+  width: 12rem;
+  aspect-ratio: 1;
+  opacity: var(--am-splash-opacity);
+  pointer-events: none;
+}
+/* The splat shape is a mask on the paint; the medium filter on the element
+   then roughens its edges, so it works at any size. */
+.am-splash { filter: var(--am-filter); }
+.am-splash::before {
+  filter: none;
+  border-radius: 0;
+  border: 0;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cpath d='M104 18c20-2 28 12 44 16s34 2 38 24-12 28-8 46 20 30 6 48-34 8-48 20-24 24-46 16-16-24-36-30-38-2-42-26 14-30 10-50-14-32 2-48 30-4 42-12 18-12 38-4z'/%3E%3Ccircle cx='182' cy='26' r='7'/%3E%3Ccircle cx='22' cy='176' r='9'/%3E%3Ccircle cx='190' cy='150' r='4'/%3E%3Ccircle cx='40' cy='22' r='4'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cpath d='M104 18c20-2 28 12 44 16s34 2 38 24-12 28-8 46 20 30 6 48-34 8-48 20-24 24-46 16-16-24-36-30-38-2-42-26 14-30 10-50-14-32 2-48 30-4 42-12 18-12 38-4z'/%3E%3Ccircle cx='182' cy='26' r='7'/%3E%3Ccircle cx='22' cy='176' r='9'/%3E%3Ccircle cx='190' cy='150' r='4'/%3E%3Ccircle cx='40' cy='22' r='4'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+}
+
 /* --- Pigment variants (after mediums so they win on the same element) ---- */
 
 .am--secondary { --am-pigment: var(--am-pigment-secondary); }
@@ -324,7 +360,7 @@
 /* --- Motion -------------------------------------------------------------- */
 
 @media (prefers-reduced-motion: reduce) {
-  :where(.am-button, .am-badge, .am-card, .am-input, .am-nav, .am-modal)::before,
+  :where(.am-button, .am-badge, .am-card, .am-input, .am-nav, .am-modal, .am-splash)::before,
   .am-input::after,
   .am-nav__link::after { transition: none; }
 }

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-medium="watercolor">
+<html lang="en" data-medium="watercolor" data-theme="light">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,134 +13,373 @@
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="628">
   <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M14 18c8-12 30-12 38 0s8 26-4 34-30 6-36-6-6-20 2-28z' fill='%233f7cba' opacity='.85'/%3E%3Ccircle cx='44' cy='42' r='12' fill='%23d06a86' opacity='.85'/%3E%3Ccircle cx='22' cy='44' r='8' fill='%23e3a33b' opacity='.9'/%3E%3C/svg%3E">
+  <script>
+    // Restore the visitor's last medium/theme before first paint.
+    (function () {
+      var root = document.documentElement, m, t;
+      try { m = localStorage.getItem('am-medium'); t = localStorage.getItem('am-theme'); } catch (e) {}
+      if (m === 'watercolor' || m === 'acrylic' || m === 'charcoal') root.setAttribute('data-medium', m);
+      if (t !== 'light' && t !== 'dark') t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      root.setAttribute('data-theme', t);
+    })();
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Caveat:wght@500;700&family=Cormorant+Garamond:wght@500;600&family=Kalam:wght@400;700&family=Nunito:wght@400;700&family=Work+Sans:wght@400;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Caveat:wght@500;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Kalam:wght@400;700&family=Nunito:wght@400;700&family=Work+Sans:wght@400;700&display=swap">
   <link rel="stylesheet" href="../src/art-medium.css">
   <script type="module" src="../src/art-medium.js"></script>
   <style>
     * { box-sizing: border-box; }
-    body { margin: 0; min-height: 100vh; }
-    .wrap { max-width: 1120px; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
-    .hero { padding: 3.5rem 0 1rem; text-align: center; }
-    .hero h1 { margin: 0; font: 400 clamp(2.6rem, 7vw, 4.6rem)/1 var(--am-font-display); }
-    .hero p { max-width: 36rem; margin: 1rem auto 1.75rem; font-size: 1.1rem; line-height: 1.6; }
-    .wrap > .am-nav .am-nav__brand { white-space: nowrap; }
-    .switcher { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; }
-    h2 { font: 400 2rem/1.1 var(--am-font-display); margin: 0 0 1.25rem; }
-    .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
-    .gallery > section { padding: 1.5rem; display: grid; gap: 1.25rem; align-content: start; border-radius: 6px; }
-    .gallery h3 { margin: 0; font: 400 1.9rem/1 var(--am-font-display); }
-    .row { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; }
-    .gallery .am-nav { padding: 0.7rem 1rem; gap: 1rem; }
-    .gallery .am-nav__brand { font-size: 1.2rem; }
-    .mix { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; }
-    code { font-size: 0.85em; }
-    pre { margin: 0; overflow-x: auto; font: 0.85rem/1.6 ui-monospace, SFMono-Regular, Menlo, monospace; }
+    html { scroll-behavior: smooth; scroll-padding-top: 6rem; }
+    body { margin: 0; min-height: 100vh; overflow-x: clip; transition: background-color .3s, color .3s; }
+    a { color: inherit; }
+    .wrap { max-width: 1160px; margin: 0 auto; padding: 0 1rem; }
+    section { padding: 4.5rem 0 1rem; }
+    h2 { margin: 0 0 .6rem; font: 400 clamp(2rem, 5vw, 3rem)/1.05 var(--am-font-display); }
+    .lede { max-width: 40rem; margin: 0 0 2.25rem; font-size: 1.1rem; line-height: 1.6; opacity: .85; }
+    code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    :not(pre) > code { font-size: .85em; padding: .1em .35em; border-radius: 4px; background: color-mix(in srgb, var(--am-ink) 8%, transparent); }
+
+    /* Top bar: a paper-coloured fade so the sticky nav reads over content. */
+    .topbar { position: sticky; top: 0; z-index: 20; padding: .75rem 0 1.25rem; background: linear-gradient(var(--am-paper) 65%, transparent); }
+    .topbar .am-nav { gap: 1rem; }
+    .topbar .am-nav__brand { white-space: nowrap; display: flex; align-items: center; gap: .5rem; }
+    .topbar .am-nav__brand .am-splash { width: 1.4rem; }
+    .topbar__tools { display: flex; gap: .5rem; }
+    .topbar__tools .am-button { padding: .5em 1em; font-size: .85rem; white-space: nowrap; }
+    @media (max-width: 760px) {
+      .topbar .am-nav__links { display: none; }
+      .topbar .am-nav { padding: .7rem 1rem; }
+      .hero__paint .s3 { display: none; }
+    }
+
+    /* Hero */
+    .hero { position: relative; isolation: isolate; padding: 5rem 0 3rem; text-align: center; }
+    .hero__paint { position: absolute; inset: -3rem 0 0; z-index: -1; pointer-events: none; }
+    .hero__paint .am-splash { position: absolute; }
+    .hero__paint .s1 { width: clamp(14rem, 34vw, 28rem); left: -4%; top: 4%; }
+    .hero__paint .s2 { width: clamp(10rem, 24vw, 20rem); right: -2%; top: 18%; }
+    .hero__paint .s3 { width: clamp(7rem, 14vw, 12rem); left: 12%; bottom: 2%; }
+    .hero .am-badge { margin-bottom: 1.5rem; }
+    .hero h1 { margin: 0; font: 400 clamp(3rem, 10vw, 7rem)/.95 var(--am-font-display); letter-spacing: -.01em; }
+    .hero h1 em { font-style: italic; }
+    .hero__lede { max-width: 38rem; margin: 1.5rem auto 2rem; font-size: clamp(1.05rem, 2.2vw, 1.25rem); line-height: 1.6; }
+    .row { display: flex; flex-wrap: wrap; gap: .85rem; align-items: center; }
+    .hero .row { justify-content: center; }
+    .palette { margin-top: 2.75rem; display: inline-grid; gap: .75rem; justify-items: center; }
+    .palette__label { font-size: .85rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; opacity: .7; }
+    .palette .am-button[aria-pressed="true"]::before { transform: var(--am-hover); }
+    .palette .am-button[aria-pressed="true"]::after { content: "✓"; }
+
+    /* Medium plates: framed like prints on a gallery wall */
+    .plates { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+    .plate { position: relative; isolation: isolate; display: grid; gap: 1rem; align-content: start; padding: 1.75rem; border-radius: 4px; overflow: hidden;
+             box-shadow: 0 1px 0 color-mix(in srgb, var(--am-ink) 12%, transparent), 0 14px 30px -18px rgb(0 0 0 / .45); }
+    .plate h3 { margin: 0; font: 400 2.4rem/1 var(--am-font-display); }
+    .plate p { margin: 0; line-height: 1.55; }
+    .plate > code { justify-self: start; }
+    .plate > .am-splash { position: absolute; width: 7rem; right: -2.5rem; top: -2.5rem; z-index: -1; }
+
+    /* Component reference */
+    .specs { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 480px), 1fr)); gap: 1.5rem; }
+    .spec { display: grid; grid-template-rows: auto 1fr auto; gap: .9rem; padding: 1.5rem;
+            border: 1px solid color-mix(in srgb, var(--am-ink) 14%, transparent); border-radius: 6px; }
+    .spec h3 { margin: 0; font: 400 1.7rem/1 var(--am-font-display); }
+    .spec h3 small { font: 400 .85rem/1 var(--am-font-body); opacity: .65; margin-left: .5rem; }
+    .spec__stage { display: flex; flex-wrap: wrap; gap: .85rem; align-items: center; padding: 1.25rem .25rem; min-height: 7rem; }
+    .spec__stage > .am-card, .spec__stage > .am-field, .spec__stage > .am-nav, .spec__stage > .am-divider { flex: 1 1 100%; }
+    .spec__stage > .am-divider { margin: .25rem 0; }
+    .spec__code { margin: 0; max-height: 14rem; overflow: auto; padding: .9rem 1rem; border-radius: 6px; font-size: .8rem; line-height: 1.55;
+                  background: color-mix(in srgb, var(--am-ink) 7%, transparent); white-space: pre; tab-size: 2; }
+
+    /* Mixed media + day/night */
+    .grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
+    .grid3 .am-card p { line-height: 1.55; }
+
+    /* Get started */
+    .start { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 1.5rem; }
+    .start .am-card { display: grid; gap: .75rem; align-content: start; min-width: 0; }
+    .start pre { margin: 0; overflow-x: auto; font-size: .78rem; line-height: 1.6; padding: .8rem .9rem; border-radius: 6px; background: color-mix(in srgb, var(--am-ink) 8%, transparent); }
+    .step { font: 700 .75rem/1 var(--am-font-body); letter-spacing: .1em; text-transform: uppercase; opacity: .65; }
+
+    footer { padding: 2rem 0 4rem; text-align: center; }
+    footer p { margin: .5rem 0; opacity: .8; }
+    footer .am-splash { display: inline-block; width: 2.5rem; vertical-align: middle; }
   </style>
 </head>
 <body class="am-canvas">
-  <div class="wrap">
-    <nav class="am-nav">
-      <a class="am-nav__brand" href="#">art-medium</a>
-      <ul class="am-nav__links">
-        <li><a class="am-nav__link" href="#" aria-current="page">Gallery</a></li>
-        <li><a class="am-nav__link" href="#mix">Mixed media</a></li>
-        <li><a class="am-nav__link" href="#start">Get started</a></li>
-        <li><a class="am-nav__link" href="https://github.com/ghanemja/art-asset">Source</a></li>
-      </ul>
-    </nav>
+  <div class="topbar">
+    <div class="wrap">
+      <nav class="am-nav" aria-label="Main">
+        <a class="am-nav__brand" href="#"><span class="am-splash" aria-hidden="true"></span>art-medium</a>
+        <ul class="am-nav__links">
+          <li><a class="am-nav__link" href="#mediums">Mediums</a></li>
+          <li><a class="am-nav__link" href="#components">Components</a></li>
+          <li><a class="am-nav__link" href="#mix">Mixed media</a></li>
+          <li><a class="am-nav__link" href="#start">Get started</a></li>
+        </ul>
+        <div class="topbar__tools">
+          <button class="am-button am--accent" id="theme-toggle">Lights off</button>
+          <a class="am-button am--secondary" href="https://github.com/ghanemja/art-asset">GitHub</a>
+        </div>
+      </nav>
+    </div>
+  </div>
 
+  <main class="wrap">
     <header class="hero">
-      <h1>Components, painted.</h1>
-      <p>A UI library where every button, card and input is made of a real art medium. Pick one for the whole page, or mix them.</p>
-      <div class="switcher" role="group" aria-label="Page medium">
-        <button class="am-button" data-set="watercolor">Watercolor</button>
-        <button class="am-button am--secondary" data-set="acrylic">Acrylic</button>
-        <button class="am-button am--accent" data-set="charcoal">Charcoal</button>
+      <div class="hero__paint" aria-hidden="true">
+        <span class="am-splash s1"></span>
+        <span class="am-splash am--secondary s2"></span>
+        <span class="am-splash am--accent s3"></span>
+      </div>
+      <span class="am-badge am--secondary">v0.1 · MIT · no build step</span>
+      <h1>Components,<br><em>painted.</em></h1>
+      <p class="hero__lede">A UI library where every button, card and input is made of a real art medium. One attribute paints your whole site in watercolor, acrylic or charcoal. Light or dark.</p>
+      <div class="row">
+        <a class="am-button" href="#start">Get started</a>
+        <a class="am-button am--secondary" href="#components">See the components</a>
+      </div>
+      <div class="palette">
+        <span class="palette__label">Paint this page with</span>
+        <div class="row" role="group" aria-label="Page medium">
+          <button class="am-button" data-set="watercolor" aria-pressed="false">Watercolor</button>
+          <button class="am-button am--secondary" data-set="acrylic" aria-pressed="false">Acrylic</button>
+          <button class="am-button am--accent" data-set="charcoal" aria-pressed="false">Charcoal</button>
+        </div>
       </div>
     </header>
 
-    <hr class="am-divider">
-
-    <h2>Every medium, side by side</h2>
-    <div class="gallery">
-      <template id="specimen">
-        <h3></h3>
-        <nav class="am-nav">
-          <a class="am-nav__brand" href="#">Studio</a>
-          <ul class="am-nav__links">
-            <li><a class="am-nav__link" href="#" aria-current="page">Work</a></li>
-            <li><a class="am-nav__link" href="#">About</a></li>
-          </ul>
-        </nav>
-        <div class="row">
-          <button class="am-button">Primary</button>
-          <button class="am-button am--secondary">Secondary</button>
-          <button class="am-button am--accent">Accent</button>
-        </div>
-        <div class="row">
-          <span class="am-badge">New</span>
-          <span class="am-badge am--secondary">Sold</span>
-          <span class="am-badge am--accent">Featured</span>
-        </div>
-        <label class="am-field">
-          <span class="am-field__label">Your name</span>
-          <span class="am-input"><input placeholder="Click to paint a stroke"></span>
-        </label>
-        <hr class="am-divider" style="margin: 0.5rem 0">
-        <article class="am-card">
-          <h4 class="am-card__title">Still life, no. 4</h4>
-          <p style="margin:0 0 1rem; line-height:1.5">Cards get a pale wash, an opaque panel or a hatched sketch depending on the medium.</p>
-          <button class="am-button" data-open-modal>Open modal</button>
+    <section id="mediums">
+      <h2>Three mediums. One attribute.</h2>
+      <p class="lede">Put <code>data-medium</code> on <code>&lt;html&gt;</code> to paint the whole site, or on any single element to paint just that part.</p>
+      <div class="plates">
+        <article class="plate am-canvas" data-medium="watercolor">
+          <span class="am-splash" aria-hidden="true"></span>
+          <h3>Watercolor</h3>
+          <p>Translucent washes that bleed at the edges, grainy pigment and darker rims where the paint pools.</p>
+          <div class="row"><button class="am-button">Button</button><span class="am-badge am--secondary">Badge</span></div>
+          <code>data-medium="watercolor"</code>
+          <div><button class="am-button am--accent" data-set="watercolor">Paint the page</button></div>
         </article>
-      </template>
-      <section class="am-canvas" data-medium="watercolor"></section>
-      <section class="am-canvas" data-medium="acrylic"></section>
-      <section class="am-canvas" data-medium="charcoal"></section>
-    </div>
+        <article class="plate am-canvas" data-medium="acrylic">
+          <span class="am-splash am--secondary" aria-hidden="true"></span>
+          <h3>Acrylic</h3>
+          <p>Thick, opaque paint with ragged edges, visible brush ridges and a primed-canvas weave.</p>
+          <div class="row"><button class="am-button">Button</button><span class="am-badge am--accent">Badge</span></div>
+          <code>data-medium="acrylic"</code>
+          <div><button class="am-button am--secondary" data-set="acrylic">Paint the page</button></div>
+        </article>
+        <article class="plate am-canvas" data-medium="charcoal">
+          <span class="am-splash am--accent" aria-hidden="true"></span>
+          <h3>Charcoal</h3>
+          <p>Shaky hand-drawn outlines, gritty broken lines and cross-hatching. In dark mode it turns to chalk on slate.</p>
+          <div class="row"><button class="am-button">Button</button><span class="am-badge am--secondary">Badge</span></div>
+          <code>data-medium="charcoal"</code>
+          <div><button class="am-button" data-set="charcoal">Paint the page</button></div>
+        </article>
+      </div>
+    </section>
 
-    <hr class="am-divider">
+    <section id="components">
+      <h2>The components</h2>
+      <p class="lede">Everything here is live and painted in the page's medium. Switch medium or theme at the top and watch it repaint. The code under each one is its real markup.</p>
+      <div class="specs">
+        <article class="spec">
+          <h3>Button <small>.am-button</small></h3>
+          <div class="spec__stage">
+            <button class="am-button">Primary</button>
+            <button class="am-button am--secondary">Secondary</button>
+            <button class="am-button am--accent">Accent</button>
+            <button class="am-button" disabled>Disabled</button>
+          </div>
+          <pre class="spec__code"><code></code></pre>
+        </article>
 
-    <h2 id="mix">Mixed media</h2>
-    <p style="margin-top:-0.5rem">Set <code>data-medium</code> on any single component to override the page.</p>
-    <div class="mix">
-      <article class="am-card" data-medium="acrylic">
-        <h4 class="am-card__title">An acrylic card</h4>
-        <p>…on whatever page medium you picked, with a <span class="am-badge am--accent" data-medium="watercolor">watercolor</span> badge inside.</p>
-      </article>
-      <article class="am-card" data-medium="charcoal">
-        <h4 class="am-card__title">A charcoal sketch</h4>
-        <p>With an acrylic call to action.</p>
-        <button class="am-button am--secondary" data-medium="acrylic">Buy print</button>
-      </article>
-      <article class="am-card" data-medium="watercolor">
-        <h4 class="am-card__title">A watercolor wash</h4>
-        <p>With a charcoal button beside it.</p>
-        <button class="am-button" data-medium="charcoal">Sketch it</button>
-      </article>
-    </div>
+        <article class="spec">
+          <h3>Badge <small>.am-badge</small></h3>
+          <div class="spec__stage">
+            <span class="am-badge">New</span>
+            <span class="am-badge am--secondary">Sold</span>
+            <span class="am-badge am--accent">Featured</span>
+          </div>
+          <pre class="spec__code"><code></code></pre>
+        </article>
 
-    <hr class="am-divider">
+        <article class="spec">
+          <h3>Card <small>.am-card</small></h3>
+          <div class="spec__stage">
+            <article class="am-card">
+              <h3 class="am-card__title">Still life, no. 4</h3>
+              <p>Cards are painted panels. Text sits on top, crisp.</p>
+            </article>
+          </div>
+          <pre class="spec__code"><code></code></pre>
+        </article>
 
-    <h2 id="start">Get started</h2>
-    <article class="am-card">
-      <p style="margin-top:0">Add the stylesheet and script, then put <code>data-medium</code> on any element.</p>
-<pre><code>&lt;link rel="stylesheet" href="https://ghanemja.github.io/art-asset/src/art-medium.css"&gt;
-&lt;script type="module" src="https://ghanemja.github.io/art-asset/src/art-medium.js"&gt;&lt;/script&gt;
+        <article class="spec">
+          <h3>Input <small>.am-field / .am-input</small></h3>
+          <div class="spec__stage">
+            <label class="am-field">
+              <span class="am-field__label">Your name</span>
+              <span class="am-input"><input placeholder="Click: a stroke paints in"></span>
+            </label>
+          </div>
+          <pre class="spec__code"><code></code></pre>
+        </article>
 
-&lt;body class="am-canvas" data-medium="watercolor"&gt;
-  &lt;button class="am-button"&gt;Primary&lt;/button&gt;
-  &lt;button class="am-button am--secondary" data-medium="acrylic"&gt;Acrylic&lt;/button&gt;
-  &lt;article class="am-card"&gt;&lt;h3 class="am-card__title"&gt;Still life&lt;/h3&gt;&lt;/article&gt;
+        <article class="spec">
+          <h3>Nav <small>.am-nav</small></h3>
+          <div class="spec__stage">
+            <nav class="am-nav">
+              <a class="am-nav__brand" href="#">Studio</a>
+              <ul class="am-nav__links">
+                <li><a class="am-nav__link" href="#" aria-current="page">Work</a></li>
+                <li><a class="am-nav__link" href="#">About</a></li>
+              </ul>
+            </nav>
+          </div>
+          <pre class="spec__code"><code></code></pre>
+        </article>
+
+        <article class="spec">
+          <h3>Divider <small>.am-divider</small></h3>
+          <div class="spec__stage">
+            <hr class="am-divider">
+            <hr class="am-divider am--secondary">
+          </div>
+          <pre class="spec__code"><code></code></pre>
+        </article>
+
+        <article class="spec">
+          <h3>Modal <small>.am-modal</small></h3>
+          <div class="spec__stage">
+            <button class="am-button" data-open-modal>Open the modal</button>
+          </div>
+          <template class="spec__src">
+            <dialog class="am-modal" id="hello">
+              <h2 class="am-modal__title">Painted dialogs</h2>
+              <p>A native &lt;dialog&gt; with paint behind it.</p>
+              <form method="dialog" class="am-modal__actions">
+                <button class="am-button">Close</button>
+              </form>
+            </dialog>
+          </template>
+          <pre class="spec__code"><code></code></pre>
+        </article>
+
+        <article class="spec">
+          <h3>Splash <small>.am-splash</small></h3>
+          <div class="spec__stage">
+            <span class="am-splash" style="width:5rem" aria-hidden="true"></span>
+            <span class="am-splash am--secondary" style="width:4rem" aria-hidden="true"></span>
+            <span class="am-splash am--accent" style="width:3rem" aria-hidden="true"></span>
+          </div>
+          <pre class="spec__code"><code></code></pre>
+        </article>
+      </div>
+      <p style="margin-top:1.5rem">The page background is <code>.am-canvas</code>: put it on <code>&lt;body&gt;</code> for the paper texture, ink colour and medium fonts.</p>
+    </section>
+
+    <section id="mix">
+      <h2>Mixed media</h2>
+      <p class="lede">Mediums nest. Override one card, one button, even a badge inside a card.</p>
+      <div class="grid3">
+        <article class="am-card" data-medium="acrylic">
+          <h3 class="am-card__title">An acrylic card</h3>
+          <p>…on whatever medium the page is in, with a <span class="am-badge am--accent" data-medium="watercolor">watercolor</span> badge inside.</p>
+        </article>
+        <article class="am-card" data-medium="charcoal">
+          <h3 class="am-card__title">A charcoal sketch</h3>
+          <p>With an acrylic call to action.</p>
+          <button class="am-button am--secondary" data-medium="acrylic">Buy print</button>
+        </article>
+        <article class="am-card" data-medium="watercolor">
+          <h3 class="am-card__title">A watercolor wash</h3>
+          <p>With a charcoal button beside it.</p>
+          <button class="am-button" data-medium="charcoal">Sketch it</button>
+        </article>
+      </div>
+    </section>
+
+    <section id="night">
+      <h2 id="night-title">After dark</h2>
+      <p class="lede">Every medium has a dark version. Add <code>data-theme="dark"</code>, or <code>"auto"</code> to follow the visitor's system setting.</p>
+      <div class="grid3" id="night-plates">
+        <article class="plate am-canvas" data-medium="watercolor">
+          <h3>Watercolor</h3>
+          <p>Luminous washes on indigo paper.</p>
+          <div class="row"><button class="am-button">Button</button><button class="am-button am--secondary">Button</button></div>
+        </article>
+        <article class="plate am-canvas" data-medium="acrylic">
+          <h3>Acrylic</h3>
+          <p>Saturated paint on black gesso.</p>
+          <div class="row"><button class="am-button">Button</button><button class="am-button am--accent">Button</button></div>
+        </article>
+        <article class="plate am-canvas" data-medium="charcoal">
+          <h3>Charcoal</h3>
+          <p>Chalk on a slate board.</p>
+          <div class="row"><button class="am-button">Button</button><button class="am-button am--secondary">Button</button></div>
+        </article>
+      </div>
+    </section>
+
+    <section id="start">
+      <h2>Get started</h2>
+      <p class="lede">No build step and no dependencies. One stylesheet and one small script.</p>
+      <div class="start">
+        <article class="am-card">
+          <span class="step">Option 1 · CDN</span>
+          <h3 class="am-card__title">Drop it in</h3>
+<pre><code>&lt;link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/gh/ghanemja/art-asset@v0.1.0/src/art-medium.css"&gt;
+&lt;script type="module"
+  src="https://cdn.jsdelivr.net/gh/ghanemja/art-asset@v0.1.0/src/art-medium.js"&gt;&lt;/script&gt;
+
+&lt;body class="am-canvas" data-medium="watercolor" data-theme="auto"&gt;
+  &lt;button class="am-button"&gt;Hello&lt;/button&gt;
 &lt;/body&gt;</code></pre>
-      <p style="margin-bottom:0">React wrappers, variants and how to add your own medium are in the <a href="https://github.com/ghanemja/art-asset#readme" style="color:inherit">README</a>.</p>
-    </article>
-  </div>
+        </article>
+        <article class="am-card">
+          <span class="step">Option 2 · npm</span>
+          <h3 class="am-card__title">Install it</h3>
+<pre><code>npm i github:ghanemja/art-asset#v0.1.0
+
+// in your app
+import 'art-medium/css';
+import { setMedium, setTheme } from 'art-medium';
+
+setMedium(document.documentElement, 'acrylic');
+setTheme(document.documentElement, 'dark');</code></pre>
+        </article>
+        <article class="am-card">
+          <span class="step">Option 3 · React</span>
+          <h3 class="am-card__title">Use the wrappers</h3>
+<pre><code>import 'art-medium/css';
+import { MediumProvider, Button, Card }
+  from 'art-medium/react';
+
+&lt;MediumProvider medium="charcoal" theme="auto"&gt;
+  &lt;Card title="Still life"&gt;
+    &lt;Button variant="secondary"&gt;Buy&lt;/Button&gt;
+  &lt;/Card&gt;
+&lt;/MediumProvider&gt;</code></pre>
+        </article>
+      </div>
+      <p style="margin-top:1.5rem">Want gouache, ink wash or pastel? A medium is one block of CSS tokens plus one SVG filter. See <a href="https://github.com/ghanemja/art-asset#adding-a-medium">adding a medium</a>.</p>
+    </section>
+  </main>
+
+  <footer class="wrap">
+    <hr class="am-divider">
+    <p><span class="am-splash" aria-hidden="true"></span> This site is built entirely with art-medium.</p>
+    <p><a href="https://github.com/ghanemja/art-asset">GitHub</a> · MIT license</p>
+  </footer>
 
   <dialog class="am-modal" id="modal">
     <h2 class="am-modal__title">Painted dialogs</h2>
-    <p>Modals are a native <code>&lt;dialog&gt;</code> with the medium painted behind it.</p>
+    <p>Modals are a native <code>&lt;dialog&gt;</code> with the medium painted behind them. This one took the medium of the button that opened it.</p>
     <label class="am-field">
       <span class="am-field__label">Email</span>
       <span class="am-input"><input type="email" placeholder="you@studio.art"></span>
@@ -152,24 +391,63 @@
   </dialog>
 
   <script type="module">
-    import { setMedium } from '../src/art-medium.js';
+    import { setMedium, setTheme } from '../src/art-medium.js';
 
-    const tpl = document.getElementById('specimen');
-    for (const section of document.querySelectorAll('.gallery > section')) {
-      section.append(tpl.content.cloneNode(true));
-      section.querySelector('h3').textContent = section.dataset.medium;
+    const root = document.documentElement;
+    const save = (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} };
+
+    // Fill each component's code block from its live markup.
+    const dedent = (html) => {
+      const lines = html.replace(/^\n+|\s+$/g, '').split('\n');
+      const indent = Math.min(...lines.filter((l) => l.trim()).map((l) => l.match(/^ */)[0].length));
+      return lines.map((l) => l.slice(indent)).join('\n')
+        .replace(/ data-open-modal=""/g, '').replace(/=""/g, '');
+    };
+    for (const spec of document.querySelectorAll('.spec')) {
+      const src = spec.querySelector('.spec__src') ?? spec.querySelector('.spec__stage');
+      spec.querySelector('.spec__code code').textContent = dedent(src.innerHTML);
     }
 
+    // Medium
+    const syncMedium = () => {
+      for (const b of document.querySelectorAll('.palette [data-set]')) {
+        b.setAttribute('aria-pressed', String(b.dataset.set === root.dataset.medium));
+      }
+    };
     for (const btn of document.querySelectorAll('[data-set]')) {
-      btn.addEventListener('click', () => setMedium(document.documentElement, btn.dataset.set));
+      btn.addEventListener('click', () => {
+        setMedium(root, btn.dataset.set);
+        save('am-medium', btn.dataset.set);
+        syncMedium();
+        if (!btn.closest('.hero')) document.querySelector('.hero').scrollIntoView();
+      });
     }
+    syncMedium();
 
+    // Theme. The "after dark" plates always show the opposite of the page.
+    const toggle = document.getElementById('theme-toggle');
+    const syncTheme = () => {
+      const dark = root.dataset.theme === 'dark';
+      toggle.textContent = dark ? 'Lights on' : 'Lights off';
+      toggle.setAttribute('aria-pressed', String(dark));
+      setTheme(document.getElementById('night-plates'), dark ? 'light' : 'dark');
+      document.getElementById('night-title').textContent = dark ? 'And in daylight' : 'After dark';
+    };
+    toggle.addEventListener('click', () => {
+      const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+      setTheme(root, next);
+      save('am-theme', next);
+      syncTheme();
+    });
+    syncTheme();
+
+    // Modal takes the medium and theme of whatever opened it.
     const modal = document.getElementById('modal');
     document.addEventListener('click', (e) => {
       const opener = e.target.closest('[data-open-modal]');
       if (!opener) return;
-      // The modal takes the medium of whatever opened it.
       setMedium(modal, opener.closest('[data-medium]').dataset.medium);
+      setTheme(modal, opener.closest('[data-theme]').dataset.theme);
       modal.showModal();
     });
   </script>

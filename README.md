@@ -6,11 +6,11 @@ A UI component library where the components are made of art. Buttons, cards, inp
 | --- | --- |
 | `watercolor` | Translucent washes, bleeding edges, pigment granulation, darker pooled rims, cold-press paper |
 | `acrylic` | Opaque, saturated paint, ragged edges, lit brush-stroke ridges, primed canvas weave |
-| `charcoal` | Wobbly hand-drawn outlines, gritty broken lines, cross-hatching, newsprint |
+| `charcoal` | Wobbly hand-drawn outlines, gritty broken lines, cross-hatching, newsprint (chalk on slate in dark mode) |
 
 ![art-medium demo](docs/screenshot.png)
 
-Components: **button, badge, card, input, divider, nav, modal**, plus **canvas** (the page background).
+Components: **button, badge, card, input, divider, nav, modal, splash**, plus **canvas** (the page background). Every medium has a light and a dark theme.
 
 ## Try the demo
 
@@ -22,15 +22,32 @@ Or run it locally:
 npm run demo   # then open http://localhost:8080/demo/
 ```
 
+## Install
+
+From the CDN (pinned to a release):
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ghanemja/art-asset@v0.1.0/src/art-medium.css">
+<script type="module" src="https://cdn.jsdelivr.net/gh/ghanemja/art-asset@v0.1.0/src/art-medium.js"></script>
+```
+
+Or from GitHub with npm:
+
+```sh
+npm i github:ghanemja/art-asset#v0.1.0
+```
+
+```js
+import 'art-medium/css';
+import { setMedium, setTheme } from 'art-medium';
+```
+
 ## Use it
 
 Plain HTML, no framework or build step:
 
 ```html
-<link rel="stylesheet" href="art-medium/src/art-medium.css">
-<script type="module" src="art-medium/src/art-medium.js"></script>
-
-<body class="am-canvas" data-medium="watercolor">
+<body class="am-canvas" data-medium="watercolor" data-theme="auto">
   <button class="am-button">Primary</button>
   <button class="am-button am--secondary">Secondary</button>
   <span class="am-badge am--accent">New</span>
@@ -68,17 +85,36 @@ import { setMedium } from 'art-medium';
 setMedium(document.documentElement, 'acrylic');
 ```
 
+### Light and dark
+
+`data-theme="light" | "dark" | "auto"` works the same way: put it on `<html>` or on any section. `auto` follows the visitor's system setting. With no `data-theme`, everything is light, so adding the library never darkens a site that wasn't designed for it.
+
+```js
+import { setTheme } from 'art-medium';
+setTheme(document.documentElement, 'dark');
+```
+
+In dark mode watercolor sits on indigo paper, acrylic on black gesso, and charcoal becomes chalk on a slate board.
+
+### Splash
+
+`.am-splash` is a decorative paint splat for hero sections, logos and empty states. It is sized by its width and works at any size:
+
+```html
+<span class="am-splash am--secondary" style="width: 20rem" aria-hidden="true"></span>
+```
+
 ### Variants
 
-`am--secondary` and `am--accent` switch to the medium's second and third pigments. They work on buttons, badges and dividers.
+`am--secondary` and `am--accent` switch to the medium's second and third pigments. They work on buttons, badges, dividers and splashes.
 
 ### React
 
 ```jsx
 import 'art-medium/css';
-import { MediumProvider, Button, Card, Input, Badge, Divider, Nav, Modal } from 'art-medium/react';
+import { MediumProvider, Button, Card, Input, Badge, Divider, Nav, Modal, Splash } from 'art-medium/react';
 
-<MediumProvider medium="watercolor">
+<MediumProvider medium="watercolor" theme="auto">
   <Nav brand="Studio" links={[{ href: '/', label: 'Work', current: true }]} />
   <Card title="Still life">
     <Input label="Email" type="email" />
@@ -95,14 +131,23 @@ import { MediumProvider, Button, Card, Input, Badge, Divider, Nav, Modal } from 
   - Acrylic adds `feDiffuseLighting` over stretched noise to get brush ridges.
   - Charcoal combines a light wobble with a high-frequency grit mask.
 - **Tokens.** Each medium is just CSS custom properties: pigments, fill strength, shapes, stroke, texture, filter and fonts. Components only read tokens, which is why one `data-medium` attribute can restyle anything.
+- **Dark mode.** Color tokens are `light-dark(light, dark)` pairs, and `data-theme` sets `color-scheme`, so one attribute flips every color in a subtree.
 
 ### Adding a medium
 
-Define a new `[data-medium="gouache"] { --am-… }` token block, add a matching `<filter id="am-gouache">` in `art-medium.js`, and add the name to `MEDIUMS`.
+Define a new `[data-medium="gouache"] { --am-… }` token block (use `light-dark()` for colors), add a matching `<filter id="am-gouache">` in `art-medium.js`, and add the name to `MEDIUMS`.
+
+## Browser support
+
+Current Chrome, Edge, Safari and Firefox (2024 or later). The library relies on `color-mix()`, `light-dark()` and SVG filters on HTML elements. It has been tested most in Chromium.
 
 ## Fonts
 
 Each medium suggests display and body fonts (`--am-font-display` and `--am-font-body`), with system fallbacks. The demo loads them from Google Fonts: Cormorant Garamond and Nunito for watercolor, Archivo Black and Work Sans for acrylic, Caveat and Kalam for charcoal.
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md).
 
 ## License
 

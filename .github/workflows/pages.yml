@@ -2,7 +2,7 @@ name: Deploy demo to GitHub Pages
 
 on:
   push:
-    branches: [main, claude/quirky-bardeen-0jszjw]
+    branches: [main]
   workflow_dispatch:
 
 permissions:

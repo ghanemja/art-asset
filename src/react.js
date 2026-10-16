@@ -7,10 +7,10 @@ import { installFilters } from './art-medium.js';
 const cx = (...c) => c.filter(Boolean).join(' ');
 const variantClass = (v) => (v && v !== 'primary' ? `am--${v}` : null);
 
-/** Sets the medium for a subtree and paints the paper background. */
-export function MediumProvider({ medium = 'watercolor', as = 'div', canvas = true, className, children, ...rest }) {
+/** Sets the medium (and optionally theme: light | dark | auto) for a subtree and paints the paper background. */
+export function MediumProvider({ medium = 'watercolor', theme, as = 'div', canvas = true, className, children, ...rest }) {
   useEffect(() => installFilters(), []);
-  return h(as, { 'data-medium': medium, className: cx(canvas && 'am-canvas', className), ...rest }, children);
+  return h(as, { 'data-medium': medium, 'data-theme': theme, className: cx(canvas && 'am-canvas', className), ...rest }, children);
 }
 
 export const Button = forwardRef(function Button({ variant, medium, className, ...rest }, ref) {
@@ -45,6 +45,11 @@ export function Nav({ brand, brandHref = '/', links = [], medium, className, ...
     h('ul', { className: 'am-nav__links' },
       links.map((l) => h('li', { key: l.href },
         h('a', { className: 'am-nav__link', href: l.href, 'aria-current': l.current ? 'page' : undefined }, l.label)))));
+}
+
+/** Decorative paint blob. Position it yourself (e.g. absolutely behind a hero). */
+export function Splash({ variant, medium, className, ...rest }) {
+  return h('span', { 'aria-hidden': true, 'data-medium': medium, className: cx('am-splash', variantClass(variant), className), ...rest });
 }
 
 /** A native <dialog>, opened modally while `open` is true. */

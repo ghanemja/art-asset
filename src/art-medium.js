@@ -3,6 +3,7 @@
 // must exist in the document. Importing this module installs them once.
 
 export const MEDIUMS = ['watercolor', 'acrylic', 'charcoal'];
+export const THEMES = ['light', 'dark', 'auto'];
 
 const FILTERS = `
 <svg id="am-filters" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"
@@ -50,6 +51,7 @@ const FILTERS = `
       <feColorMatrix in="grit" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1.5 0 0 0 -0.05" result="gritAlpha"/>
       <feComposite in="wobbly" in2="gritAlpha" operator="in"/>
     </filter>
+
   </defs>
 </svg>`;
 
@@ -65,6 +67,12 @@ export function installFilters(doc = globalThis.document) {
 export function setMedium(el, medium) {
   if (!MEDIUMS.includes(medium)) throw new Error(`Unknown medium "${medium}". Use one of: ${MEDIUMS.join(', ')}`);
   el.setAttribute('data-medium', medium);
+}
+
+/** Switch light/dark for an element and everything inside it. "auto" follows the OS. */
+export function setTheme(el, theme) {
+  if (!THEMES.includes(theme)) throw new Error(`Unknown theme "${theme}". Use one of: ${THEMES.join(', ')}`);
+  el.setAttribute('data-theme', theme);
 }
 
 if (typeof document !== 'undefined') {
