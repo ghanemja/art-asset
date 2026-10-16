@@ -14,6 +14,10 @@ Components: **button, badge, card, input, divider, nav, modal**, plus **canvas**
 
 ## Try the demo
 
+**Live:** https://ghanemja.github.io/art-asset/
+
+Or run it locally:
+
 ```sh
 npm run demo   # then open http://localhost:8080/demo/
 ```
@@ -99,3 +103,7 @@ Define a new `[data-medium="gouache"] { --am-… }` token block, add a matching 
 ## Fonts
 
 Each medium suggests display and body fonts (`--am-font-display` and `--am-font-body`), with system fallbacks. The demo loads them from Google Fonts: Cormorant Garamond and Nunito for watercolor, Archivo Black and Work Sans for acrylic, Caveat and Kalam for charcoal.
+
+## License
+
+MIT. See [LICENSE](LICENSE).
