@@ -1,4 +1,4 @@
-name: Deploy demo to GitHub Pages
+name: Deploy site to GitHub Pages
 
 on:
   push:
@@ -19,18 +19,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Assemble site
-        run: |
-          mkdir -p _site
-          cp -r src _site/src
-          # Serve the demo at the site root, pointing at the copied src/.
-          sed 's#\.\./src/#./src/#g' demo/index.html > _site/index.html
-          cp docs/og.png _site/og.png
-          touch _site/.nojekyll
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: _site
+          path: .
 
   deploy:
     needs: build

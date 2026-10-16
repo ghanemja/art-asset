@@ -19,7 +19,7 @@ Components: **button, badge, card, input, divider, nav, modal, splash**, plus **
 Or run it locally:
 
 ```sh
-npm run demo   # then open http://localhost:8080/demo/
+npm run demo   # then open http://localhost:8080/
 ```
 
 ## Install
