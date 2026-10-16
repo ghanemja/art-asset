@@ -27,8 +27,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Caveat:wght@500;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Figtree:wght@400;700&family=Fredoka:wght@400;600&family=Kalam:wght@400;700&family=Nunito:wght@400;700&family=Permanent+Marker&family=Varela+Round&family=Work+Sans:wght@400;700&display=swap">
-  <link rel="stylesheet" href="./src/art-medium.css">
-  <script type="module" src="./src/art-medium.js"></script>
+  <link rel="stylesheet" href="./src/art-medium.css?v=dev">
+  <script type="module" src="./src/art-medium.js?v=dev"></script>
   <style>
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; scroll-padding-top: 6rem; }
@@ -435,7 +435,7 @@ import { MediumProvider, Button, Card }
   </dialog>
 
   <script type="module">
-    import { setMedium, setTheme } from './src/art-medium.js';
+    import { setMedium, setTheme } from './src/art-medium.js?v=dev';
 
     const root = document.documentElement;
     const save = (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} };
