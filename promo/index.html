@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en" data-medium="watercolor" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <title>art-medium promo</title>
+  <!-- A 1080x1080 promo video, driven frame by frame by render.mjs (window.at(t)). -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Caveat:wght@500;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Kalam:wght@400;700&family=Nunito:wght@400;700;800&family=Work+Sans:wght@400;700&display=swap">
+  <link rel="stylesheet" href="../src/art-medium.css">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; width: 1080px; height: 1080px; overflow: hidden; }
+    body { position: relative; }
+    .scene { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; visibility: hidden; }
+    .abs { position: absolute; }
+
+    /* A: hook */
+    #A .am-splash { position: absolute; }
+    #A h1 { margin: 0; font: 400 150px/0.95 var(--am-font-display); }
+    #A h1 span { display: block; }
+    #A h1 em { font-style: italic; }
+    #A .am-badge { font-size: 26px; margin-top: 48px; padding: .35em 1em; }
+
+    /* B: the swap */
+    #B .label { font: 400 96px/1 var(--am-font-display); margin-bottom: 8px; }
+    #B .am-divider { width: 420px; margin: 4px auto 40px; }
+    #B .app { width: 820px; display: grid; gap: 26px; text-align: left; }
+    #B .am-nav { padding: 18px 30px; font-size: 24px; }
+    #B .am-nav__brand { font-size: 34px; }
+    #B .am-card { padding: 36px 42px; font-size: 24px; }
+    #B .am-card__title { font-size: 46px; margin-bottom: 10px; }
+    #B .am-card p { margin: 0 0 24px; line-height: 1.45; }
+    #B .row { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+    #B .am-button { font-size: 24px; }
+    #B .am-badge { font-size: 18px; }
+    #B .am-field__label { font-size: 20px; }
+    #B .am-input input { font-size: 24px; }
+    #B .am-input::after { transform: scaleX(1); }
+
+    /* C: one attribute */
+    #C h2 { margin: 0 0 50px; font: 400 120px/1 var(--am-font-display); }
+    #C .code { font: 600 42px/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; padding: 34px 44px; min-width: 900px; text-align: left; }
+    #C .code .v { color: var(--am-pigment-secondary); }
+    #C .code .caret { display: inline-block; width: .55em; height: 1.05em; vertical-align: -0.15em; background: currentColor; }
+    #C .chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 22px; margin-top: 60px; max-width: 900px; }
+    #C .chips .am-badge { font-size: 26px; padding: .45em 1.1em; }
+
+    /* D: end card */
+    #D .am-splash { position: absolute; }
+    #D .logo { display: flex; align-items: center; gap: 22px; font: 400 108px/1 var(--am-font-display); }
+    #D .logo .am-splash { position: static; width: 100px; }
+    #D .tag { font: 400 56px/1.2 var(--am-font-body); margin: 34px 0 54px; font-weight: 700; }
+    #D .am-button { font-size: 34px; padding: .7em 1.4em; }
+    #D .small { margin-top: 40px; font-size: 26px; opacity: .8; font-weight: 700; letter-spacing: .04em; }
+
+    #wipe { position: absolute; left: 50%; top: 50%; width: 2300px; margin: -1150px 0 0 -1150px; z-index: 50; visibility: hidden; }
+  </style>
+</head>
+<body class="am-canvas">
+  <section class="scene" id="A">
+    <span class="am-splash" id="a1" style="width:560px; left:-120px; top:-80px"></span>
+    <span class="am-splash am--secondary" id="a2" style="width:440px; right:-110px; bottom:40px"></span>
+    <span class="am-splash am--accent" id="a3" style="width:260px; left:120px; bottom:-40px"></span>
+    <h1><span id="a-l1">Your UI,</span><span id="a-l2"><em>but painted.</em></span></h1>
+    <span class="am-badge" id="a-badge">art-medium</span>
+  </section>
+
+  <section class="scene" id="B">
+    <div class="label" id="b-label">Watercolor</div>
+    <hr class="am-divider" id="b-rule">
+    <div class="app" id="b-app">
+      <nav class="am-nav">
+        <a class="am-nav__brand">Studio</a>
+        <ul class="am-nav__links">
+          <li><a class="am-nav__link" aria-current="page">Work</a></li>
+          <li><a class="am-nav__link">Shop</a></li>
+          <li><a class="am-nav__link">About</a></li>
+        </ul>
+      </nav>
+      <article class="am-card">
+        <h3 class="am-card__title">Still life, no. 4</h3>
+        <p>Oil on linen, 2026. <span class="am-badge am--accent">Featured</span> <span class="am-badge am--secondary">1 left</span></p>
+        <label class="am-field" style="margin-bottom:26px">
+          <span class="am-field__label">Email for the drop</span>
+          <span class="am-input"><input value="you@studio.art"></span>
+        </label>
+        <div class="row">
+          <button class="am-button">Buy print</button>
+          <button class="am-button am--secondary">Save</button>
+          <button class="am-button am--accent">Share</button>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="scene" id="C">
+    <h2 id="c-title">One attribute.</h2>
+    <div class="am-card code" id="c-code"></div>
+    <div class="chips">
+      <span class="am-badge" id="c1">3 mediums</span>
+      <span class="am-badge am--secondary" id="c2">Light + dark</span>
+      <span class="am-badge am--accent" id="c3">No build step</span>
+      <span class="am-badge" id="c4">React ready</span>
+      <span class="am-badge am--secondary" id="c5">Open source</span>
+    </div>
+  </section>
+
+  <section class="scene" id="D">
+    <span class="am-splash" id="d1" style="width:380px; left:-110px; top:-90px"></span>
+    <span class="am-splash am--secondary" id="d2" style="width:300px; right:-110px; top:-70px"></span>
+    <span class="am-splash am--accent" id="d3" style="width:340px; left:60px; bottom:-120px"></span>
+    <span class="am-splash" id="d4" style="width:160px; right:150px; bottom:90px"></span>
+    <div class="logo" id="d-logo"><span class="am-splash am--secondary"></span>art-medium</div>
+    <div class="tag" id="d-tag">Components, painted.</div>
+    <span class="am-button" id="d-url">ghanemja.github.io/art-asset</span>
+    <div class="small" id="d-small">Free &amp; open source · MIT</div>
+  </section>
+
+  <span class="am-splash" id="wipe" data-medium="acrylic" data-theme="light"></span>
+
+  <script type="module">
+    import { installFilters } from '../src/art-medium.js';
+    installFilters();
+
+    const $ = (id) => document.getElementById(id);
+    const root = document.documentElement;
+    const clamp = (x) => Math.max(0, Math.min(1, x));
+    const prog = (t, start, dur) => clamp((t - start) / dur);
+    const back = (x) => (x <= 0 ? 0 : 1 + 2.70158 * (x - 1) ** 3 + 1.70158 * (x - 1) ** 2);
+    const outCubic = (x) => 1 - (1 - x) ** 3;
+    const inOut = (x) => (x < .5 ? 4 * x ** 3 : 1 - (-2 * x + 2) ** 3 / 2);
+
+    // Pop: scale up from nothing with overshoot, slight rotation settle.
+    function pop(el, t, start, dur = .5, rot = -8) {
+      const k = prog(t, start, dur);
+      el.style.opacity = k > 0 ? 1 : 0;
+      el.style.transform = `scale(${back(k)}) rotate(${(1 - outCubic(k)) * rot}deg)`;
+    }
+    // Rise: slide up and fade in.
+    function rise(el, t, start, dur = .5, dist = 60) {
+      const k = outCubic(prog(t, start, dur));
+      el.style.opacity = k;
+      el.style.transform = `translateY(${(1 - k) * dist}px)`;
+    }
+
+    // Paint-splat wipes: grow to cover the frame, repaint at the peak, then fly off.
+    const GROW = .38, OUT = .42;
+    const wipes = [
+      { t: 8.4,  medium: 'acrylic',  theme: 'light', variant: 'am--secondary' },
+      { t: 10.4, medium: 'charcoal', theme: 'light', variant: 'am--accent' },
+      { t: 12.3, medium: 'charcoal', theme: 'dark',  pigment: '#23282b' },
+      { t: 16.2, medium: 'acrylic',  theme: 'light', variant: '' },
+      { t: 18.2, medium: 'acrylic',  theme: 'light', variant: 'am--secondary' },
+    ];
+    const labels = { watercolor: 'Watercolor', acrylic: 'Acrylic', charcoal: 'Charcoal' };
+
+    function stateAt(t) {
+      let medium = 'watercolor', theme = 'light', lastPeak = -1;
+      // Hook: the frame flickers through mediums.
+      if (t >= 4.3 && t < 5.9) medium = ['acrylic', 'charcoal', 'watercolor', 'acrylic'][Math.floor((t - 4.3) / .4)] ?? 'watercolor';
+      for (const w of wipes) if (t >= w.t + GROW) { medium = w.medium; theme = w.theme; lastPeak = w.t + GROW; }
+      return { medium, theme, lastPeak };
+    }
+
+    function show(id, on) { $(id).style.visibility = on ? 'visible' : 'hidden'; }
+
+    window.at = function (t) {
+      const { medium, theme, lastPeak } = stateAt(t);
+      root.dataset.medium = medium;
+      root.dataset.theme = theme;
+
+      // Wipe
+      const wipe = $('wipe');
+      const w = wipes.find((w) => t >= w.t && t < w.t + GROW + OUT);
+      if (w) {
+        wipe.style.visibility = 'visible';
+        wipe.className = `am-splash ${w.variant ?? ''}`;
+        wipe.dataset.theme = w.theme === 'dark' ? 'dark' : 'light';
+        wipe.style.setProperty('--am-pigment', w.pigment ?? '');
+        if (!w.pigment) wipe.style.removeProperty('--am-pigment');
+        if (t < w.t + GROW) {
+          const k = inOut(prog(t, w.t, GROW));
+          wipe.style.opacity = 1;
+          wipe.style.transform = `scale(${k * 1.05}) rotate(${(1 - k) * 60}deg)`;
+        } else {
+          const k = outCubic(prog(t, w.t + GROW, OUT));
+          wipe.style.opacity = 1 - k;
+          wipe.style.transform = `scale(${1.05 + k * .5}) rotate(${-k * 12}deg)`;
+        }
+      } else wipe.style.visibility = 'hidden';
+
+      // Scene windows
+      const peak = (i) => wipes[i].t + GROW;
+      show('A', t < 6.6);
+      show('B', t >= 6.4 && t < 14.1);
+      show('C', t >= 14.0 && t < peak(4));
+      show('D', t >= peak(4));
+
+      // A: hook
+      const drift = (i) => `translate(${Math.sin(t * .9 + i) * 10}px, ${Math.cos(t * .7 + i) * 10}px)`;
+      ['a1', 'a2', 'a3'].forEach((id, i) => {
+        const k = prog(t, .15 + i * .3, .55);
+        $(id).style.transform = `${drift(i)} scale(${back(k)}) rotate(${t * 4 * (i % 2 ? -1 : 1)}deg)`;
+      });
+      pop($('a-l1'), t, 1.1, .5, -6);
+      pop($('a-l2'), t, 1.7, .55, 6);
+      pop($('a-badge'), t, 2.8, .45, -10);
+      const aOut = outCubic(prog(t, 6.05, .5));
+      $('A').style.opacity = 1 - aOut;
+      $('A').style.transform = `scale(${1 + aOut * .15})`;
+
+      // B: the swap
+      const bIn = outCubic(prog(t, 6.4, .6));
+      const bOut = outCubic(prog(t, 13.6, .45));
+      $('B').style.opacity = bIn * (1 - bOut);
+      $('B').style.transform = `translateY(${(1 - bIn) * 80}px) scale(${1 - bOut * .08})`;
+      $('b-label').textContent = labels[medium] + (theme === 'dark' ? ', dark' : '');
+      // After each repaint: the label pops, the rule paints in, the app settles.
+      const since = lastPeak > 6 ? t - lastPeak : t - 6.4;
+      const s = clamp(since / .45);
+      $('b-label').style.transform = `scale(${.85 + .15 * back(s)})`;
+      $('b-rule').style.transform = `scaleX(${outCubic(clamp((since - .1) / .5))})`;
+      $('b-app').style.transform = `scale(${.96 + .04 * back(s)}) rotate(${(1 - outCubic(s)) * -1.2}deg)`;
+
+      // C: one attribute
+      const cIn = outCubic(prog(t, 14.0, .5));
+      $('C').style.opacity = cIn;
+      pop($('c-title'), t, 14.05, .5, -6);
+      rise($('c-code'), t, 14.5, .45);
+      const pre = '<html data-medium=', val = '"acrylic"', post = '>';
+      const full = pre + val + post;
+      const n = Math.round(clamp((t - 14.9) / 1.0) * full.length);
+      const typed = full.slice(0, n);
+      const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      const html = esc(typed.slice(0, pre.length)) +
+        (n > pre.length ? `<span class="v">${esc(typed.slice(pre.length, pre.length + val.length))}</span>` : '') +
+        esc(typed.slice(pre.length + val.length));
+      const caretOn = n < full.length || Math.floor(t * 2.5) % 2 === 0;
+      $('c-code').innerHTML = html + (caretOn ? '<span class="caret"></span>' : '');
+      ['c1', 'c2', 'c3', 'c4', 'c5'].forEach((id, i) => pop($(id), t, 16.75 + i * .18, .42, i % 2 ? 8 : -8));
+
+      // D: end card
+      ['d1', 'd2', 'd3', 'd4'].forEach((id, i) => {
+        const k = prog(t, peak(4) + .05 + i * .12, .5);
+        $(id).style.transform = `${drift(i + 2)} scale(${back(k)}) rotate(${t * 5 * (i % 2 ? -1 : 1)}deg)`;
+      });
+      pop($('d-logo'), t, peak(4) + .15, .55, -6);
+      rise($('d-tag'), t, peak(4) + .55, .5);
+      pop($('d-url'), t, peak(4) + .95, .5, 4);
+      rise($('d-small'), t, peak(4) + 1.3, .5, 30);
+    };
+
+    window.DURATION = 22.5;
+    // Load every medium's fonts up front so no frame renders a fallback.
+    await Promise.all([
+      '500 40px "Cormorant Garamond"', 'italic 500 40px "Cormorant Garamond"', '400 20px Nunito', '700 20px Nunito',
+      '400 40px "Archivo Black"', '400 20px "Work Sans"', '700 20px "Work Sans"',
+      '500 40px Caveat', '700 40px Caveat', '400 20px Kalam', '700 20px Kalam',
+    ].map((f) => document.fonts.load(f)));
+    await document.fonts.ready;
+    window.at(0);
+    window.ready = true;
+  </script>
+</body>
+</html>
