@@ -1,7 +1,7 @@
 {
   "name": "art-medium",
   "version": "0.1.0",
-  "description": "A UI component library where every component is painted: watercolor, acrylic, charcoal.",
+  "description": "A UI component library where every component is painted: watercolor, acrylic, charcoal, paper, marker.",
   "type": "module",
   "main": "./src/art-medium.js",
   "exports": {
@@ -21,6 +21,6 @@
   "scripts": {
     "demo": "python3 -m http.server 8080"
   },
-  "keywords": ["ui", "components", "watercolor", "acrylic", "charcoal", "design-system", "svg-filters"],
+  "keywords": ["ui", "components", "watercolor", "acrylic", "charcoal", "paper", "collage", "marker", "design-system", "svg-filters"],
   "license": "MIT"
 }

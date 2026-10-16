@@ -1,16 +1,23 @@
 /* ==========================================================================
    art-medium — a component library where every component is painted.
 
-   Pick a medium with data-medium="watercolor | acrylic | charcoal" and a theme
-   with data-theme="light | dark | auto" on any element. It applies to that element and everything inside it, so you can
-   theme a whole page from <html> or override a single button.
+   Pick a medium with data-medium="watercolor | acrylic | charcoal | paper | marker"
+   and a theme with data-theme="light | dark | auto" on any element. It applies
+   to that element and everything inside it, so you can theme a whole page
+   from <html> or override a single button.
 
    Each component paints itself on a ::before layer (filtered through an SVG
    filter from art-medium.js), so text stays crisp above the paint.
    ========================================================================== */
 
 /* --- Mediums: tokens only ------------------------------------------------ */
-/* Colors are light-dark(light, dark) pairs, resolved by data-theme below.   */
+/* Colors are light-dark(light, dark) pairs, resolved by data-theme below.
+   Every medium sets every token, so mediums nest cleanly.
+
+   --am-if-marker is a "space toggle": empty (on) or initial (off). It
+   switches the paint layer to the marker's composed scribble background,
+   which has to be built on the ::before itself because it mixes tints of
+   each component's own --am-paint.                                          */
 
 :root,
 [data-medium="watercolor"] {
@@ -36,7 +43,14 @@
   --am-stroke-weight: 7px;
   --am-texture: none;
   --am-shadow: none;
+  --am-panel-stroke: var(--am-stroke);
+  --am-blend: normal;
+  --am-label-shadow: none;
+  --am-tape: none;
+  --am-if-marker: initial;
   --am-filter: url(#am-watercolor);
+  --am-filter-splash: var(--am-filter);
+  --am-filter-panel: var(--am-filter);
   --am-filter-stroke: url(#am-watercolor-stroke);
   --am-splash-opacity: 0.85;
 
@@ -73,8 +87,15 @@
   --am-stroke-core: 100%;
   --am-stroke-weight: 8px;
   --am-texture: none;
-  --am-shadow: 3px 4px 0 light-dark(rgb(30 27 36 / 0.85), rgb(0 0 0 / 0.9));
+  --am-shadow: none;
+  --am-panel-stroke: var(--am-stroke);
+  --am-blend: normal;
+  --am-label-shadow: 0 1px 2px rgb(0 0 0 / 0.45);
+  --am-tape: none;
+  --am-if-marker: initial;
   --am-filter: url(#am-acrylic);
+  --am-filter-splash: url(#am-acrylic-splash);
+  --am-filter-panel: url(#am-acrylic-panel);
   --am-filter-stroke: url(#am-acrylic-stroke);
   --am-splash-opacity: 0.95;
 
@@ -110,7 +131,14 @@
   --am-stroke-weight: 4px;
   --am-texture: repeating-linear-gradient(-45deg, light-dark(rgb(38 38 38 / 0.16), rgb(235 231 222 / 0.14)) 0 1px, transparent 1px 6px);
   --am-shadow: none;
+  --am-panel-stroke: var(--am-stroke);
+  --am-blend: normal;
+  --am-label-shadow: none;
+  --am-tape: none;
+  --am-if-marker: initial;
   --am-filter: url(#am-charcoal);
+  --am-filter-splash: var(--am-filter);
+  --am-filter-panel: var(--am-filter);
   --am-filter-stroke: url(#am-charcoal);
   --am-splash-opacity: 1;
 
@@ -120,6 +148,98 @@
 
   --am-font-display: "Caveat", "Comic Sans MS", cursive;
   --am-font-body: "Kalam", "Comic Sans MS", cursive;
+}
+
+/* Cut and torn construction paper, layered on a sheet of card stock.
+   In the dark, black card stock with lighter paper pieces. */
+[data-medium="paper"] {
+  --am-paper: light-dark(#efe7d8, #1a1816);
+  --am-paper-texture:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.4 0 0 0 0 0.33 0 0 0 0 0.24 0 0 0 0.13 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='360' height='360'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.05 0.5' numOctaves='2' seed='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.42 0 0 0 0 0.3 0 0 0 1.6 -1.1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");
+  --am-ink: light-dark(#2a2420, #f1ebe1);
+
+  --am-pigment-primary: light-dark(#2f63a8, #5b8fd6);   /* cobalt construction paper */
+  --am-pigment-secondary: light-dark(#c8463b, #e2665a); /* tomato red */
+  --am-pigment-accent: light-dark(#f0b43c, #f5c454);    /* marigold */
+  --am-pigment: var(--am-pigment-primary);
+  --am-on-pigment: #fffdf8;
+  --am-on-accent: #2a2420;
+  --am-fill-core: 100%;
+  --am-fill-edge: 100%;
+
+  --am-surface: light-dark(#fffdf7, #39342e);
+  --am-surface-core: 100%;
+  --am-surface-edge: 100%;
+
+  --am-stroke: 0 solid transparent;
+  --am-stroke-core: 100%;
+  --am-stroke-weight: 7px;
+  --am-texture: none;
+  --am-shadow: none;
+  --am-panel-stroke: var(--am-stroke);
+  --am-blend: normal;
+  --am-label-shadow: none;
+  --am-tape: "";
+  --am-if-marker: initial;
+  --am-filter: url(#am-paper);
+  --am-filter-splash: var(--am-filter);
+  --am-filter-panel: var(--am-filter);
+  --am-filter-stroke: url(#am-paper-stroke);
+  --am-splash-opacity: 1;
+
+  --am-shape-blob: 3px 5px 2px 6px;
+  --am-shape-panel: 2px 4px 3px 2px;
+  --am-hover: translateY(-2px) rotate(-1.2deg);
+
+  --am-font-display: "Fredoka", "Trebuchet MS", system-ui, sans-serif;
+  --am-font-body: "Figtree", "Segoe UI", system-ui, sans-serif;
+}
+
+/* Felt-tip markers scribbled on clean paper: diagonal back-and-forth
+   strokes, translucent ink that darkens where strokes cross. In the dark,
+   bright paint markers on black. */
+[data-medium="marker"] {
+  --am-paper: light-dark(#fdfdfb, #161619);
+  --am-paper-texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0.07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E");
+  --am-ink: light-dark(#1f1f24, #f2f2ef);
+
+  --am-pigment-primary: light-dark(#009ddc, #22b4f0);   /* blue */
+  --am-pigment-secondary: light-dark(#e03a3e, #ff5a5e); /* red */
+  --am-pigment-accent: light-dark(#fdb827, #ffc53d);    /* yellow */
+  --am-pigment: var(--am-pigment-primary);
+  --am-on-pigment: #18181c;
+  --am-on-accent: #18181c;
+  --am-fill-core: 84%;
+  --am-fill-edge: 84%;
+
+  /* Alpha lives in the color so light and dark can differ. */
+  --am-surface: light-dark(rgb(253 184 39 / 0.2), rgb(150 61 151 / 0.3));
+  --am-surface-core: 100%;
+  --am-surface-edge: 100%;
+
+  --am-stroke: 0 solid transparent;
+  --am-stroke-core: 92%;
+  --am-stroke-weight: 8px;
+  --am-texture: none;
+  --am-shadow: none;
+  --am-panel-stroke: 3px solid light-dark(rgb(31 31 36 / 0.82), rgb(242 242 239 / 0.85));
+  --am-blend: multiply;
+  --am-label-shadow: 0 0 3px light-dark(rgb(255 255 255 / 0.85), transparent), 0 0 1px light-dark(rgb(255 255 255 / 0.9), transparent);
+  --am-tape: none;
+  --am-if-marker: ;
+  --am-filter: url(#am-marker);
+  --am-filter-splash: var(--am-filter);
+  --am-filter-panel: url(#am-marker-panel);
+  --am-filter-stroke: url(#am-marker-stroke);
+  --am-splash-opacity: 1;
+
+  --am-shape-blob: 40% 46% 38% 50% / 50% 44% 56% 46%;
+  --am-shape-panel: 14px 22px 12px 26px / 20px 12px 24px 14px;
+  --am-hover: rotate(-1.5deg) scale(1.04);
+
+  --am-font-display: "Permanent Marker", "Marker Felt", "Comic Sans MS", cursive;
+  --am-font-body: "Varela Round", "Segoe UI", system-ui, sans-serif;
 }
 
 /* --- Theme ----------------------------------------------------------------
@@ -151,6 +271,18 @@
   --am-core: var(--am-surface-core);
   --am-edge: var(--am-surface-edge);
   --am-shape: var(--am-shape-panel);
+  --am-border: var(--am-stroke);
+  --am-layer-filter: var(--am-filter);
+  --am-nib: 7px;       /* marker: stroke width */
+  --am-nib-gap: 2.5px; /* marker: paper showing between strokes */
+  --am-under: 0%;      /* marker: solid paint under the scribble */
+  --am-under-dark: var(--am-under); /* ...in dark mode, so labels stay readable on black */
+  --am-scribble: var(--am-core); /* marker: ink strength of the scribble */
+}
+/* Panels can take a different outline than filled shapes. */
+:where(.am-card, .am-input, .am-nav, .am-modal) {
+  --am-border: var(--am-panel-stroke);
+  --am-layer-filter: var(--am-filter-panel);
 }
 
 :where(.am-button, .am-badge, .am-card, .am-input, .am-nav, .am-modal, .am-splash)::before {
@@ -161,14 +293,46 @@
   pointer-events: none;
   box-sizing: border-box;
   border-radius: var(--am-shape);
-  border: var(--am-stroke);
-  background:
+  border: var(--am-border);
+
+  /* Marker: two passes of diagonal hatching at slightly different angles,
+     plus a lighter-pressure pass. Each stroke has darker edges and a lighter
+     streak down the middle; multiply darkens where strokes cross. */
+  --am-mk: color-mix(in srgb, var(--am-paint) var(--am-scribble), transparent);
+  --am-mk-edge: color-mix(in srgb, color-mix(in oklab, var(--am-paint), #000 24%) var(--am-scribble), transparent);
+  --am-mk-hi: color-mix(in srgb, color-mix(in oklab, var(--am-paint), #fff 26%) var(--am-scribble), transparent);
+  --am-mk-soft: color-mix(in srgb, var(--am-paint) calc(var(--am-scribble) * 0.55), transparent);
+  --am-mk-under: light-dark(
+    color-mix(in srgb, var(--am-paint) var(--am-under), transparent),
+    color-mix(in srgb, var(--am-paint) var(--am-under-dark), transparent));
+  --am-bg-marker: var(--am-if-marker)
+    repeating-linear-gradient(146deg,
+      transparent 0 var(--am-nib-gap),
+      var(--am-mk-edge) var(--am-nib-gap),
+      var(--am-mk) calc(var(--am-nib-gap) + var(--am-nib) * 0.2),
+      var(--am-mk-hi) calc(var(--am-nib-gap) + var(--am-nib) * 0.5),
+      var(--am-mk) calc(var(--am-nib-gap) + var(--am-nib) * 0.8),
+      var(--am-mk-edge) calc(var(--am-nib-gap) + var(--am-nib))),
+    repeating-linear-gradient(155deg,
+      transparent 0 calc(var(--am-nib-gap) * 1.6),
+      var(--am-mk-edge) calc(var(--am-nib-gap) * 1.6),
+      var(--am-mk) calc(var(--am-nib-gap) * 1.6 + var(--am-nib) * 0.2),
+      var(--am-mk-hi) calc(var(--am-nib-gap) * 1.6 + var(--am-nib) * 0.45),
+      var(--am-mk) calc(var(--am-nib-gap) * 1.6 + var(--am-nib) * 0.75),
+      var(--am-mk-edge) calc(var(--am-nib-gap) * 1.6 + var(--am-nib) * 0.9)),
+    repeating-linear-gradient(138deg,
+      transparent 0 calc(var(--am-nib) * 2.4),
+      var(--am-mk-soft) calc(var(--am-nib) * 2.4) calc(var(--am-nib) * 2.9)),
+    linear-gradient(var(--am-mk-under), var(--am-mk-under));
+
+  background: var(--am-bg-marker,
     var(--am-texture),
     radial-gradient(ellipse at 35% 35%,
       color-mix(in srgb, var(--am-paint) var(--am-core), transparent),
-      color-mix(in srgb, var(--am-paint) var(--am-edge), transparent) 80%);
+      color-mix(in srgb, var(--am-paint) var(--am-edge), transparent) 80%));
+  background-blend-mode: var(--am-blend);
   box-shadow: var(--am-shadow);
-  filter: var(--am-filter);
+  filter: var(--am-layer-filter);
   transition: transform 0.3s cubic-bezier(.3, 1.4, .5, 1);
 }
 
@@ -179,11 +343,13 @@
   --am-core: var(--am-fill-core);
   --am-edge: var(--am-fill-edge);
   --am-shape: var(--am-shape-blob);
+  --am-under-dark: 70%;
   display: inline-flex;
   align-items: center;
   gap: 0.5em;
   padding: 0.8em 1.7em;
   color: var(--am-on-pigment);
+  text-shadow: var(--am-label-shadow);
   font: 700 1rem/1.2 var(--am-font-body);
   letter-spacing: 0.02em;
   cursor: pointer;
@@ -202,9 +368,14 @@
   --am-core: var(--am-fill-core);
   --am-edge: var(--am-fill-edge);
   --am-shape: var(--am-shape-blob);
+  --am-nib: 5px;
+  --am-nib-gap: 2px;
+  --am-under: 30%;
+  --am-under-dark: 70%;
   display: inline-block;
   padding: 0.3em 0.9em;
   color: var(--am-on-pigment);
+  text-shadow: var(--am-label-shadow);
   font: 700 0.75rem/1.2 var(--am-font-body);
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -313,9 +484,13 @@
 /* --- Modal (<dialog>) ---------------------------------------------------- */
 
 .am-modal {
-  --am-surface: var(--am-paper);
-  --am-surface-core: 100%;
-  --am-surface-edge: 100%;
+  /* A solid sheet of the page's paper. Set on --am-paint (not --am-surface)
+     so inputs inside the modal keep their own surface. */
+  --am-paint: var(--am-paper);
+  --am-core: 100%;
+  --am-edge: 100%;
+  --am-under: 100%;
+  --am-scribble: 0%;
   width: min(32rem, calc(100vw - 2rem));
   padding: 2rem 2.2rem;
   overflow: visible;
@@ -329,12 +504,36 @@
 .am-modal__title { margin: 0 0 0.75rem; font: 400 1.8rem/1.1 var(--am-font-display); }
 .am-modal__actions { display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem; }
 
+/* --- Tape (paper medium): a strip of washi tape holding the sheet down ---- */
+
+:where(.am-card, .am-modal)::after {
+  content: var(--am-tape);
+  position: absolute;
+  z-index: -1;
+  top: -0.7rem;
+  left: 50%;
+  width: min(6.5rem, 40%);
+  height: 1.45rem;
+  translate: -50% 0;
+  rotate: -3deg;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(90deg, rgb(255 255 255 / 0.22) 0 6px, transparent 6px 12px),
+    color-mix(in srgb, var(--am-pigment-accent) 62%, transparent);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.12);
+  /* Torn, zig-zag ends */
+  clip-path: polygon(0 8%, 3% 22%, 0 38%, 3% 54%, 0 70%, 3% 86%, 0 100%, 100% 100%, 97% 84%, 100% 68%, 97% 52%, 100% 36%, 97% 20%, 100% 4%, 100% 0, 0 0);
+}
+:where(.am-card:nth-of-type(even))::after { rotate: 4deg; left: 58%; background-color: color-mix(in srgb, var(--am-pigment-secondary) 45%, transparent); }
+
 /* --- Splash (decorative paint blob) ------------------------------------ */
 
 .am-splash {
   --am-paint: var(--am-pigment);
   --am-core: var(--am-fill-core);
   --am-edge: var(--am-fill-edge);
+  --am-nib: max(4px, 4.2%);
+  --am-nib-gap: max(1.5px, 1.3%);
   display: block;
   width: 12rem;
   aspect-ratio: 1;
@@ -343,7 +542,7 @@
 }
 /* The splat shape is a mask on the paint; the medium filter on the element
    then roughens its edges, so it works at any size. */
-.am-splash { filter: var(--am-filter); }
+.am-splash { filter: var(--am-filter-splash); }
 .am-splash::before {
   filter: none;
   border-radius: 0;
@@ -355,7 +554,7 @@
 /* --- Pigment variants (after mediums so they win on the same element) ---- */
 
 .am--secondary { --am-pigment: var(--am-pigment-secondary); }
-.am--accent { --am-pigment: var(--am-pigment-accent); --am-on-pigment: var(--am-on-accent); }
+.am--accent { --am-pigment: var(--am-pigment-accent); --am-on-pigment: var(--am-on-accent); --am-label-shadow: none; }
 
 /* --- Motion -------------------------------------------------------------- */
 

@@ -1,5 +1,6 @@
 // Optional React wrappers. Plain createElement so no build step is needed.
-// Each component accepts `medium` (overrides the surrounding medium) and,
+// Each component accepts `medium` (overrides the surrounding medium: "watercolor"
+// | "acrylic" | "charcoal" | "paper" | "marker") and,
 // where it makes sense, `variant` ("primary" | "secondary" | "accent").
 import { createElement as h, forwardRef, useEffect, useRef } from 'react';
 import { installFilters } from './art-medium.js';

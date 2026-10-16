@@ -5,8 +5,10 @@ A UI component library where the components are made of art. Buttons, cards, inp
 | Medium | Looks like |
 | --- | --- |
 | `watercolor` | Translucent washes, bleeding edges, pigment granulation, darker pooled rims, cold-press paper |
-| `acrylic` | Opaque, saturated paint, ragged edges, lit brush-stroke ridges, primed canvas weave |
+| `acrylic` | Thick impasto in short directional dabs of broken color (several tints side by side), lit ridges and gloss, stroke ends for edges, primed canvas weave |
 | `charcoal` | Wobbly hand-drawn outlines, gritty broken lines, cross-hatching, newsprint (chalk on slate in dark mode) |
+| `paper` | Cut and torn construction-paper collage: fibrous torn edges, paper grain, soft layered shadows, washi tape on cards |
+| `marker` | Felt-tip scribbles: diagonal back-and-forth strokes with rounded ends, translucent ink that darkens where strokes cross, streaky nibs |
 
 ![art-medium demo](docs/screenshot.png)
 
@@ -75,7 +77,7 @@ The JS module is required. It injects the SVG filters that the CSS refers to (`f
 ```html
 <html data-medium="charcoal">
   …
-  <button class="am-button" data-medium="acrylic">This one is acrylic</button>
+  <button class="am-button" data-medium="marker">This one is marker</button>
 ```
 
 To switch at runtime:
@@ -94,7 +96,7 @@ import { setTheme } from 'art-medium';
 setTheme(document.documentElement, 'dark');
 ```
 
-In dark mode watercolor sits on indigo paper, acrylic on black gesso, and charcoal becomes chalk on a slate board.
+In dark mode watercolor sits on indigo paper, acrylic on black gesso, charcoal becomes chalk on a slate board, paper becomes bright scraps on black card stock, and marker becomes paint markers on black paper.
 
 ### Splash
 
@@ -128,14 +130,16 @@ import { MediumProvider, Button, Card, Input, Badge, Divider, Nav, Modal, Splash
 - **Painted layer.** Each component draws its paint on a `::before` pseudo-element behind its content. That layer goes through an SVG filter, so the paint distorts but the text stays sharp.
 - **Filters** (`src/art-medium.js`):
   - Watercolor uses `feTurbulence` and `feDisplacementMap` for the bleed, a noise alpha mask for granulation, and an erode-and-subtract rim for pooled edges.
-  - Acrylic adds `feDiffuseLighting` over stretched noise to get brush ridges.
+  - Acrylic drags the paint into short horizontal strokes with band-shaped displacement noise, then splits it into hard-edged dabs using posterized noise masks: some hue-rotated cooler or warmer, some lighter or darker. The dab map becomes a height map for `feDiffuseLighting` and `feSpecularLighting`, so each dab is a lit ridge of paint.
   - Charcoal combines a light wobble with a high-frequency grit mask.
+  - Paper tears the shape with displacement noise, puts it on a slightly larger, fibrous, lighter core (the paper's own color, lightened, so it works on any stock), adds lit grain and a soft drop shadow. Cards and modals get a strip of washi tape.
+  - Marker paints diagonal hatching with CSS gradients (two passes at slightly different angles plus a light-pressure pass, multiplied so crossings darken). The filter shifts the hatching along its own stroke direction, which leaves the inside alone but makes every stroke overshoot or stop short of the edge, then rounds the stroke ends with a blur-and-threshold mask.
 - **Tokens.** Each medium is just CSS custom properties: pigments, fill strength, shapes, stroke, texture, filter and fonts. Components only read tokens, which is why one `data-medium` attribute can restyle anything.
 - **Dark mode.** Color tokens are `light-dark(light, dark)` pairs, and `data-theme` sets `color-scheme`, so one attribute flips every color in a subtree.
 
 ### Adding a medium
 
-Define a new `[data-medium="gouache"] { --am-… }` token block (use `light-dark()` for colors), add a matching `<filter id="am-gouache">` in `art-medium.js`, and add the name to `MEDIUMS`.
+Define a new `[data-medium="gouache"] { --am-… }` token block (use `light-dark()` for colors; copy an existing block so every token is set, which keeps nested mediums from inheriting each other's settings), add a matching `<filter id="am-gouache">` in `art-medium.js`, and add the name to `MEDIUMS`. `--am-filter-panel` and `--am-filter-splash` let a medium use a gentler or larger-scale filter for panels and splashes.
 
 ## Browser support
 
@@ -143,7 +147,7 @@ Current Chrome, Edge, Safari and Firefox (2024 or later). The library relies on 
 
 ## Fonts
 
-Each medium suggests display and body fonts (`--am-font-display` and `--am-font-body`), with system fallbacks. The demo loads them from Google Fonts: Cormorant Garamond and Nunito for watercolor, Archivo Black and Work Sans for acrylic, Caveat and Kalam for charcoal.
+Each medium suggests display and body fonts (`--am-font-display` and `--am-font-body`), with system fallbacks. The demo loads them from Google Fonts: Cormorant Garamond and Nunito for watercolor, Archivo Black and Work Sans for acrylic, Caveat and Kalam for charcoal, Fredoka and Figtree for paper, Permanent Marker and Varela Round for marker.
 
 ## Changelog
 

@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>art-medium</title>
-  <meta name="description" content="A UI component library where every component is painted: watercolor, acrylic and charcoal buttons, cards, inputs and more.">
+  <meta name="description" content="A UI component library where every component is painted: watercolor, acrylic, charcoal, torn paper and marker buttons, cards, inputs and more.">
   <meta property="og:title" content="art-medium: components, painted">
-  <meta property="og:description" content="A UI component library where every button, card and input is made of a real art medium: watercolor, acrylic, charcoal.">
+  <meta property="og:description" content="A UI component library where every button, card and input is made of a real art medium: watercolor, acrylic, charcoal, paper, marker.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://ghanemja.github.io/art-asset/">
   <meta property="og:image" content="https://ghanemja.github.io/art-asset/docs/og.png">
@@ -19,14 +19,14 @@
     (function () {
       var root = document.documentElement, m, t;
       try { m = localStorage.getItem('am-medium'); t = localStorage.getItem('am-theme'); } catch (e) {}
-      if (m === 'watercolor' || m === 'acrylic' || m === 'charcoal') root.setAttribute('data-medium', m);
+      if (['watercolor', 'acrylic', 'charcoal', 'paper', 'marker'].indexOf(m) > -1) root.setAttribute('data-medium', m);
       if (t !== 'light' && t !== 'dark') t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
       root.setAttribute('data-theme', t);
     })();
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Caveat:wght@500;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Kalam:wght@400;700&family=Nunito:wght@400;700&family=Work+Sans:wght@400;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Caveat:wght@500;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Figtree:wght@400;700&family=Fredoka:wght@400;600&family=Kalam:wght@400;700&family=Nunito:wght@400;700&family=Permanent+Marker&family=Varela+Round&family=Work+Sans:wght@400;700&display=swap">
   <link rel="stylesheet" href="./src/art-medium.css">
   <script type="module" src="./src/art-medium.js"></script>
   <style>
@@ -53,6 +53,11 @@
       .topbar .am-nav { padding: .7rem 1rem; }
       .hero__paint .s3 { display: none; }
     }
+    @media (max-width: 420px) {
+      .topbar .am-nav { gap: .5rem; padding: .6rem .8rem; }
+      .topbar__tools { gap: .35rem; }
+      .topbar__tools .am-button { padding: .45em .75em; font-size: .78rem; }
+    }
 
     /* Hero */
     .hero { position: relative; isolation: isolate; padding: 5rem 0 3rem; text-align: center; }
@@ -73,13 +78,19 @@
     .palette .am-button[aria-pressed="true"]::after { content: "✓"; }
 
     /* Medium plates: framed like prints on a gallery wall */
-    .plates { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+    .plates { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 1.5rem; }
     .plate { position: relative; isolation: isolate; display: grid; gap: 1rem; align-content: start; padding: 1.75rem; border-radius: 4px; overflow: hidden;
              box-shadow: 0 1px 0 color-mix(in srgb, var(--am-ink) 12%, transparent), 0 14px 30px -18px rgb(0 0 0 / .45); }
     .plate h3 { margin: 0; font: 400 2.4rem/1 var(--am-font-display); }
     .plate p { margin: 0; line-height: 1.55; }
     .plate > code { justify-self: start; }
     .plate > .am-splash { position: absolute; width: 7rem; right: -2.5rem; top: -2.5rem; z-index: -1; }
+    /* Five across as 3 + 2 on wide screens */
+    @media (min-width: 900px) {
+      .grid5.grid5 { grid-template-columns: repeat(6, 1fr); }
+      .grid5 > * { grid-column: span 2; }
+      .grid5 > :nth-child(n+4) { grid-column: span 3; }
+    }
 
     /* Component reference */
     .specs { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 480px), 1fr)); gap: 1.5rem; }
@@ -94,7 +105,7 @@
                   background: color-mix(in srgb, var(--am-ink) 7%, transparent); white-space: pre; tab-size: 2; }
 
     /* Mixed media + day/night */
-    .grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
+    .grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: 1.5rem; }
     .grid3 .am-card p { line-height: 1.55; }
 
     /* Get started */
@@ -136,7 +147,7 @@
       </div>
       <span class="am-badge am--secondary">v0.1 · MIT · no build step</span>
       <h1>Components,<br><em>painted.</em></h1>
-      <p class="hero__lede">A UI library where every button, card and input is made of a real art medium. One attribute paints your whole site in watercolor, acrylic or charcoal. Light or dark.</p>
+      <p class="hero__lede">A UI library where every button, card and input is made of a real art medium. One attribute paints your whole site in watercolor, acrylic, charcoal, torn paper or marker. Light or dark.</p>
       <div class="row">
         <a class="am-button" href="#start">Get started</a>
         <a class="am-button am--secondary" href="#components">See the components</a>
@@ -144,17 +155,19 @@
       <div class="palette">
         <span class="palette__label">Paint this page with</span>
         <div class="row" role="group" aria-label="Page medium">
-          <button class="am-button" data-set="watercolor" aria-pressed="false">Watercolor</button>
-          <button class="am-button am--secondary" data-set="acrylic" aria-pressed="false">Acrylic</button>
-          <button class="am-button am--accent" data-set="charcoal" aria-pressed="false">Charcoal</button>
+          <button class="am-button" data-medium="watercolor" data-set="watercolor" aria-pressed="false">Watercolor</button>
+          <button class="am-button am--secondary" data-medium="acrylic" data-set="acrylic" aria-pressed="false">Acrylic</button>
+          <button class="am-button am--accent" data-medium="charcoal" data-set="charcoal" aria-pressed="false">Charcoal</button>
+          <button class="am-button" data-medium="paper" data-set="paper" aria-pressed="false">Paper</button>
+          <button class="am-button am--accent" data-medium="marker" data-set="marker" aria-pressed="false">Marker</button>
         </div>
       </div>
     </header>
 
     <section id="mediums">
-      <h2>Three mediums. One attribute.</h2>
+      <h2>Five mediums. One attribute.</h2>
       <p class="lede">Put <code>data-medium</code> on <code>&lt;html&gt;</code> to paint the whole site, or on any single element to paint just that part.</p>
-      <div class="plates">
+      <div class="plates grid5">
         <article class="plate am-canvas" data-medium="watercolor">
           <span class="am-splash" aria-hidden="true"></span>
           <h3>Watercolor</h3>
@@ -166,7 +179,7 @@
         <article class="plate am-canvas" data-medium="acrylic">
           <span class="am-splash am--secondary" aria-hidden="true"></span>
           <h3>Acrylic</h3>
-          <p>Thick, opaque paint with ragged edges, visible brush ridges and a primed-canvas weave.</p>
+          <p>Thick impasto in short, directional dabs of broken color, with lit ridges, a little gloss and stroke ends for edges.</p>
           <div class="row"><button class="am-button">Button</button><span class="am-badge am--accent">Badge</span></div>
           <code>data-medium="acrylic"</code>
           <div><button class="am-button am--secondary" data-set="acrylic">Paint the page</button></div>
@@ -178,6 +191,22 @@
           <div class="row"><button class="am-button">Button</button><span class="am-badge am--secondary">Badge</span></div>
           <code>data-medium="charcoal"</code>
           <div><button class="am-button" data-set="charcoal">Paint the page</button></div>
+        </article>
+        <article class="plate am-canvas" data-medium="paper">
+          <span class="am-splash am--secondary" aria-hidden="true"></span>
+          <h3>Paper</h3>
+          <p>Cut and torn construction paper, layered and taped down. Fibrous torn edges, paper grain and soft shadows.</p>
+          <div class="row"><button class="am-button">Button</button><span class="am-badge am--accent">Badge</span></div>
+          <code>data-medium="paper"</code>
+          <div><button class="am-button am--secondary" data-set="paper">Paint the page</button></div>
+        </article>
+        <article class="plate am-canvas" data-medium="marker">
+          <span class="am-splash" aria-hidden="true"></span>
+          <h3>Marker</h3>
+          <p>Felt-tip scribbles: loose diagonal strokes with rounded ends, translucent ink that darkens where strokes cross.</p>
+          <div class="row"><button class="am-button am--accent">Button</button><span class="am-badge am--secondary">Badge</span></div>
+          <code>data-medium="marker"</code>
+          <div><button class="am-button" data-set="marker">Paint the page</button></div>
         </article>
       </div>
     </section>
@@ -300,13 +329,18 @@
           <p>With a charcoal button beside it.</p>
           <button class="am-button" data-medium="charcoal">Sketch it</button>
         </article>
+        <article class="am-card" data-medium="paper">
+          <h3 class="am-card__title">A paper note</h3>
+          <p>Taped down, with a <span class="am-badge am--secondary" data-medium="marker">marker</span> scribble on it.</p>
+          <button class="am-button" data-medium="marker">Doodle</button>
+        </article>
       </div>
     </section>
 
     <section id="night">
       <h2 id="night-title">After dark</h2>
       <p class="lede">Every medium has a dark version. Add <code>data-theme="dark"</code>, or <code>"auto"</code> to follow the visitor's system setting.</p>
-      <div class="grid3" id="night-plates">
+      <div class="grid3 grid5" id="night-plates">
         <article class="plate am-canvas" data-medium="watercolor">
           <h3>Watercolor</h3>
           <p>Luminous washes on indigo paper.</p>
@@ -320,6 +354,16 @@
         <article class="plate am-canvas" data-medium="charcoal">
           <h3>Charcoal</h3>
           <p>Chalk on a slate board.</p>
+          <div class="row"><button class="am-button">Button</button><button class="am-button am--secondary">Button</button></div>
+        </article>
+        <article class="plate am-canvas" data-medium="paper">
+          <h3>Paper</h3>
+          <p>Bright paper scraps on black card stock.</p>
+          <div class="row"><button class="am-button">Button</button><button class="am-button am--accent">Button</button></div>
+        </article>
+        <article class="plate am-canvas" data-medium="marker">
+          <h3>Marker</h3>
+          <p>Paint markers on black paper.</p>
           <div class="row"><button class="am-button">Button</button><button class="am-button am--secondary">Button</button></div>
         </article>
       </div>
