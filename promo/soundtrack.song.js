@@ -4,10 +4,10 @@
 // Times match the animation in promo/index.html. Render with:
 //   node promo/soundtrack.mjs out.wav
 
-const WIPES = [8.4, 10.4, 12.3, 16.2, 18.2, 22.1];   // paint-splat wipes
+const WIPES = [7.4, 8.6, 9.8, 11.0, 12.3, 16.2, 18.2, 22.1];   // paint-splat wipes
 const PEAK = 0.38;                                  // a wipe covers the frame this long after it starts
-const DROP = WIPES[3] + PEAK;                       // the beat comes back here (16.58s)
-const PLUG = WIPES[5] + PEAK;                       // the "100% math" scene (22.48s)
+const DROP = WIPES[5] + PEAK;                       // the beat comes back here (16.58s)
+const PLUG = WIPES[7] + PEAK;                       // the "100% math" scene (22.48s)
 
 // The arrangement is math too: drums play from 6s, rest under the typing, return on the drop.
 const DRUMS = `t >= 6 && (t < 14 || t >= ${DROP}) && t < ${PLUG}`;
@@ -76,7 +76,7 @@ export default {
     {
       name: 'Pop',
       equation: 'sin(TAU*(380*tau + 16*(1 - exp(-45*tau)))) * exp(-35*tau)',
-      at: [1.1, 1.7, 2.8, ...[0, 1, 2, 3, 4].map((i) => 16.75 + i * 0.18), WIPES[4] + PEAK + 0.15, WIPES[4] + PEAK + 0.95,
+      at: [1.1, 1.7, 2.8, ...[0, 1, 2, 3, 4].map((i) => 16.75 + i * 0.18), WIPES[6] + PEAK + 0.15, WIPES[6] + PEAK + 0.95,
         PLUG + 0.3, PLUG + 1.95],
       len: 0.15, gain: 0.4,
     },

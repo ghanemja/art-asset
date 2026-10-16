@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <title>art-medium promo</title>
   <!-- A 1080x1080 promo video, driven frame by frame by render.mjs (window.at(t)). -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Caveat:wght@500;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Kalam:wght@400;700&family=Nunito:wght@400;700;800&family=Work+Sans:wght@400;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Caveat:wght@500;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Figtree:wght@400;700&family=Fredoka:wght@400;600&family=Kalam:wght@400;700&family=Nunito:wght@400;700;800&family=Permanent+Marker&family=Varela+Round&family=Work+Sans:wght@400;700&display=swap">
   <link rel="stylesheet" href="../src/art-medium.css">
   <style>
     * { box-sizing: border-box; }
@@ -105,7 +105,7 @@
     <h2 id="c-title">One attribute.</h2>
     <div class="am-card code" id="c-code"></div>
     <div class="chips">
-      <span class="am-badge" id="c1">3 mediums</span>
+      <span class="am-badge" id="c1">5 mediums</span>
       <span class="am-badge am--secondary" id="c2">Light + dark</span>
       <span class="am-badge am--accent" id="c3">No build step</span>
       <span class="am-badge" id="c4">React ready</span>
@@ -161,19 +161,21 @@
     // Paint-splat wipes: grow to cover the frame, repaint at the peak, then fly off.
     const GROW = .38, OUT = .42;
     const wipes = [
-      { t: 8.4,  medium: 'acrylic',  theme: 'light', variant: 'am--secondary' },
-      { t: 10.4, medium: 'charcoal', theme: 'light', variant: 'am--accent' },
+      { t: 7.4,  medium: 'acrylic',  theme: 'light', variant: 'am--secondary' },
+      { t: 8.6,  medium: 'paper',    theme: 'light', variant: 'am--accent' },
+      { t: 9.8,  medium: 'marker',   theme: 'light', variant: '' },
+      { t: 11.0, medium: 'charcoal', theme: 'light', variant: 'am--secondary' },
       { t: 12.3, medium: 'charcoal', theme: 'dark',  pigment: '#23282b' },
       { t: 16.2, medium: 'acrylic',  theme: 'light', variant: '' },
       { t: 18.2, medium: 'acrylic',  theme: 'light', variant: 'am--secondary' },
       { t: 22.1, medium: 'charcoal', theme: 'dark',  pigment: '#23282b' },
     ];
-    const labels = { watercolor: 'Watercolor', acrylic: 'Acrylic', charcoal: 'Charcoal' };
+    const labels = { watercolor: 'Watercolor', acrylic: 'Acrylic', charcoal: 'Charcoal', paper: 'Paper', marker: 'Marker' };
 
     function stateAt(t) {
       let medium = 'watercolor', theme = 'light', lastPeak = -1;
       // Hook: the frame flickers through mediums.
-      if (t >= 4.3 && t < 5.9) medium = ['acrylic', 'charcoal', 'watercolor', 'acrylic'][Math.floor((t - 4.3) / .4)] ?? 'watercolor';
+      if (t >= 4.3 && t < 5.9) medium = ['acrylic', 'paper', 'marker', 'charcoal'][Math.floor((t - 4.3) / .4)] ?? 'watercolor';
       for (const w of wipes) if (t >= w.t + GROW) { medium = w.medium; theme = w.theme; lastPeak = w.t + GROW; }
       return { medium, theme, lastPeak };
     }
@@ -209,9 +211,9 @@
       const peak = (i) => wipes[i].t + GROW;
       show('A', t < 6.6);
       show('B', t >= 6.4 && t < 14.1);
-      show('C', t >= 14.0 && t < peak(4));
-      show('D', t >= peak(4) && t < peak(5));
-      show('E', t >= peak(5));
+      show('C', t >= 14.0 && t < peak(6));
+      show('D', t >= peak(6) && t < peak(7));
+      show('E', t >= peak(7));
 
       // A: hook
       const drift = (i) => `translate(${Math.sin(t * .9 + i) * 10}px, ${Math.cos(t * .7 + i) * 10}px)`;
@@ -258,16 +260,16 @@
 
       // D: end card
       ['d1', 'd2', 'd3', 'd4'].forEach((id, i) => {
-        const k = prog(t, peak(4) + .05 + i * .12, .5);
+        const k = prog(t, peak(6) + .05 + i * .12, .5);
         $(id).style.transform = `${drift(i + 2)} scale(${back(k)}) rotate(${t * 5 * (i % 2 ? -1 : 1)}deg)`;
       });
-      pop($('d-logo'), t, peak(4) + .15, .55, -6);
-      rise($('d-tag'), t, peak(4) + .55, .5);
-      pop($('d-url'), t, peak(4) + .95, .5, 4);
-      rise($('d-small'), t, peak(4) + 1.3, .5, 30);
+      pop($('d-logo'), t, peak(6) + .15, .55, -6);
+      rise($('d-tag'), t, peak(6) + .55, .5);
+      pop($('d-url'), t, peak(6) + .95, .5, 4);
+      rise($('d-small'), t, peak(6) + 1.3, .5, 30);
 
       // E: the soundtrack plug. These are the real equations from promo/soundtrack.song.js.
-      const E0 = peak(5);
+      const E0 = peak(7);
       rise($('e-kicker'), t, E0 + .1, .45, 40);
       pop($('e-title'), t, E0 + .3, .55, -5);
       rise($('e-board'), t, E0 + .55, .4, 40);
@@ -308,6 +310,7 @@
       '500 40px "Cormorant Garamond"', 'italic 500 40px "Cormorant Garamond"', '400 20px Nunito', '700 20px Nunito',
       '400 40px "Archivo Black"', '400 20px "Work Sans"', '700 20px "Work Sans"',
       '500 40px Caveat', '700 40px Caveat', '400 20px Kalam', '700 20px Kalam',
+      '400 40px Fredoka', '600 40px Fredoka', '400 20px Figtree', '700 20px Figtree', '400 40px "Permanent Marker"', '400 20px "Varela Round"',
     ].map((f) => document.fonts.load(f)));
     await document.fonts.ready;
     window.at(0);
