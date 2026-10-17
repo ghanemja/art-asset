@@ -118,6 +118,12 @@
     .plate p { margin: 0; line-height: 1.55; }
     .plate > code { justify-self: start; }
     .plate > .am-splash { position: absolute; width: 7rem; right: -2.5rem; top: -2.5rem; z-index: -1; }
+    /* Notebook paper has its red margin 64-66px in: write to the right of it,
+       on the plate and on the page (the centered column only needs the extra
+       room when the window is too narrow to clear the line on its own; the
+       top bar has its own paper, so it stays put). */
+    .plate[data-medium="marker"][data-style="notebook"] { padding-left: calc(66px + 1.25rem); }
+    [data-medium="marker"][data-style="notebook"] :is(main, footer).wrap { padding-left: max(1rem, calc(66px + 1rem - max(0px, (100vw - 1160px) / 2))); }
     /* Five across as 3 + 2 on wide screens */
     @media (min-width: 900px) {
       .grid5.grid5 { grid-template-columns: repeat(6, 1fr); }
