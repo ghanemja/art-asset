@@ -1,4 +1,4 @@
-// art-medium — SVG filter defs + helpers.
+// Splatform (formerly art-medium) — SVG filter defs + helpers.
 // The CSS references these filters by id (filter: url(#am-watercolor)), so they
 // must exist in the document. Importing this module installs them once.
 

@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>art-medium</title>
+  <title>Splatform</title>
   <meta name="description" content="A UI component library where every component is painted: watercolor, acrylic, charcoal, torn paper and marker buttons, cards, inputs and more.">
-  <meta property="og:title" content="art-medium: components, painted">
+  <meta property="og:title" content="Splatform: splat your site">
   <meta property="og:description" content="A UI component library where every button, card and input is made of a real art medium: watercolor, acrylic, charcoal, paper, marker.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://ghanemja.github.io/art-asset/">
@@ -156,7 +156,7 @@
   <div class="topbar">
     <div class="wrap">
       <nav class="am-nav" aria-label="Main">
-        <a class="am-nav__brand" href="#"><span class="am-splash" aria-hidden="true"></span>art-medium</a>
+        <a class="am-nav__brand" href="#"><span class="am-splash" aria-hidden="true"></span>Splatform</a>
         <ul class="am-nav__links">
           <li><a class="am-nav__link" href="#mediums">Mediums</a></li>
           <li><a class="am-nav__link" href="#components">Components</a></li>
@@ -178,7 +178,7 @@
         <span class="am-splash am--secondary s2"></span>
         <span class="am-splash am--accent s3"></span>
       </div>
-      <span class="am-badge am--secondary">v0.1 · MIT · no build step</span>
+      <span class="am-badge am--secondary">v0.2 · MIT · no build step</span>
       <h1>Components,<br><em>painted.</em></h1>
       <script>amHeadline();</script>
       <p class="hero__lede">A UI library where every button, card and input is made of a real art medium. One attribute paints your whole site in watercolor, acrylic, charcoal, torn paper or marker. Light or dark.</p>
@@ -450,9 +450,9 @@
           <span class="step">Option 1 · CDN</span>
           <h3 class="am-card__title">Drop it in</h3>
 <pre><code>&lt;link rel="stylesheet"
-  href="https://cdn.jsdelivr.net/gh/ghanemja/art-asset@v0.1.0/src/art-medium.css"&gt;
+  href="https://cdn.jsdelivr.net/gh/ghanemja/art-asset@v0.2.0/src/art-medium.css"&gt;
 &lt;script type="module"
-  src="https://cdn.jsdelivr.net/gh/ghanemja/art-asset@v0.1.0/src/art-medium.js"&gt;&lt;/script&gt;
+  src="https://cdn.jsdelivr.net/gh/ghanemja/art-asset@v0.2.0/src/art-medium.js"&gt;&lt;/script&gt;
 
 &lt;body class="am-canvas" data-medium="watercolor" data-theme="auto"&gt;
   &lt;button class="am-button"&gt;Hello&lt;/button&gt;
@@ -461,11 +461,11 @@
         <article class="am-card">
           <span class="step">Option 2 · npm</span>
           <h3 class="am-card__title">Install it</h3>
-<pre><code>npm i github:ghanemja/art-asset#v0.1.0
+<pre><code>npm i github:ghanemja/art-asset#v0.2.0
 
 // in your app
-import 'art-medium/css';
-import { setMedium, setTheme } from 'art-medium';
+import 'splatform/css';
+import { setMedium, setTheme } from 'splatform';
 
 setMedium(document.documentElement, 'acrylic');
 setTheme(document.documentElement, 'dark');</code></pre>
@@ -473,9 +473,9 @@ setTheme(document.documentElement, 'dark');</code></pre>
         <article class="am-card">
           <span class="step">Option 3 · React</span>
           <h3 class="am-card__title">Use the wrappers</h3>
-<pre><code>import 'art-medium/css';
+<pre><code>import 'splatform/css';
 import { MediumProvider, Button, Card }
-  from 'art-medium/react';
+  from 'splatform/react';
 
 &lt;MediumProvider medium="charcoal" theme="auto"&gt;
   &lt;Card title="Still life"&gt;
@@ -490,7 +490,7 @@ import { MediumProvider, Button, Card }
 
   <footer class="wrap">
     <hr class="am-divider">
-    <p><span class="am-splash" aria-hidden="true"></span> This site is built entirely with art-medium.</p>
+    <p><span class="am-splash" aria-hidden="true"></span> This site is built entirely with Splatform.</p>
     <p><a href="https://github.com/ghanemja/art-asset">GitHub</a> · MIT license</p>
   </footer>
 

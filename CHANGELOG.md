@@ -1,7 +1,8 @@
 # Changelog
 
-## Unreleased
+## 0.2.0 (2026-10-17)
 
+- Renamed to **Splatform** (package `splatform`). Files, `am-` class names and `--am-*` tokens are unchanged, so existing markup keeps working.
 - New medium: `paper`, cut and torn construction-paper collage with fibrous torn edges, paper grain, layered shadows and washi tape on cards and modals. Dark mode is bright scraps on black card stock.
 - New medium: `marker`, felt-tip scribbles: a few fat strokes in one back-and-forth zig-zag with rounded hairpin turns, translucent ink that darkens where it overlaps, and a wobbly marker outline with a highlighter swipe on panels. Dark mode is paint markers on black paper with white labels.
 - Acrylic repainted as thick broken-color impasto: short directional dabs of several related tints, lit ridges and gloss, and edges made of staggered stroke ends instead of a flat fill with a streak texture.
