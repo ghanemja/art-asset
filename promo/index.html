@@ -1,8 +1,8 @@
 <!doctype html>
-<html lang="en" data-medium="watercolor" data-theme="light">
+<html lang="en" data-medium="acrylic" data-theme="light">
 <head>
   <meta charset="utf-8">
-  <title>art-medium promo</title>
+  <title>Splatform promo</title>
   <!-- A 1080x1080 promo video, driven frame by frame by render.mjs (window.at(t)). -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Caveat:wght@500;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Figtree:wght@400;700&family=Fredoka:wght@400;600&family=Kalam:wght@400;700&family=Nunito:wght@400;700;800&family=Permanent+Marker&family=Varela+Round&family=Work+Sans:wght@400;700&display=swap">
   <link rel="stylesheet" href="../src/art-medium.css">
@@ -11,14 +11,49 @@
     html, body { margin: 0; width: 1080px; height: 1080px; overflow: hidden; }
     body { position: relative; }
     .scene { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; visibility: hidden; }
-    .abs { position: absolute; }
 
-    /* A: hook */
-    #A .am-splash { position: absolute; }
-    #A h1 { margin: 0; font: 400 150px/0.95 var(--am-font-display); }
-    #A h1 span { display: block; }
-    #A h1 em { font-style: italic; }
-    #A .am-badge { font-size: 26px; margin-top: 48px; padding: .35em 1em; }
+    /* R: the painter's room. Everything in #room zooms together, so the
+       easel's canvas (#site, a real 1080px page scaled to 400px) ends up
+       filling the frame at exactly 1:1. */
+    #R { display: block; background: #ecdcc3; }
+    #room { position: absolute; inset: 0; transform-origin: 0 0; }
+    #room > svg { position: absolute; inset: 0; }
+    #site { position: absolute; left: 560px; top: 250px; width: 1080px; height: 1080px; transform: scale(.37037); transform-origin: 0 0; overflow: hidden; }
+    #site > div { position: absolute; inset: 0; }
+
+    /* The bland "every vibe-coded app" page on the canvas before the paint. */
+    #boring { background: #f6f6f8; font-family: Helvetica, Arial, sans-serif; color: #26262b; text-align: left; }
+    #boring .bar { height: 96px; background: #fff; border-bottom: 2px solid #e4e4e8; display: flex; align-items: center; gap: 18px; padding: 0 56px; font-size: 30px; color: #55555c; }
+    #boring .bar i { width: 44px; height: 44px; border-radius: 12px; background: #d6d6dc; }
+    #boring .bar b { margin-left: auto; width: 120px; height: 20px; border-radius: 10px; background: #e2e2e7; }
+    #boring .bar u { width: 56px; height: 56px; border-radius: 50%; background: #e2e2e7; }
+    #boring h2 { margin: 90px 56px 14px; font-size: 70px; font-weight: 700; letter-spacing: -.02em; }
+    #boring p { margin: 0 56px 56px; font-size: 32px; color: #8a8a92; }
+    #boring .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin: 0 56px; }
+    #boring .cards > div { height: 230px; background: #fff; border: 2px solid #e6e6ea; border-radius: 20px; box-shadow: 0 6px 18px rgb(0 0 0 / .05); padding: 30px; }
+    #boring .cards s { display: block; height: 18px; border-radius: 9px; background: #ececf0; margin-bottom: 18px; text-decoration: none; }
+    #boring .cards s:first-child { width: 50%; height: 26px; background: #dcdce2; }
+    #boring .cta { margin: 64px 56px 0; display: inline-block; padding: 26px 56px; border-radius: 16px; font-size: 34px; font-weight: 700; color: #fff; background: linear-gradient(135deg, #7c5cff, #a46bff); box-shadow: 0 10px 26px rgb(124 92 255 / .35); }
+
+    /* The painted page the canvas turns into. */
+    #paper, #content { clip-path: circle(var(--reveal, 0%) at 50% 52%); }
+    #splats > * { position: absolute; }
+    #splats i { border-radius: 50%; }
+    #content { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+    #content .am-nav { position: absolute; left: 40px; right: 40px; top: 30px; padding: 18px 30px; font-size: 26px; text-align: left; }
+    #content .am-nav__brand { font-size: 36px; display: flex; align-items: center; gap: 14px; }
+    #content .am-nav__brand .am-splash { width: 44px; }
+    #content h1 { margin: 60px 0 0; font: 400 158px/.92 var(--am-font-display); }
+    #content h1 span { display: block; }
+    #content .lede { margin: 34px 0 44px; font-size: 34px; max-width: 800px; line-height: 1.4; font-weight: 700; }
+    #content .row { display: flex; gap: 24px; }
+    #content .am-button { font-size: 32px; padding: .65em 1.3em; }
+
+    #caption { position: absolute; left: 0; right: 0; top: 34px; text-align: center; color: #2a2a2e; z-index: 5; }
+    #caption div { font: 400 74px/1.02 "Archivo Black", sans-serif; letter-spacing: -.01em; }
+    #caption p { margin: 18px 0 0; font: 700 34px/1 Figtree, sans-serif; color: #6d6458; }
+    .series { position: absolute; left: 40px; top: 36px; z-index: 6; font-size: 24px; padding: .4em 1em; }
+    #R .series { top: auto; bottom: 40px; }
 
     /* B: the swap */
     #B .label { font: 400 96px/1 var(--am-font-display); margin-bottom: 8px; }
@@ -46,31 +81,154 @@
 
     /* D: end card */
     #D .am-splash { position: absolute; }
-    #D .logo { display: flex; align-items: center; gap: 22px; font: 400 108px/1 var(--am-font-display); }
-    #D .logo .am-splash { position: static; width: 100px; }
-    #D .tag { font: 400 56px/1.2 var(--am-font-body); margin: 34px 0 54px; font-weight: 700; }
+    #D .logo { display: flex; align-items: center; gap: 22px; font: 400 120px/1 var(--am-font-display); }
+    #D .logo .am-splash { position: static; width: 110px; }
+    #D .tag { font: 400 64px/1.2 var(--am-font-display); margin: 30px 0 50px; }
     #D .am-button { font-size: 34px; padding: .7em 1.4em; }
     #D .small { margin-top: 40px; font-size: 26px; opacity: .8; font-weight: 700; letter-spacing: .04em; }
-
-    /* E: the soundtrack plug, chalk on slate */
-    #E .kicker { font: 400 44px/1 var(--am-font-display); opacity: .85; }
-    #E h2 { margin: 6px 0 34px; font: 400 128px/1 var(--am-font-display); }
-    #E .board { width: 1010px; padding: 30px 36px; text-align: left; font: 600 21px/1.9 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; white-space: pre; }
-    #E .board .k { color: var(--am-pigment-accent); }
-    #E .board .n { color: var(--am-pigment-secondary); }
-    #E .made { margin-top: 38px; display: flex; align-items: center; gap: 22px; font: 400 40px/1 var(--am-font-display); }
-    #E .made .am-button { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 28px; }
 
     #wipe { position: absolute; left: 50%; top: 50%; width: 2300px; margin: -1150px 0 0 -1150px; z-index: 50; visibility: hidden; }
   </style>
 </head>
 <body class="am-canvas">
-  <section class="scene" id="A">
-    <span class="am-splash" id="a1" style="width:560px; left:-120px; top:-80px"></span>
-    <span class="am-splash am--secondary" id="a2" style="width:440px; right:-110px; bottom:40px"></span>
-    <span class="am-splash am--accent" id="a3" style="width:260px; left:120px; bottom:-40px"></span>
-    <h1><span id="a-l1">Your UI,</span><span id="a-l2"><em>but painted.</em></span></h1>
-    <span class="am-badge" id="a-badge">art-medium</span>
+  <section class="scene" id="R">
+    <div id="room">
+      <svg viewBox="0 0 1080 1080" width="1080" height="1080" aria-hidden="true">
+        <defs>
+          <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6ead8"/><stop offset="1" stop-color="#ead8bd"/></linearGradient>
+          <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c38f58"/><stop offset="1" stop-color="#9f7043"/></linearGradient>
+          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a9d4f2"/><stop offset="1" stop-color="#e3f1fa"/></linearGradient>
+          <radialGradient id="light" cx=".22" cy=".38" r=".6"><stop offset="0" stop-color="#fff8e8" stop-opacity=".7"/><stop offset="1" stop-color="#fff8e8" stop-opacity="0"/></radialGradient>
+        </defs>
+        <rect width="1080" height="800" fill="url(#wall)"/>
+        <rect width="1080" height="800" fill="url(#light)"/>
+        <!-- window -->
+        <g transform="translate(40 290)">
+          <rect x="-10" y="-10" width="230" height="250" rx="6" fill="#fff8ee"/>
+          <rect width="210" height="230" fill="url(#sky)"/>
+          <circle cx="160" cy="58" r="26" fill="#fff4c9"/>
+          <path d="M18 170c20-22 44-22 62-6 14-16 40-18 56 2 16-10 40-6 54 14v50H18z" fill="#cfe7c4"/>
+          <path d="M105 0v230M0 115h210" stroke="#fff8ee" stroke-width="10"/>
+          <rect x="-22" y="236" width="254" height="16" rx="4" fill="#e9dcc6"/>
+        </g>
+        <!-- floor -->
+        <rect y="800" width="1080" height="280" fill="url(#floor)"/>
+        <g stroke="#8c6037" stroke-width="3" opacity=".55">
+          <path d="M0 850h1080M0 915h1080M0 995h1080"/>
+          <path d="M140 800v50M520 800v50M880 800v50M60 850v65M400 850v65M760 850v65M1010 850v65M230 915v80M640 915v80M960 915v80"/>
+        </g>
+        <rect y="790" width="1080" height="22" fill="#efe3cf"/>
+        <!-- drop cloth -->
+        <ellipse cx="640" cy="930" rx="470" ry="92" fill="#ece5d8"/>
+        <g opacity=".85">
+          <circle cx="520" cy="920" r="11" fill="#2f5fd0"/><circle cx="560" cy="955" r="6" fill="#e2483d"/>
+          <circle cx="760" cy="905" r="9" fill="#f2b705"/><circle cx="850" cy="950" r="13" fill="#2f5fd0"/>
+          <circle cx="690" cy="975" r="7" fill="#e2483d"/><circle cx="430" cy="960" r="8" fill="#f2b705"/>
+        </g>
+        <!-- paint cans -->
+        <g transform="translate(470 860)">
+          <rect width="70" height="80" rx="6" fill="#c9ced6"/><rect width="70" height="14" rx="5" fill="#2f5fd0"/>
+          <path d="M14 14v22a5 5 0 0 0 10 0V14M44 14v12a4 4 0 0 0 8 0V14" fill="#2f5fd0"/>
+        </g>
+        <g transform="translate(990 880)">
+          <rect width="62" height="72" rx="6" fill="#c9ced6"/><rect width="62" height="13" rx="5" fill="#e2483d"/>
+          <path d="M10 13v18a5 5 0 0 0 10 0V13" fill="#e2483d"/>
+        </g>
+        <!-- easel -->
+        <g stroke-linecap="round">
+          <path d="M760 190L760 870" stroke="#6e4626" stroke-width="14"/>
+          <path d="M760 190L600 900M760 190L920 900" stroke="#8a5a33" stroke-width="18"/>
+          <path d="M640 730H880" stroke="#8a5a33" stroke-width="12"/>
+        </g>
+        <rect x="730" y="226" width="60" height="28" rx="6" fill="#8a5a33"/>
+        <rect x="570" y="262" width="400" height="400" fill="#000" opacity=".18"/>
+        <rect x="540" y="648" width="440" height="24" rx="6" fill="#9c6a3e"/>
+        <!-- the painter -->
+        <g id="painter">
+          <!-- legs and shoes -->
+          <rect x="230" y="640" width="44" height="236" rx="20" fill="#2e3a56"/>
+          <rect x="286" y="640" width="44" height="236" rx="20" fill="#26314a"/>
+          <ellipse cx="248" cy="880" rx="38" ry="15" fill="#25221f"/>
+          <ellipse cx="316" cy="880" rx="38" ry="15" fill="#25221f"/>
+          <!-- back arm holding the palette -->
+          <path d="M226 482L192 560" stroke="#2f7a86" stroke-width="36" stroke-linecap="round"/>
+          <path d="M192 560L172 618" stroke="#e9b48f" stroke-width="26" stroke-linecap="round"/>
+          <g transform="translate(150 630) rotate(-14)">
+            <path d="M-78 2c0-34 40-52 84-48 46 4 76 30 70 58-6 26-44 36-70 24-12-6-14 8-30 12-28 6-54-16-54-46z" fill="#d8b07a"/>
+            <ellipse cx="-28" cy="10" rx="13" ry="10" fill="#efe3cf"/>
+            <circle cx="10" cy="-26" r="11" fill="#2f5fd0"/><circle cx="42" cy="-14" r="11" fill="#e2483d"/>
+            <circle cx="58" cy="16" r="10" fill="#f2b705"/><circle cx="24" cy="32" r="9" fill="#fbfaf6"/>
+          </g>
+          <!-- torso, apron -->
+          <rect x="206" y="450" width="136" height="214" rx="54" fill="#2f7a86"/>
+          <rect x="226" y="502" width="96" height="190" rx="20" fill="#f4efe4"/>
+          <path d="M232 506L214 462M316 506L334 462" stroke="#f4efe4" stroke-width="8" stroke-linecap="round"/>
+          <circle cx="252" cy="560" r="8" fill="#2f5fd0"/><circle cx="296" cy="600" r="10" fill="#e2483d"/>
+          <circle cx="264" cy="640" r="6" fill="#f2b705"/><circle cx="300" cy="540" r="5" fill="#f2b705"/>
+          <!-- neck and head -->
+          <rect x="258" y="420" width="34" height="44" rx="12" fill="#dda07b"/>
+          <circle cx="276" cy="388" r="54" fill="#e9b48f"/>
+          <path d="M224 392c-6-44 20-82 62-80 30 2 46 18 50 36-22-10-48-12-66-2-8 16-14 32-22 48z" fill="#3b2a20"/>
+          <circle cx="250" cy="398" r="11" fill="#dda07b"/>
+          <circle cx="302" cy="386" r="5.5" fill="#2a1f1a"/>
+          <path d="M296 414q12 8 26-2" stroke="#2a1f1a" stroke-width="4" fill="none" stroke-linecap="round"/>
+          <circle cx="314" cy="404" r="9" fill="#f08c7a" opacity=".45"/>
+          <!-- beret -->
+          <g transform="rotate(-12 268 336)">
+            <ellipse cx="268" cy="336" rx="62" ry="22" fill="#d9443a"/>
+            <path d="M268 314v-12" stroke="#d9443a" stroke-width="7" stroke-linecap="round"/>
+          </g>
+          <!-- brush arm: rotates at the shoulder -->
+          <g id="arm" transform="translate(320 484)">
+            <path d="M0 0H70" stroke="#2f7a86" stroke-width="34" stroke-linecap="round"/>
+            <path d="M70 0H138" stroke="#e9b48f" stroke-width="25" stroke-linecap="round"/>
+            <path d="M128 0H252" stroke="#b5783f" stroke-width="10" stroke-linecap="round"/>
+            <circle cx="142" cy="0" r="17" fill="#e9b48f"/>
+            <rect x="250" y="-7" width="20" height="14" rx="2" fill="#c0c4c9"/>
+            <path id="bristles" d="M268-9Q292-8 306 0Q292 8 268 9z" fill="#2f5fd0"/>
+          </g>
+        </g>
+        <!-- paint in flight -->
+        <g id="drops"></g>
+      </svg>
+      <div id="site" data-medium="acrylic" data-style="impasto" data-theme="light">
+        <div id="boring">
+          <div class="bar"><i></i>Dashboard<b></b><u></u></div>
+          <h2>Welcome back</h2>
+          <p>Here's what's happening with your projects today.</p>
+          <div class="cards">
+            <div><s></s><s></s><s></s><s style="width:70%"></s></div>
+            <div><s></s><s></s><s></s><s style="width:60%"></s></div>
+            <div><s></s><s></s><s></s><s style="width:80%"></s></div>
+          </div>
+          <span class="cta">Get started</span>
+        </div>
+        <div id="paper" class="am-canvas"></div>
+        <div id="splats"></div>
+        <div id="content">
+          <nav class="am-nav">
+            <a class="am-nav__brand"><span class="am-splash am--secondary"></span>Splatform</a>
+            <ul class="am-nav__links">
+              <li><a class="am-nav__link" aria-current="page">Mediums</a></li>
+              <li><a class="am-nav__link">Components</a></li>
+              <li><a class="am-nav__link">Docs</a></li>
+            </ul>
+          </nav>
+          <h1 id="s-h1"><span>Splat</span><span>your site.</span></h1>
+          <p class="lede" id="s-lede">Every button, card and input, painted in a real art medium.</p>
+          <div class="row">
+            <span class="am-button" id="s-b1">Get started</span>
+            <span class="am-button am--secondary" id="s-b2">See it live</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="caption">
+      <div id="cap1">Every vibe-coded app</div>
+      <div id="cap2">looks the same.</div>
+      <p id="cap3">Gray cards. Purple button. Zero soul.</p>
+    </div>
+    <span class="am-badge am--accent series" id="r-series" data-medium="marker" data-style="plain">7 Days of Vibes · Part 1</span>
   </section>
 
   <section class="scene" id="B">
@@ -106,29 +264,23 @@
     <div class="am-card code" id="c-code"></div>
     <div class="chips">
       <span class="am-badge" id="c1">5 mediums</span>
-      <span class="am-badge am--secondary" id="c2">Light + dark</span>
-      <span class="am-badge am--accent" id="c3">No build step</span>
-      <span class="am-badge" id="c4">React ready</span>
-      <span class="am-badge am--secondary" id="c5">Open source</span>
+      <span class="am-badge am--secondary" id="c2">9 styles</span>
+      <span class="am-badge am--accent" id="c3">Light + dark</span>
+      <span class="am-badge" id="c4">No build step</span>
+      <span class="am-badge am--secondary" id="c5">React ready</span>
     </div>
   </section>
 
   <section class="scene" id="D">
-    <span class="am-splash" id="d1" style="width:380px; left:-110px; top:-90px"></span>
-    <span class="am-splash am--secondary" id="d2" style="width:300px; right:-110px; top:-70px"></span>
-    <span class="am-splash am--accent" id="d3" style="width:340px; left:60px; bottom:-120px"></span>
-    <span class="am-splash" id="d4" style="width:160px; right:150px; bottom:90px"></span>
-    <div class="logo" id="d-logo"><span class="am-splash am--secondary"></span>art-medium</div>
-    <div class="tag" id="d-tag">Components, painted.</div>
+    <span class="am-badge am--accent series" id="d-series">7 Days of Vibes · Part 1</span>
+    <span class="am-splash" id="d1" style="width:380px; left:-110px; top:-60px"></span>
+    <span class="am-splash am--secondary" id="d2" style="width:300px; right:-90px; top:-40px"></span>
+    <span class="am-splash am--accent" id="d3" style="width:340px; left:40px; bottom:-130px"></span>
+    <span class="am-splash" id="d4" style="width:180px; right:130px; bottom:70px"></span>
+    <div class="logo" id="d-logo"><span class="am-splash am--secondary"></span>Splatform</div>
+    <div class="tag" id="d-tag">Splat your site.</div>
     <span class="am-button" id="d-url">ghanemja.github.io/art-asset</span>
-    <div class="small" id="d-small">Free &amp; open source · MIT</div>
-  </section>
-
-  <section class="scene" id="E">
-    <div class="kicker" id="e-kicker">The soundtrack you're hearing</div>
-    <h2 id="e-title">is 100% math.</h2>
-    <div class="am-card board" id="e-board"></div>
-    <div class="made" id="e-made">Made with <span class="am-button am--accent">ghanemja.github.io/equalizer</span></div>
+    <div class="small" id="d-small">Free &amp; open source · MIT · v0.2</div>
   </section>
 
   <span class="am-splash" id="wipe" data-medium="acrylic" data-theme="light"></span>
@@ -144,6 +296,7 @@
     const back = (x) => (x <= 0 ? 0 : 1 + 2.70158 * (x - 1) ** 3 + 1.70158 * (x - 1) ** 2);
     const outCubic = (x) => 1 - (1 - x) ** 3;
     const inOut = (x) => (x < .5 ? 4 * x ** 3 : 1 - (-2 * x + 2) ** 3 / 2);
+    const lerp = (a, b, k) => a + (b - a) * k;
 
     // Pop: scale up from nothing with overshoot, slight rotation settle.
     function pop(el, t, start, dur = .5, rot = -8) {
@@ -157,98 +310,199 @@
       el.style.opacity = k;
       el.style.transform = `translateY(${(1 - k) * dist}px)`;
     }
-
-    // Paint-splat wipes: grow to cover the frame, repaint at the peak, then fly off.
-    const GROW = .38, OUT = .42;
-    const wipes = [
-      { t: 7.4,  medium: 'acrylic',  theme: 'light', variant: 'am--secondary' },
-      { t: 8.6,  medium: 'paper',    theme: 'light', variant: 'am--accent' },
-      { t: 9.8,  medium: 'marker',   theme: 'light', variant: '' },
-      { t: 11.0, medium: 'charcoal', theme: 'light', variant: 'am--secondary' },
-      { t: 12.3, medium: 'charcoal', theme: 'dark',  pigment: '#23282b' },
-      { t: 16.2, medium: 'acrylic',  theme: 'light', variant: '' },
-      { t: 18.2, medium: 'acrylic',  theme: 'light', variant: 'am--secondary' },
-      { t: 22.1, medium: 'charcoal', theme: 'dark',  pigment: '#23282b' },
-    ];
-    const labels = { watercolor: 'Watercolor', acrylic: 'Acrylic', charcoal: 'Charcoal', paper: 'Paper', marker: 'Marker' };
-
-    function stateAt(t) {
-      let medium = 'watercolor', theme = 'light', lastPeak = -1;
-      // Hook: the frame flickers through mediums.
-      if (t >= 4.3 && t < 5.9) medium = ['acrylic', 'paper', 'marker', 'charcoal'][Math.floor((t - 4.3) / .4)] ?? 'watercolor';
-      for (const w of wipes) if (t >= w.t + GROW) { medium = w.medium; theme = w.theme; lastPeak = w.t + GROW; }
-      return { medium, theme, lastPeak };
-    }
-
     function show(id, on) { $(id).style.visibility = on ? 'visible' : 'hidden'; }
 
+    // --- R: the painter ------------------------------------------------------
+    // The beat is 120 bpm, so a beat is 0.5s. Five flicks on the beat, each
+    // throwing paint that lands on the canvas LAND seconds later.
+    const FLICKS = [2.0, 2.5, 3.0, 3.5, 4.0];
+    const LAND = .6;
+    const ZOOM = [4.5, 6.0];            // camera pushes into the canvas
+    const COLORS = ['#2f5fd0', '#e2483d', '#f2b705', '#2f5fd0', '#e2483d'];
+    const VARIANT = { '#2f5fd0': '', '#e2483d': 'am--secondary', '#f2b705': 'am--accent' };
+    const SHOULDER = [320, 484], BRUSH = 306;
+    const CANVAS = { x: 560, y: 250, k: 400 / 1080 };   // where #site sits in the room
+    let seed = 7;
+    const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+
+    // Where each flick's big splats land (page coordinates, 0-1080) and how big.
+    const BIG = [
+      [[180, 250, 430], [900, 830, 320]],
+      [[920, 240, 380], [150, 870, 280]],
+      [[560, 990, 320], [1000, 560, 220]],
+      [[70, 570, 250], [690, 110, 210]],
+      [[400, 120, 230], [870, 990, 260]],
+    ];
+    const drops = [];
+    FLICKS.forEach((ft, i) => {
+      const color = COLORS[i];
+      for (const [x, y, size] of BIG[i]) drops.push({ ft, color, x, y, size, big: true, dur: LAND + rnd() * .08, r: 13 + rnd() * 4 });
+      // specks fly wide ("everywhere") and still curve back onto the canvas
+      for (let s = 0; s < 4; s++) drops.push({ ft, color, x: 60 + rnd() * 960, y: 60 + rnd() * 960, size: 10 + rnd() * 22, big: false, dur: LAND - .1 + rnd() * .25, r: 5 + rnd() * 3, wide: true });
+    });
+    drops.forEach((d) => { d.bend = [(rnd() - .5) * (d.wide ? 900 : 420), -120 - rnd() * (d.wide ? 420 : 220)]; d.rot = (rnd() - .5) * 80; });
+
+    // Build the splats on the canvas page, hidden until their drop lands.
+    const splats = $('splats');
+    for (const d of drops) {
+      const el = document.createElement(d.big ? 'span' : 'i');
+      if (d.big) { el.className = `am-splash ${VARIANT[d.color]}`; el.style.width = `${d.size}px`; }
+      else { el.style.width = el.style.height = `${d.size}px`; el.style.background = d.color; }
+      el.style.left = `${d.x - d.size / 2}px`;
+      el.style.top = `${d.y - d.size / 2}px`;
+      splats.append(el);
+      d.el = el;
+      const dot = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
+      dot.setAttribute('fill', d.color);
+      $('drops').append(dot);
+      d.dot = dot;
+    }
+
+    function armAngle(t) {
+      if (t < 1.5) return -25 + 6 * Math.sin(t * 2.2);
+      if (t < FLICKS[0]) return lerp(-25 + 6 * Math.sin(1.5 * 2.2), -75, inOut(prog(t, 1.5, .5)));
+      if (t < 4.5) {
+        const p = ((t - FLICKS[0]) % .5) / .5;
+        const shape = p < .16 ? outCubic(p / .16) : 1 - inOut((p - .16) / .84);
+        return -75 + 95 * shape;
+      }
+      return lerp(-75, -30, outCubic(prog(t, 4.5, .5)));
+    }
+    function painterBob(t) { return t < 2 ? Math.sin(t * 2.4) * 3 : -Math.abs(Math.sin((t - 2) * Math.PI * 2)) * 10; }
+    function tipAt(t) {
+      const a = armAngle(t) * Math.PI / 180, b = painterBob(t);
+      return [SHOULDER[0] + Math.cos(a) * BRUSH, SHOULDER[1] + b + Math.sin(a) * BRUSH];
+    }
+
+    function painterScene(t) {
+      const b = painterBob(t);
+      $('painter').setAttribute('transform', `translate(0 ${b})`);
+      $('arm').setAttribute('transform', `translate(${SHOULDER[0]} ${SHOULDER[1]}) rotate(${armAngle(t)})`);
+      const loaded = FLICKS.findIndex((ft) => t < ft + .08);
+      $('bristles').setAttribute('fill', COLORS[loaded < 0 ? 4 : loaded]);
+
+      for (const d of drops) {
+        const launch = d.ft + .08;
+        const k = (t - launch) / d.dur;
+        // in flight: a quadratic arc from the brush tip to the landing spot
+        if (k > 0 && k < 1) {
+          const [sx, sy] = tipAt(launch);
+          const ex = CANVAS.x + d.x * CANVAS.k, ey = CANVAS.y + d.y * CANVAS.k;
+          const cx = (sx + ex) / 2 + d.bend[0], cy = Math.min(sy, ey) + d.bend[1];
+          const u = inOut(k) * .4 + k * .6;
+          const x = (1 - u) ** 2 * sx + 2 * (1 - u) * u * cx + u * u * ex;
+          const y = (1 - u) ** 2 * sy + 2 * (1 - u) * u * cy + u * u * ey;
+          const dx = 2 * (1 - u) * (cx - sx) + 2 * u * (ex - cx), dy = 2 * (1 - u) * (cy - sy) + 2 * u * (ey - cy);
+          d.dot.setAttribute('cx', x); d.dot.setAttribute('cy', y);
+          d.dot.setAttribute('rx', d.r * 1.9); d.dot.setAttribute('ry', d.r * .8);
+          d.dot.setAttribute('transform', `rotate(${Math.atan2(dy, dx) * 180 / Math.PI} ${x} ${y})`);
+          d.dot.style.display = '';
+        } else d.dot.style.display = 'none';
+        // landed: the splat bursts onto the canvas
+        const s = prog(t, launch + d.dur, d.big ? .28 : .12);
+        d.el.style.opacity = s > 0 ? 1 : 0;
+        d.el.style.transform = `scale(${d.big ? back(s) : outCubic(s)}) rotate(${d.rot}deg)`;
+      }
+
+      // Camera: push into the canvas until it fills the frame at 1:1.
+      const z = inOut(prog(t, ZOOM[0], ZOOM[1] - ZOOM[0]));
+      const S = (1 / CANVAS.k) ** z;
+      const fx = CANVAS.x * (1 - z), fy = CANVAS.y * (1 - z);
+      $('room').style.transform = `translate(${fx - CANVAS.x * S}px, ${fy - CANVAS.y * S}px) scale(${S})`;
+
+      // The paint spreads over the bland page and the painted site comes through.
+      $('site').style.setProperty('--reveal', `${outCubic(prog(t, 4.75, 1.05)) * 80}%`);
+      pop($('s-h1'), t, 6.0, .55, -5);
+      rise($('s-lede'), t, 6.35, .45, 40);
+      pop($('s-b1'), t, 6.6, .45, -6);
+      pop($('s-b2'), t, 6.75, .45, 6);
+
+      rise($('cap1'), t, .35, .45, 40);
+      rise($('cap2'), t, .85, .45, 40);
+      rise($('cap3'), t, 1.45, .45, 30);
+      const capOut = outCubic(prog(t, 4.2, .4));
+      $('caption').style.opacity = 1 - capOut;
+      $('caption').style.transform = `translateY(${-capOut * 60}px)`;
+      pop($('r-series'), t, .15, .45, -8);
+      $('r-series').style.opacity = t < 4.3 ? 1 : 1 - prog(t, 4.3, .3);
+    }
+
+    // --- Paint-splat wipes: grow to cover the frame, repaint at the peak ----
+    const GROW = .38, OUT = .42;
+    const wipes = [
+      { peak: 8,  medium: 'watercolor', theme: 'light', variant: '' },
+      { peak: 9,  medium: 'acrylic',  style: 'impasto',       theme: 'light', variant: 'am--secondary' },
+      { peak: 10, medium: 'paper',    theme: 'light', variant: 'am--accent' },
+      { peak: 11, medium: 'marker',   style: 'notebook',      theme: 'light', variant: '' },
+      { peak: 12, medium: 'charcoal', style: 'newsprint',     theme: 'light', variant: 'am--secondary' },
+      { peak: 13, medium: 'marker',   style: 'parchment',     theme: 'light', variant: 'am--accent' },
+      { peak: 14, medium: 'acrylic',  style: 'impressionist', theme: 'light', variant: '' },
+      { peak: 15, medium: 'charcoal', theme: 'dark', pigment: '#23282b' },
+      { peak: 18, medium: 'acrylic',  style: 'impasto',       theme: 'light', variant: '' },
+      { peak: 20, medium: 'marker',   style: 'notebook',      theme: 'light', variant: 'am--secondary' },
+    ].map((w) => ({ ...w, t: w.peak - GROW }));
+    const labels = { watercolor: 'Watercolor', acrylic: 'Acrylic', charcoal: 'Charcoal', paper: 'Paper', marker: 'Marker' };
+    const styleNames = { notebook: 'notebook', parchment: 'parchment', impressionist: 'impressionist' };
+
+    function stateAt(t) {
+      let state = { medium: 'acrylic', style: 'impasto', theme: 'light', lastPeak: -1 };
+      for (const w of wipes) if (t >= w.peak) state = { medium: w.medium, style: w.style, theme: w.theme, lastPeak: w.peak };
+      return state;
+    }
+
     window.at = function (t) {
-      const { medium, theme, lastPeak } = stateAt(t);
+      const { medium, style, theme, lastPeak } = stateAt(t);
       root.dataset.medium = medium;
       root.dataset.theme = theme;
+      if (style) root.dataset.style = style; else delete root.dataset.style;
 
       // Wipe
       const wipe = $('wipe');
-      const w = wipes.find((w) => t >= w.t && t < w.t + GROW + OUT);
+      const w = wipes.find((w) => t >= w.t && t < w.peak + OUT);
       if (w) {
         wipe.style.visibility = 'visible';
         wipe.className = `am-splash ${w.variant ?? ''}`;
         wipe.dataset.theme = w.theme === 'dark' ? 'dark' : 'light';
-        wipe.style.setProperty('--am-pigment', w.pigment ?? '');
-        if (!w.pigment) wipe.style.removeProperty('--am-pigment');
-        if (t < w.t + GROW) {
+        if (w.pigment) wipe.style.setProperty('--am-pigment', w.pigment); else wipe.style.removeProperty('--am-pigment');
+        if (t < w.peak) {
           const k = inOut(prog(t, w.t, GROW));
           wipe.style.opacity = 1;
           wipe.style.transform = `scale(${k * 1.05}) rotate(${(1 - k) * 60}deg)`;
         } else {
-          const k = outCubic(prog(t, w.t + GROW, OUT));
+          const k = outCubic(prog(t, w.peak, OUT));
           wipe.style.opacity = 1 - k;
           wipe.style.transform = `scale(${1.05 + k * .5}) rotate(${-k * 12}deg)`;
         }
       } else wipe.style.visibility = 'hidden';
 
       // Scene windows
-      const peak = (i) => wipes[i].t + GROW;
-      show('A', t < 6.6);
-      show('B', t >= 6.4 && t < 14.1);
-      show('C', t >= 14.0 && t < peak(6));
-      show('D', t >= peak(6) && t < peak(7));
-      show('E', t >= peak(7));
+      show('R', t < 8);
+      show('B', t >= 8 && t < 16.05);
+      show('C', t >= 15.95 && t < 20);
+      show('D', t >= 20);
 
-      // A: hook
-      const drift = (i) => `translate(${Math.sin(t * .9 + i) * 10}px, ${Math.cos(t * .7 + i) * 10}px)`;
-      ['a1', 'a2', 'a3'].forEach((id, i) => {
-        const k = prog(t, .15 + i * .3, .55);
-        $(id).style.transform = `${drift(i)} scale(${back(k)}) rotate(${t * 4 * (i % 2 ? -1 : 1)}deg)`;
-      });
-      pop($('a-l1'), t, 1.1, .5, -6);
-      pop($('a-l2'), t, 1.7, .55, 6);
-      pop($('a-badge'), t, 2.8, .45, -10);
-      const aOut = outCubic(prog(t, 6.05, .5));
-      $('A').style.opacity = 1 - aOut;
-      $('A').style.transform = `scale(${1 + aOut * .15})`;
+      if (t < 8) painterScene(t);
 
       // B: the swap
-      const bIn = outCubic(prog(t, 6.4, .6));
-      const bOut = outCubic(prog(t, 13.6, .45));
-      $('B').style.opacity = bIn * (1 - bOut);
-      $('B').style.transform = `translateY(${(1 - bIn) * 80}px) scale(${1 - bOut * .08})`;
-      $('b-label').textContent = labels[medium] + (theme === 'dark' ? ', dark' : '');
+      const bOut = outCubic(prog(t, 15.6, .45));
+      $('B').style.opacity = 1 - bOut;
+      $('B').style.transform = `scale(${1 - bOut * .08})`;
+      $('b-label').textContent = labels[medium] + (styleNames[style] ? ` · ${styleNames[style]}` : '') + (theme === 'dark' ? ', dark' : '');
       // After each repaint: the label pops, the rule paints in, the app settles.
-      const since = lastPeak > 6 ? t - lastPeak : t - 6.4;
+      const since = t - lastPeak;
       const s = clamp(since / .45);
       $('b-label').style.transform = `scale(${.85 + .15 * back(s)})`;
       $('b-rule').style.transform = `scaleX(${outCubic(clamp((since - .1) / .5))})`;
       $('b-app').style.transform = `scale(${.96 + .04 * back(s)}) rotate(${(1 - outCubic(s)) * -1.2}deg)`;
 
-      // C: one attribute
-      const cIn = outCubic(prog(t, 14.0, .5));
+      // C: one attribute, typed out, then the page repaints to match on the drop
+      const cIn = outCubic(prog(t, 15.95, .45));
       $('C').style.opacity = cIn;
-      pop($('c-title'), t, 14.05, .5, -6);
-      rise($('c-code'), t, 14.5, .45);
+      pop($('c-title'), t, 16.0, .5, -6);
+      rise($('c-code'), t, 16.45, .45);
       const pre = '<html data-medium=', val = '"acrylic"', post = '>';
       const full = pre + val + post;
-      const n = Math.round(clamp((t - 14.9) / 1.0) * full.length);
+      const n = Math.round(clamp((t - 16.9) / 1.0) * full.length);
       const typed = full.slice(0, n);
       const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
       const html = esc(typed.slice(0, pre.length)) +
@@ -256,55 +510,22 @@
         esc(typed.slice(pre.length + val.length));
       const caretOn = n < full.length || Math.floor(t * 2.5) % 2 === 0;
       $('c-code').innerHTML = html + (caretOn ? '<span class="caret"></span>' : '');
-      ['c1', 'c2', 'c3', 'c4', 'c5'].forEach((id, i) => pop($(id), t, 16.75 + i * .18, .42, i % 2 ? 8 : -8));
+      ['c1', 'c2', 'c3', 'c4', 'c5'].forEach((id, i) => pop($(id), t, 18.25 + i * .25, .42, i % 2 ? 8 : -8));
 
       // D: end card
+      const drift = (i) => `translate(${Math.sin(t * .9 + i) * 10}px, ${Math.cos(t * .7 + i) * 10}px)`;
       ['d1', 'd2', 'd3', 'd4'].forEach((id, i) => {
-        const k = prog(t, peak(6) + .05 + i * .12, .5);
+        const k = prog(t, 20.05 + i * .12, .5);
         $(id).style.transform = `${drift(i + 2)} scale(${back(k)}) rotate(${t * 5 * (i % 2 ? -1 : 1)}deg)`;
       });
-      pop($('d-logo'), t, peak(6) + .15, .55, -6);
-      rise($('d-tag'), t, peak(6) + .55, .5);
-      pop($('d-url'), t, peak(6) + .95, .5, 4);
-      rise($('d-small'), t, peak(6) + 1.3, .5, 30);
-
-      // E: the soundtrack plug. These are the real equations from promo/soundtrack.song.js.
-      const E0 = peak(7);
-      rise($('e-kicker'), t, E0 + .1, .45, 40);
-      pop($('e-title'), t, E0 + .3, .55, -5);
-      rise($('e-board'), t, E0 + .55, .4, 40);
-      const lines = [
-        ['kick ', 'sin(TAU*(48*tau + 5.7*(1 - exp(-28*tau)))) * exp(-7*tau)'],
-        ['bass ', '(saw(f*tau) + sin(TAU*f*tau/2)) * exp(-3*tau)'],
-        ['pluck', '(sin(TAU*f*tau) + 0.3*sin(TAU*2*f*tau)) * exp(-9*tau)'],
-        ['hat  ', 'noise() * exp(-55*tau)'],
-      ];
-      const total = lines.reduce((n, [, eq]) => n + eq.length, 0);
-      let left = Math.round(clamp((t - (E0 + .65)) / 1.25) * total);
-      const board = $('e-board');
-      board.textContent = '';
-      for (const [name, eq] of lines) {
-        const shown = eq.slice(0, Math.max(0, left));
-        left -= eq.length;
-        const row = document.createElement('div');
-        const k = document.createElement('span');
-        k.className = 'k';
-        k.textContent = `${name} = `;
-        row.append(k);
-        // numbers in the second pigment, everything else in chalk
-        for (const part of shown.split(/(\d+\.?\d*)/)) {
-          const sp = document.createElement('span');
-          if (/^\d/.test(part)) sp.className = 'n';
-          sp.textContent = part;
-          row.append(sp);
-        }
-        row.style.visibility = shown || left > -eq.length ? 'visible' : 'hidden';
-        board.append(row);
-      }
-      pop($('e-made'), t, E0 + 1.95, .5, 3);
+      pop($('d-logo'), t, 20.15, .55, -6);
+      pop($('d-tag'), t, 20.6, .5, 5);
+      pop($('d-url'), t, 21.0, .5, 4);
+      rise($('d-small'), t, 21.4, .5, 30);
+      pop($('d-series'), t, 21.7, .45, -8);
     };
 
-    window.DURATION = 25.5;
+    window.DURATION = 25;
     // Load every medium's fonts up front so no frame renders a fallback.
     await Promise.all([
       '500 40px "Cormorant Garamond"', 'italic 500 40px "Cormorant Garamond"', '400 20px Nunito', '700 20px Nunito',
