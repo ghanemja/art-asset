@@ -19,6 +19,8 @@
     (function () {
       var root = document.documentElement, m, s, t;
       var styles = window.amStyles = { acrylic: ['impasto', 'impressionist', 'realism'], charcoal: ['newsprint', 'sketchbook', 'kraft'], marker: ['plain', 'notebook', 'parchment'] };
+      // The site's pick when a visitor hasn't chosen one (otherwise the medium's own default, the first in its list).
+      var defaults = window.amDefaultStyles = { marker: 'notebook' };
       try {
         m = localStorage.getItem('am-medium');
         s = localStorage.getItem('am-style:' + m) || (m === 'acrylic' ? localStorage.getItem('am-style') : null);
@@ -26,6 +28,7 @@
       } catch (e) {}
       if (['watercolor', 'acrylic', 'charcoal', 'paper', 'marker'].indexOf(m) > -1) root.setAttribute('data-medium', m);
       if (styles[m] && styles[m].indexOf(s) > -1) root.setAttribute('data-style', s);
+      else if (defaults[m]) root.setAttribute('data-style', defaults[m]);
       if (t !== 'light' && t !== 'dark') t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
       root.setAttribute('data-theme', t);
     })();
@@ -265,17 +268,17 @@
           <code>data-medium="paper"</code>
           <div><button class="am-button am--secondary" data-set="paper">Paint the page</button></div>
         </article>
-        <article class="plate am-canvas" data-medium="marker" data-style="plain">
+        <article class="plate am-canvas" data-medium="marker" data-style="notebook">
           <span class="am-splash" aria-hidden="true"></span>
           <h3>Marker</h3>
           <p>A few fat felt-tip strokes in one back-and-forth scribble, with rounded hairpin turns and translucent ink that darkens where it overlaps. On plain paper, a ruled notebook or parchment.</p>
           <div class="row plate__styles" role="group" aria-label="Marker paper for this plate">
-            <button class="plate__style" data-plate-style="plain" aria-pressed="true">Plain</button>
-            <button class="plate__style" data-plate-style="notebook" aria-pressed="false">Notebook</button>
+            <button class="plate__style" data-plate-style="plain" aria-pressed="false">Plain</button>
+            <button class="plate__style" data-plate-style="notebook" aria-pressed="true">Notebook</button>
             <button class="plate__style" data-plate-style="parchment" aria-pressed="false">Parchment</button>
           </div>
           <div class="row"><button class="am-button am--accent">Button</button><span class="am-badge am--secondary">Badge</span></div>
-          <code data-plate-code>data-medium="marker" data-style="plain"</code>
+          <code data-plate-code>data-medium="marker" data-style="notebook"</code>
           <div><button class="am-button" data-set="marker">Paint the page</button></div>
         </article>
       </div>
@@ -543,6 +546,7 @@ import { MediumProvider, Button, Card }
       const list = window.amStyles[root.dataset.medium];
       const saved = load(`am-style:${root.dataset.medium}`);
       if (list && list.includes(saved)) root.setAttribute('data-style', saved);
+      else if (window.amDefaultStyles[root.dataset.medium]) root.setAttribute('data-style', window.amDefaultStyles[root.dataset.medium]);
       else root.removeAttribute('data-style');
     };
     for (const btn of document.querySelectorAll('[data-set-style]')) {
