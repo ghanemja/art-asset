@@ -6,18 +6,18 @@
 // 0-6s    the bland app: sterile beeps; the painter's flicks whoosh and
 //         splat; the beeps tape-stop and a riser pulls into the canvas
 // 6s      the drop, as "Splat your site." lands
-// 8-16s   a splat wipe on every second beat while the page repaints
-// 16-18s  breakdown under the typing; 18s the beat drops back in
-// 20s     end card
+// 8-20s   a splat wipe every three beats while the page repaints
+// 20-22s  breakdown under the typing; 22s the beat drops back in
+// 24s     end card
 
 const FLICKS = [2.0, 2.5, 3.0, 3.5, 4.0];  // brush flicks
 const LAND = 0.6;                           // paint hits the canvas this long after a flick
-const PEAKS = [8, 9, 10, 11, 12, 13, 14, 15, 18, 20];  // a wipe covers the frame here
+const PEAKS = [8, 9.5, 11, 12.5, 14, 15.5, 17, 18.5, 22, 24];  // a wipe covers the frame here
 const GROW = 0.38;                          // and starts growing this long before
 
 // The arrangement is math too.
-const DRUMS = 't >= 6 && (t < 16 || t >= 18)';
-const MUSIC = '(t >= 6 ? ((t >= 16 && t < 18) ? 0.5 : 1) : 0)';
+const DRUMS = 't >= 6 && (t < 20 || t >= 22)';
+const MUSIC = '(t >= 6 ? ((t >= 20 && t < 22) ? 0.5 : 1) : 0)';
 
 // F minor: Fm7, Dbmaj7, Abmaj7, Eb7. Bar 3 (t = 6) lands on Fm7, so the
 // four-bar loop starts on Db.
@@ -34,7 +34,7 @@ const LEAD = [
 export default {
   title: 'Splatform promo',
   bpm: 120,
-  duration: 25,
+  duration: 29,
   fadeOut: 1.4,
   tracks: [
     // --- The bland app: a polite notification ding on every beat ---
@@ -107,19 +107,19 @@ export default {
     {
       name: 'Riser',
       equation: 'noise() * min(1, tau/1.5)^3',
-      at: [4.5, 16.5], len: 1.5, hp: 2200, gain: 0.3,
+      at: [4.5, 20.5], len: 1.5, hp: 2200, gain: 0.3,
     },
     {
       name: 'Pop',
       equation: 'sin(TAU*(380*tau + 16*(1 - exp(-45*tau)))) * exp(-35*tau)',
-      at: [0.15, 6.6, 6.75, 16.0, ...[0, 1, 2, 3, 4].map((i) => 18.25 + i * 0.25), 20.15, 20.6, 21.0, 21.7],
+      at: [0.15, 6.6, 6.75, 20.0, ...[0, 1, 2, 3, 4].map((i) => 22.25 + i * 0.25), 24.15, 24.6, 25.0, 25.7],
       len: 0.15, gain: 0.38,
     },
     {
       name: 'Keys',
       equation: 'noise() * exp(-300*tau)',
       // typing <html data-medium="acrylic">
-      at: Array.from({ length: 28 }, (_, i) => 16.9 + i / 28),
+      at: Array.from({ length: 28 }, (_, i) => 20.9 + i / 28),
       len: 0.03, hp: 1500, gain: 0.3,
     },
   ],
