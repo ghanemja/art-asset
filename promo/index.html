@@ -505,7 +505,7 @@
     // Right arm poses: [upper arm, forearm, hand].
     const IDLE = [V(.35, -.9, .25), V(.85, .35, .35), V(.8, .5, .3)];    // brush held up, ready
     const RAISED = [V(-.35, -.75, .55), V(-.75, -.15, .6), V(-.8, .25, .5)]; // pulled back low by the hip, like a backhand
-    const FORWARD = [V(.9, .25, .35), V(.95, -.1, .3), V(.9, -.35, .3)]; // follow-through at the canvas
+    const FORWARD = [V(.8, -.35, .5), V(.95, .05, .3), V(.95, -.15, .3)]; // follow-through: elbow below the shoulder, forearm toward the canvas
     const flickShape = (p) => (p < 0 ? 0 : p < .16 ? outCubic(p / .16) : 1 - inOut(Math.min(1, (p - .16) / .84)));
     function armPose(t) {
       const sway = Math.sin(t * 2.2) * .06;
@@ -519,7 +519,7 @@
       }
       return RAISED.map((v, i) => mixV(v, idle[i], outCubic(prog(t, 4.5, .5))));
     }
-    function painterBob(t) { return t < 2 ? Math.sin(t * 2.4) * 3 : -Math.abs(Math.sin((t - 2) * Math.PI * 2)) * 10; }
+    function painterBob(t) { return Math.sin(t * 2.4) * 1.5; }   // breathing only: the flick is in the arm, her feet stay planted
     function poseAt(t) {
       girl.position.y = -painterBob(t) * PX;
       girl.updateMatrixWorld(true);
@@ -531,7 +531,7 @@
       aim(bone.upperarmL, bone.lowerarmL, V(-.1, -1, .25));
       aim(bone.lowerarmL, bone.handL, V(.25, -.15, 1));
       // lean into each flick a little
-      const lean = t >= FLICKS[0] && t < 4.5 ? flickShape(((t - FLICKS[0]) % .5) / .5) * .06 : 0;
+      const lean = t >= FLICKS[0] && t < 4.5 ? flickShape(((t - FLICKS[0]) % .5) / .5) * .03 : 0;
       bone.spine2.rotation.z = -lean;
       girl.updateMatrixWorld(true);
       bone.handL.getWorldPosition(palette.position);
