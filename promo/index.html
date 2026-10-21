@@ -462,14 +462,14 @@
     const mat = (color, roughness = .6, metalness = 0) => new THREE.MeshStandardMaterial({ color, roughness, metalness });
     const brush = new THREE.Group();
     const handle = new THREE.Mesh(new THREE.CylinderGeometry(.05, .075, 1.5, 14), mat(0xb07440, .45));
-    handle.position.y = .45;
+    handle.position.y = .8;            // starts at her fist: nothing pokes back into the wrist
     const ferrule = new THREE.Mesh(new THREE.CylinderGeometry(.08, .075, .22, 14), mat(0xc8ccd2, .25, .8));
-    ferrule.position.y = 1.3;
+    ferrule.position.y = 1.65;
     const bristleMat = mat(0x2f5fd0, .35);
     const bristles = new THREE.Mesh(new THREE.ConeGeometry(.09, .42, 14), bristleMat);
-    bristles.position.y = 1.62;
+    bristles.position.y = 1.97;
     const tip = new THREE.Object3D();
-    tip.position.y = 1.85;
+    tip.position.y = 2.2;
     brush.add(handle, ferrule, bristles, tip);
     brush.position.y = .15;
     bone.handR.add(brush);
@@ -504,7 +504,7 @@
     const mixV = (a, b, k) => a.clone().lerp(b, k);
     // Right arm poses: [upper arm, forearm, hand].
     const IDLE = [V(.35, -.9, .25), V(.85, .35, .35), V(.8, .5, .3)];    // brush held up, ready
-    const RAISED = [V(.3, -.85, .45), V(-.1, .9, .45), V(-.45, .8, .4)];  // wind-up like a dart throw: upper arm stays in front, the elbow folds the brush back
+    const RAISED = [V(.08, -1, .35), V(.25, -.65, .75), V(-.1, -.7, .7)];  // underhand wind-up: arm down in front of her hip, brush dipped low
     const FORWARD = [V(.8, -.35, .5), V(.95, .05, .3), V(.95, -.15, .3)]; // follow-through: elbow below the shoulder, forearm toward the canvas
     const flickShape = (p) => (p < 0 ? 0 : p < .16 ? outCubic(p / .16) : 1 - inOut(Math.min(1, (p - .16) / .84)));
     function armPose(t) {
@@ -538,7 +538,7 @@
       bone.spine2.rotation.z = -lean;
       girl.updateMatrixWorld(true);
       bone.handL.getWorldPosition(palette.position);
-      palette.position.add(V(.15, .05, .62));   // in front of her fingers, so they don't poke through
+      palette.position.add(V(-.3, -.45, .55));   // low on her left, in front of her fingers and clear of the brush arm
     }
     // Where the brush tip is on screen, in room pixels.
     function tipNow() {
