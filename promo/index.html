@@ -504,7 +504,7 @@
     const mixV = (a, b, k) => a.clone().lerp(b, k);
     // Right arm poses: [upper arm, forearm, hand].
     const IDLE = [V(.35, -.9, .25), V(.85, .35, .35), V(.8, .5, .3)];    // brush held up, ready
-    const RAISED = [V(.08, -1, .35), V(.25, -.65, .75), V(-.1, -.7, .7)];  // underhand wind-up: arm down in front of her hip, brush dipped low
+    const RAISED = [V(.4, -.95, .3), V(.5, -.8, .3), V(.2, -.95, .3)];   // underhand wind-up: arm down by her right hip, beside the palette, brush dipped low
     const FORWARD = [V(.8, -.35, .5), V(.95, .05, .3), V(.95, -.15, .3)]; // follow-through: elbow below the shoulder, forearm toward the canvas
     const flickShape = (p) => (p < 0 ? 0 : p < .16 ? outCubic(p / .16) : 1 - inOut(Math.min(1, (p - .16) / .84)));
     function armPose(t) {
@@ -538,7 +538,8 @@
       bone.spine2.rotation.z = -lean;
       girl.updateMatrixWorld(true);
       bone.handL.getWorldPosition(palette.position);
-      palette.position.add(V(-.3, -.45, .55));   // low on her left, in front of her fingers and clear of the brush arm
+      bone.handL.scale.setScalar(.01);   // the palette covers her left hand: fold it away so no fingers poke through
+      palette.position.add(V(-.2, -.3, .5));   // low on her left, in front of her fingers and clear of the brush arm
     }
     // Where the brush tip is on screen, in room pixels.
     function tipNow() {
