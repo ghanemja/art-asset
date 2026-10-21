@@ -467,11 +467,11 @@
         <article class="am-card">
           <span class="step">Option 2 · npm</span>
           <h3 class="am-card__title">Install it</h3>
-<pre><code>npm i github:ghanemja/art-asset#v0.2.0
+<pre><code>npm i @ghanemja/splatform
 
 // in your app
-import 'splatform/css';
-import { setMedium, setTheme } from 'splatform';
+import '@ghanemja/splatform/css';
+import { setMedium, setTheme } from '@ghanemja/splatform';
 
 setMedium(document.documentElement, 'acrylic');
 setTheme(document.documentElement, 'dark');</code></pre>
@@ -479,9 +479,9 @@ setTheme(document.documentElement, 'dark');</code></pre>
         <article class="am-card">
           <span class="step">Option 3 · React</span>
           <h3 class="am-card__title">Use the wrappers</h3>
-<pre><code>import 'splatform/css';
+<pre><code>import '@ghanemja/splatform/css';
 import { MediumProvider, Button, Card }
-  from 'splatform/react';
+  from '@ghanemja/splatform/react';
 
 &lt;MediumProvider medium="charcoal" theme="auto"&gt;
   &lt;Card title="Still life"&gt;

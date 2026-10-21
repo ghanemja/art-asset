@@ -1,5 +1,5 @@
 {
-  "name": "splatform",
+  "name": "@ghanemja/splatform",
   "version": "0.2.0",
   "description": "Splat your site: a UI component library where every component is painted in watercolor, acrylic, charcoal, paper or marker.",
   "type": "module",
@@ -16,11 +16,21 @@
     "react": ">=17"
   },
   "peerDependenciesMeta": {
-    "react": { "optional": true }
+    "react": {
+      "optional": true
+    }
   },
   "scripts": {
     "demo": "python3 -m http.server 8080"
   },
   "keywords": ["splatform", "ui", "components", "watercolor", "acrylic", "charcoal", "paper", "collage", "marker", "design-system", "svg-filters"],
-  "license": "MIT"
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ghanemja/art-asset.git"
+  },
+  "homepage": "https://ghanemja.github.io/art-asset/"
 }

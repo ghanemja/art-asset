@@ -35,15 +35,17 @@ From the CDN (pinned to a release):
 <script type="module" src="https://cdn.jsdelivr.net/gh/ghanemja/art-asset@v0.2.0/src/art-medium.js"></script>
 ```
 
-Or from GitHub with npm:
+Or with npm:
 
 ```sh
-npm i github:ghanemja/art-asset#v0.2.0
+npm i @ghanemja/splatform
 ```
 
+(or straight from GitHub: `npm i github:ghanemja/art-asset#v0.2.0`)
+
 ```js
-import 'splatform/css';
-import { setMedium, setTheme } from 'splatform';
+import '@ghanemja/splatform/css';
+import { setMedium, setTheme } from '@ghanemja/splatform';
 ```
 
 ## Use it
@@ -85,7 +87,7 @@ The JS module is required. It injects the SVG filters that the CSS refers to (`f
 To switch at runtime:
 
 ```js
-import { setMedium } from 'splatform';
+import { setMedium } from '@ghanemja/splatform';
 setMedium(document.documentElement, 'acrylic');
 ```
 
@@ -106,7 +108,7 @@ Acrylic comes in three styles, picked with `data-style` on the acrylic element o
 ```
 
 ```js
-import { setStyle, STYLES } from 'splatform';
+import { setStyle, STYLES } from '@ghanemja/splatform';
 setStyle(document.documentElement, 'realism');
 ```
 
@@ -136,7 +138,7 @@ Charcoal and marker take `data-style` too, to pick the paper they're drawn on:
 `data-theme="light" | "dark" | "auto"` works the same way: put it on `<html>` or on any section. `auto` follows the visitor's system setting. With no `data-theme`, everything is light, so adding the library never darkens a site that wasn't designed for it.
 
 ```js
-import { setTheme } from 'splatform';
+import { setTheme } from '@ghanemja/splatform';
 setTheme(document.documentElement, 'dark');
 ```
 
@@ -157,8 +159,8 @@ In dark mode watercolor sits on indigo paper, acrylic on black gesso, charcoal b
 ### React
 
 ```jsx
-import 'splatform/css';
-import { MediumProvider, Button, Card, Input, Badge, Divider, Nav, Modal, Splash } from 'splatform/react';
+import '@ghanemja/splatform/css';
+import { MediumProvider, Button, Card, Input, Badge, Divider, Nav, Modal, Splash } from '@ghanemja/splatform/react';
 
 <MediumProvider medium="watercolor" theme="auto">
   <Nav brand="Studio" links={[{ href: '/', label: 'Work', current: true }]} />
