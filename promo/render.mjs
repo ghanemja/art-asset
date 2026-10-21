@@ -15,7 +15,7 @@ const browser = await chromium.launch({ args: ['--use-angle=swiftshader', '--ena
 const page = await browser.newPage({ viewport: { width: 1080, height: 1080 } });
 page.on('pageerror', (e) => console.error('page error:', e.message));
 await page.goto('http://localhost:8765/promo/', { waitUntil: 'networkidle' });
-await page.waitForFunction(() => window.ready === true);
+await page.waitForFunction(() => window.ready === true, null, { timeout: 600000 });
 
 const shoot = async (t, file) => {
   await page.evaluate((t) => window.at(t), t);
