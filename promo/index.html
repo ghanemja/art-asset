@@ -504,7 +504,7 @@
     const mixV = (a, b, k) => a.clone().lerp(b, k);
     // Right arm poses: [upper arm, forearm, hand].
     const IDLE = [V(.35, -.9, .25), V(.85, .35, .35), V(.8, .5, .3)];    // brush held up, ready
-    const RAISED = [V(-.35, -.75, .55), V(-.75, -.15, .6), V(-.8, .25, .5)]; // pulled back low by the hip, like a backhand
+    const RAISED = [V(.3, -.85, .45), V(-.1, .9, .45), V(-.45, .8, .4)];  // wind-up like a dart throw: upper arm stays in front, the elbow folds the brush back
     const FORWARD = [V(.8, -.35, .5), V(.95, .05, .3), V(.95, -.15, .3)]; // follow-through: elbow below the shoulder, forearm toward the canvas
     const flickShape = (p) => (p < 0 ? 0 : p < .16 ? outCubic(p / .16) : 1 - inOut(Math.min(1, (p - .16) / .84)));
     function armPose(t) {
@@ -512,12 +512,15 @@
       const idle = IDLE.map((v) => v.clone().add(V(0, sway, 0)));
       if (t < 1.5) return idle;
       if (t < FLICKS[0]) return idle.map((v, i) => mixV(v, RAISED[i], inOut(prog(t, 1.5, .5))));
-      if (t < 4.5) {
+      const last = FLICKS[FLICKS.length - 1];
+      if (t < last + .08) {
         const p = ((t - FLICKS[0]) % .5) / .5;
         const s = [flickShape(p), flickShape(p - .04), flickShape(p - .08)];   // shoulder, elbow, wrist
         return RAISED.map((v, i) => mixV(v, FORWARD[i], s[i]));
       }
-      return RAISED.map((v, i) => mixV(v, idle[i], outCubic(prog(t, 4.5, .5))));
+      // after the last flick she doesn't wind up again: the arm settles from the
+      // follow-through to rest before the camera pushes in
+      return FORWARD.map((v, i) => mixV(v, idle[i], inOut(prog(t, last + .08, .4))));
     }
     function painterBob(t) { return Math.sin(t * 2.4) * 1.5; }   // breathing only: the flick is in the arm, her feet stay planted
     function poseAt(t) {
@@ -535,7 +538,7 @@
       bone.spine2.rotation.z = -lean;
       girl.updateMatrixWorld(true);
       bone.handL.getWorldPosition(palette.position);
-      palette.position.add(V(.15, .05, .35));
+      palette.position.add(V(.15, .05, .62));   // in front of her fingers, so they don't poke through
     }
     // Where the brush tip is on screen, in room pixels.
     function tipNow() {
