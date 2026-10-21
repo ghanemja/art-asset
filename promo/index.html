@@ -6,6 +6,7 @@
   <!-- A 1080x1080 promo video, driven frame by frame by render.mjs (window.at(t)). -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Caveat:wght@500;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Figtree:wght@400;700&family=Fredoka:wght@400;600&family=Kalam:wght@400;700&family=Nunito:wght@400;700;800&family=Permanent+Marker&family=Varela+Round&family=Work+Sans:wght@400;700&display=swap">
   <link rel="stylesheet" href="../src/art-medium.css">
+  <script type="importmap">{ "imports": { "three": "./vendor/three/build/three.module.min.js", "three/addons/": "./vendor/three/examples/jsm/" } }</script>
   <style>
     * { box-sizing: border-box; }
     html, body { margin: 0; width: 1080px; height: 1080px; overflow: hidden; }
@@ -18,6 +19,7 @@
     #R { display: block; background: #ecdcc3; }
     #room { position: absolute; inset: 0; transform-origin: 0 0; }
     #room > svg { position: absolute; inset: 0; }
+    #painter3d { position: absolute; left: 30px; top: 200px; width: 600px; height: 720px; }
     #site { position: absolute; left: 560px; top: 250px; width: 1080px; height: 1080px; transform: scale(.37037); transform-origin: 0 0; overflow: hidden; }
     #site > div { position: absolute; inset: 0; }
 
@@ -192,93 +194,16 @@
         <rect x="536" y="648" width="448" height="26" rx="4" fill="url(#wood)"/>
         <rect x="536" y="648" width="448" height="4" rx="2" fill="#c08a5a"/>
 
-        <!-- the painter, lit from the window on the left -->
-        <g id="painter">
-          <ellipse cx="300" cy="890" rx="120" ry="16" fill="#000" opacity=".3" filter="url(#soft)"/>
-          <path d="M240 886C320 880 470 884 560 900 500 912 330 912 240 900z" fill="#000" opacity=".12" filter="url(#soft)"/>
-          <!-- legs, with a knee crease, and shoes with a highlight -->
-          <path d="M234 628h48l-4 248h-38z" fill="url(#jeans)"/>
-          <path d="M288 628h50l-6 248h-40z" fill="url(#jeans)"/>
-          <path d="M242 760q18 6 34 0M296 764q18 6 34 0" stroke="#1b2336" stroke-width="3" fill="none" opacity=".6"/>
-          <path d="M284 640v230" stroke="#1b2336" stroke-width="4" opacity=".5"/>
-          <path d="M226 872c4-10 52-12 56 0 6 18-4 22-30 22h-30c-8 0-6-14 4-22z" fill="#2a2420"/>
-          <path d="M286 872c4-10 52-12 58 0 10 18 0 22-28 22h-34c-8 0-6-14 4-22z" fill="#2a2420"/>
-          <path d="M236 874q20-4 38 0M296 874q20-4 40 0" stroke="#5b524b" stroke-width="3" fill="none"/>
-
-          <!-- back arm holding the palette -->
-          <path d="M236 470c-18 26-30 54-38 86" stroke="url(#shirt)" stroke-width="38" stroke-linecap="round" fill="none"/>
-          <path d="M198 556c-6 20-12 38-18 58" stroke="url(#skin)" stroke-width="24" stroke-linecap="round" fill="none"/>
-          <g transform="translate(150 630) rotate(-14)">
-            <path d="M-78 6c0-34 40-52 84-48 46 4 76 30 70 58-6 26-44 36-70 24-12-6-14 8-30 12-28 6-54-16-54-46z" fill="#000" opacity=".25" transform="translate(4 6)" filter="url(#softer)"/>
-            <path d="M-78 2c0-34 40-52 84-48 46 4 76 30 70 58-6 26-44 36-70 24-12-6-14 8-30 12-28 6-54-16-54-46z" fill="#d6ab72"/>
-            <path d="M-70 0c4-28 40-44 78-40" stroke="#ecc995" stroke-width="5" fill="none" stroke-linecap="round"/>
-            <ellipse cx="-28" cy="10" rx="13" ry="10" fill="#b48852"/>
-            <path d="M0-30c8-6 22-4 22 6 0 10-16 12-22 4z" fill="#2f5fd0"/><path d="M34-20c10-4 22 2 20 10-2 10-18 10-22 2z" fill="#e2483d"/>
-            <path d="M52 8c10-2 18 6 14 14-4 8-18 6-18-2z" fill="#f2b705"/><path d="M16 26c8-4 18 0 16 8-2 6-16 6-18 0z" fill="#fbfaf6"/>
-            <circle cx="4" cy="-28" r="3" fill="#fff" opacity=".6"/><circle cx="38" cy="-17" r="3" fill="#fff" opacity=".6"/>
-            <path d="M-48 18c-14 6-14 18-2 20" stroke="url(#skin)" stroke-width="14" stroke-linecap="round" fill="none"/>
-          </g>
-
-          <!-- torso: shirt, then the apron over it -->
-          <path d="M226 452c30-14 92-14 122 0 12 30 6 120-2 178H222c-8-58-12-148 4-178z" fill="url(#shirt)"/>
-          <path d="M240 480c-6 40-6 100 0 140M330 486c6 40 4 92-2 130" stroke="#164650" stroke-width="5" fill="none" opacity=".4"/>
-          <path d="M244 506h88c6 40 6 118-2 188H246c-8-70-8-148-2-188z" fill="url(#apron)"/>
-          <path d="M244 506c-6-18-10-36-14-52M332 506c4-18 8-36 12-52" stroke="#e8dfce" stroke-width="7" stroke-linecap="round" fill="none"/>
-          <path d="M262 590h52v34h-52z" fill="none" stroke="#c4b9a4" stroke-width="3"/>
-          <path d="M256 556c6-6 16-4 16 4s-12 10-16 4z" fill="#2f5fd0"/><path d="M300 600c10-6 20 0 18 8-2 10-20 10-20 0z" fill="#e2483d"/>
-          <path d="M270 650c4-4 12-2 10 4-2 4-10 4-10-4z" fill="#f2b705"/><path d="M306 538c4-2 8 0 7 4-1 3-7 3-7-4z" fill="#f2b705"/>
-          <path d="M318 520c2 14-2 30 0 44" stroke="#2f5fd0" stroke-width="3" opacity=".7" fill="none"/>
-          <path d="M246 506h86" stroke="#000" stroke-width="4" opacity=".08"/>
-
-          <!-- neck, head in three-quarter view -->
-          <path d="M266 398h34v52c-10 8-24 8-34 0z" fill="#cf916b"/>
-          <path d="M266 420c12 8 24 8 34 0v-8c-10 6-24 6-34 0z" fill="#000" opacity=".15"/>
-          <path d="M246 352c0-34 18-54 42-54s42 22 40 56c0 14-4 22-2 30 2 6 8 10 6 14-2 6-10 4-10 10 0 10-6 22-20 24-26 4-56-14-56-80z" fill="url(#skin)"/>
-          <path d="M318 336c4-4 14-4 18 0" stroke="#3a281d" stroke-width="4" stroke-linecap="round" fill="none"/>
-          <ellipse cx="324" cy="350" rx="6" ry="5" fill="#fff"/>
-          <circle cx="326" cy="350" r="3.6" fill="#3b2a20"/>
-          <circle cx="327" cy="349" r="1.2" fill="#fff"/>
-          <path d="M318 344q8-4 14 0" stroke="#3a281d" stroke-width="1.5" fill="none" opacity=".6"/>
-          <path d="M326 388q-8 4-16 1" stroke="#9c5a48" stroke-width="3" stroke-linecap="round" fill="none"/>
-          <circle cx="310" cy="372" r="9" fill="#f08c7a" opacity=".3"/>
-          <path d="M256 360c-10-2-14 8-10 18 4 8 12 8 14 2" fill="#d99a74"/>
-          <path d="M254 366c-4 2-4 8 0 10" stroke="#a96b4c" stroke-width="2" fill="none"/>
-          <path d="M244 360c-10-40 10-70 48-70 24 0 40 12 44 30-10-8-28-10-40-6-8 14-14 26-26 34-6 4-6 12-8 18z" fill="url(#hair)"/>
-          <path d="M262 318c10-10 26-14 40-12M254 334c6-12 16-20 28-24" stroke="#7a5a42" stroke-width="2.5" fill="none" opacity=".7" stroke-linecap="round"/>
-          <path d="M246 362c-4 16-2 34 6 44" stroke="url(#hair)" stroke-width="8" stroke-linecap="round" fill="none"/>
-          <!-- beret -->
-          <g transform="rotate(-12 282 306)">
-            <ellipse cx="284" cy="312" rx="60" ry="14" fill="#000" opacity=".2" filter="url(#softer)"/>
-            <ellipse cx="282" cy="304" rx="62" ry="22" fill="url(#beret)"/>
-            <path d="M226 308c20 8 92 8 114 0" stroke="#8a1f17" stroke-width="3" fill="none" opacity=".6"/>
-            <path d="M282 284v-11" stroke="#a3261d" stroke-width="6" stroke-linecap="round"/>
-          </g>
-
-          <!-- brush arm: upper arm turns at the shoulder, the forearm bends at the elbow -->
-          <g id="arm" transform="translate(330 470)">
-            <path d="M0 0H92" stroke="#2f7a86" stroke-width="34" stroke-linecap="round"/>
-            <path d="M4 -10H88" stroke="#4aa0ac" stroke-width="7" stroke-linecap="round" opacity=".7"/>
-            <path d="M58 -15v30" stroke="#1f5560" stroke-width="5" opacity=".6"/>
-            <g id="forearm" transform="translate(92 0)">
-              <path d="M0 0H84" stroke="#e2a988" stroke-width="24" stroke-linecap="round"/>
-              <path d="M4 -6H80" stroke="#f1c6a2" stroke-width="6" stroke-linecap="round" opacity=".8"/>
-              <path d="M6 9H78" stroke="#b9805e" stroke-width="5" stroke-linecap="round" opacity=".45"/>
-              <path d="M80 0H200" stroke="#b07440" stroke-width="10" stroke-linecap="round"/>
-              <path d="M84 -3H198" stroke="#d29a62" stroke-width="3" stroke-linecap="round"/>
-              <path d="M76-14c12-4 24 0 26 12 2 12-6 18-18 18-10 0-16-8-14-18z" fill="#e2a988"/>
-              <path d="M84-12c8 0 14 4 14 10" stroke="#c4876a" stroke-width="3" fill="none"/>
-              <rect x="198" y="-7" width="18" height="14" rx="2" fill="#c3c7cd"/>
-              <rect x="198" y="-7" width="18" height="4" rx="2" fill="#eef0f3"/>
-              <path id="bristles" d="M214-9Q236-8 248 0Q236 8 214 9z" fill="#2f5fd0"/>
-            </g>
-          </g>
-        </g>
+        <!-- the painter's shadow on the floor (she is rendered in 3D on #painter3d) -->
+        <ellipse cx="300" cy="890" rx="120" ry="16" fill="#000" opacity=".3" filter="url(#soft)"/>
+        <path d="M240 886C320 880 470 884 560 900 500 912 330 912 240 900z" fill="#000" opacity=".12" filter="url(#soft)"/>
 
         <!-- a soft vignette, like a real camera -->
         <rect width="1080" height="1080" fill="url(#vignette)"/>
         <!-- paint in flight -->
         <g id="drops"></g>
       </svg>
+      <canvas id="painter3d" width="1200" height="1440"></canvas>
       <div id="site" data-medium="acrylic" data-style="impasto" data-theme="light">
         <div id="boring">
           <div class="bar"><i></i>Dashboard<b></b><u></u></div>
@@ -375,6 +300,8 @@
 
   <script type="module">
     import { installFilters } from '../src/art-medium.js';
+    import * as THREE from 'three';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
     installFilters();
 
     const $ = (id) => document.getElementById(id);
@@ -408,7 +335,6 @@
     const ZOOM = [4.5, 6.0];            // camera pushes into the canvas
     const COLORS = ['#2f5fd0', '#e2483d', '#f2b705', '#2f5fd0', '#e2483d'];
     const VARIANT = { '#2f5fd0': '', '#e2483d': 'am--secondary', '#f2b705': 'am--accent' };
-    const SHOULDER = [330, 470], UPPER = 92, BRUSH = 248;   // shoulder, upper arm, elbow to brush tip
     const CANVAS = { x: 560, y: 250, k: 400 / 1080 };   // where #site sits in the room
     let seed = 7;
     const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
@@ -446,37 +372,161 @@
       d.dot = dot;
     }
 
-    // [upper arm angle, elbow bend] in degrees. Each flick whips the arm
-    // down and the wrist snaps a beat behind it, like a real flick.
-    const flickShape = (p) => (p < 0 ? 0 : p < .16 ? outCubic(p / .16) : 1 - inOut(Math.min(1, (p - .16) / .84)));
-    function armPose(t) {
-      if (t < 1.5) return [-22 + 5 * Math.sin(t * 2.2), -38 + 4 * Math.sin(t * 1.7)];
-      if (t < FLICKS[0]) {
-        const k = inOut(prog(t, 1.5, .5));
-        return [lerp(-22 + 5 * Math.sin(3.3), -68, k), lerp(-38 + 4 * Math.sin(2.55), -55, k)];
+    // The painter is a rigged 3D model (promo/assets/painter.glb) rendered with
+    // three.js onto #painter3d, which sits in the room and zooms with it. Her
+    // own clips are portfolio moves, so the painting is posed bone by bone:
+    // each flick whips the right arm forward and the wrist snaps just after.
+    const BOX = { x: 30, y: 200, w: 600, h: 720 };       // #painter3d in room pixels
+    const gl = new THREE.WebGLRenderer({ canvas: $('painter3d'), antialias: true, alpha: true, preserveDrawingBuffer: true });
+    gl.outputColorSpace = THREE.SRGBColorSpace;
+    gl.setClearColor(0x000000, 0);
+    const scene3 = new THREE.Scene();
+    scene3.add(new THREE.HemisphereLight(0xfff2dc, 0x7a5a3c, 1.4));
+    const sun = new THREE.DirectionalLight(0xfff0d6, 2.8);   // the window, on the left
+    sun.position.set(-7, 5, 6);
+    scene3.add(sun);
+    const fill = new THREE.DirectionalLight(0xffe0c0, .45);
+    fill.position.set(6, 1, 5);
+    scene3.add(fill);
+    const VIEW_H = 11.4;                                      // world units visible top to bottom
+    const cam3 = new THREE.PerspectiveCamera(20, BOX.w / BOX.h, 1, 200);
+    const camDist = VIEW_H / 2 / Math.tan(10 * Math.PI / 180);
+    cam3.position.set(.75, .55, camDist);
+    cam3.lookAt(.75, .55, 0);
+    const PX = VIEW_H / BOX.h;                                // world units per room pixel
+
+    const girl = (await new GLTFLoader().loadAsync('./assets/painter.glb')).scene;
+    girl.rotation.y = -.55;                                   // three-quarter, turned to the easel
+    // One solid color per triangle: where skin meets sweater a triangle spans
+    // both, and per-vertex colors would smear them into each other. Each
+    // triangle takes the color most of its corners have (ties: the lightest).
+    girl.traverse((o) => {
+      if (!o.isMesh) return;
+      o.frustumCulled = false;
+      const geo = o.geometry.index ? o.geometry.toNonIndexed() : o.geometry;
+      const col = geo.attributes.color;
+      const c = [0, 1, 2].map(() => new THREE.Color());
+      for (let f = 0; f < col.count; f += 3) {
+        for (let k = 0; k < 3; k++) c[k].fromBufferAttribute(col, f + k);
+        const pick = c[0].equals(c[1]) || c[0].equals(c[2]) ? c[0] : c[1].equals(c[2]) ? c[1]
+          : c.reduce((a, b) => (a.r + a.g + a.b >= b.r + b.g + b.b ? a : b));
+        for (let k = 0; k < 3; k++) col.setXYZ(f + k, pick.r, pick.g, pick.b);
       }
-      if (t < 4.5) {
-        const p = ((t - FLICKS[0]) % .5) / .5;
-        return [-68 + 78 * flickShape(p), -55 + 80 * flickShape(p - .05)];
-      }
-      const k = outCubic(prog(t, 4.5, .5));
-      return [lerp(-68, -30, k), lerp(-55, -20, k)];
-    }
-    function painterBob(t) { return t < 2 ? Math.sin(t * 2.4) * 3 : -Math.abs(Math.sin((t - 2) * Math.PI * 2)) * 10; }
-    function tipAt(t) {
-      const [up, bend] = armPose(t), b = painterBob(t);
-      const a1 = up * Math.PI / 180, a2 = (up + bend) * Math.PI / 180;
-      return [SHOULDER[0] + Math.cos(a1) * UPPER + Math.cos(a2) * BRUSH, SHOULDER[1] + b + Math.sin(a1) * UPPER + Math.sin(a2) * BRUSH];
+      col.needsUpdate = true;
+      o.geometry = geo;
+    });
+    scene3.add(girl);
+    const bone = {};
+    girl.traverse((o) => { if (o.isBone) bone[o.name] = o; });
+
+    // Pupils and catchlights. The irises are only a handful of triangles, so a
+    // crisp pupil is geometry on the head bone, placed at each iris's center
+    // in the bind pose (before any posing), facing out of the face (+x).
+    girl.updateMatrixWorld(true);
+    for (const z of [.25, -.26]) {
+      const at = (dx, dy, dz) => bone.head.worldToLocal(girl.localToWorld(new THREE.Vector3(.36 + dx, 3.4 + dy, z + dz)));
+      const pupil = new THREE.Mesh(new THREE.SphereGeometry(1, 20, 12), new THREE.MeshBasicMaterial({ color: 0x120a07 }));
+      pupil.scale.set(.012, .085, .055);
+      pupil.position.copy(at(0, -.01, 0));
+      const glint = new THREE.Mesh(new THREE.SphereGeometry(1, 12, 8), new THREE.MeshBasicMaterial({ color: 0xffffff }));
+      glint.scale.set(.012, .03, .022);
+      glint.position.copy(at(.006, .06, .03));
+      bone.head.add(pupil, glint);
     }
 
+    const mat = (color, roughness = .6, metalness = 0) => new THREE.MeshStandardMaterial({ color, roughness, metalness });
+    const brush = new THREE.Group();
+    const handle = new THREE.Mesh(new THREE.CylinderGeometry(.05, .075, 1.5, 14), mat(0xb07440, .45));
+    handle.position.y = .45;
+    const ferrule = new THREE.Mesh(new THREE.CylinderGeometry(.08, .075, .22, 14), mat(0xc8ccd2, .25, .8));
+    ferrule.position.y = 1.3;
+    const bristleMat = mat(0x2f5fd0, .35);
+    const bristles = new THREE.Mesh(new THREE.ConeGeometry(.09, .42, 14), bristleMat);
+    bristles.position.y = 1.62;
+    const tip = new THREE.Object3D();
+    tip.position.y = 1.85;
+    brush.add(handle, ferrule, bristles, tip);
+    brush.position.y = .15;
+    bone.handR.add(brush);
+
+    const palette = new THREE.Group();
+    const board = new THREE.Mesh(new THREE.CylinderGeometry(.85, .85, .07, 32), mat(0xd6ab72, .7));
+    board.scale.set(1, 1, .72);
+    palette.add(board);
+    [[0x2f5fd0, .35, .2], [0xe2483d, -.1, .38], [0xf2b705, -.45, .1], [0xfbfaf6, .05, -.3]].forEach(([c, x, z]) => {
+      const blob = new THREE.Mesh(new THREE.SphereGeometry(.16, 16, 10), mat(c, .3));
+      blob.scale.set(1, .35, 1);
+      blob.position.set(x, .06, z);
+      palette.add(blob);
+    });
+    palette.rotation.set(Math.PI / 2 - .55, 0, -.25);           // tilted toward the camera
+    scene3.add(palette);
+
+    // Aim a bone so it points at its child along a direction in world space
+    // (x right, y up, z toward the camera).
+    const _a = new THREE.Vector3(), _b = new THREE.Vector3(), _d = new THREE.Vector3();
+    const _q = new THREE.Quaternion(), _qp = new THREE.Quaternion(), _qb = new THREE.Quaternion();
+    function aim(b, child, dir) {
+      b.getWorldPosition(_a);
+      child.getWorldPosition(_b);
+      _q.setFromUnitVectors(_b.sub(_a).normalize(), _d.copy(dir).normalize());
+      b.getWorldQuaternion(_qb);
+      b.parent.getWorldQuaternion(_qp);
+      b.quaternion.copy(_qp.invert().multiply(_q).multiply(_qb));
+      b.updateMatrixWorld(true);
+    }
+    const V = (x, y, z) => new THREE.Vector3(x, y, z);
+    const mixV = (a, b, k) => a.clone().lerp(b, k);
+    // Right arm poses: [upper arm, forearm, hand].
+    const IDLE = [V(.35, -.9, .25), V(.85, .35, .35), V(.8, .5, .3)];    // brush held up, ready
+    const RAISED = [V(-.35, -.75, .55), V(-.75, -.15, .6), V(-.8, .25, .5)]; // pulled back low by the hip, like a backhand
+    const FORWARD = [V(.9, .25, .35), V(.95, -.1, .3), V(.9, -.35, .3)]; // follow-through at the canvas
+    const flickShape = (p) => (p < 0 ? 0 : p < .16 ? outCubic(p / .16) : 1 - inOut(Math.min(1, (p - .16) / .84)));
+    function armPose(t) {
+      const sway = Math.sin(t * 2.2) * .06;
+      const idle = IDLE.map((v) => v.clone().add(V(0, sway, 0)));
+      if (t < 1.5) return idle;
+      if (t < FLICKS[0]) return idle.map((v, i) => mixV(v, RAISED[i], inOut(prog(t, 1.5, .5))));
+      if (t < 4.5) {
+        const p = ((t - FLICKS[0]) % .5) / .5;
+        const s = [flickShape(p), flickShape(p - .04), flickShape(p - .08)];   // shoulder, elbow, wrist
+        return RAISED.map((v, i) => mixV(v, FORWARD[i], s[i]));
+      }
+      return RAISED.map((v, i) => mixV(v, idle[i], outCubic(prog(t, 4.5, .5))));
+    }
+    function painterBob(t) { return t < 2 ? Math.sin(t * 2.4) * 3 : -Math.abs(Math.sin((t - 2) * Math.PI * 2)) * 10; }
+    function poseAt(t) {
+      girl.position.y = -painterBob(t) * PX;
+      girl.updateMatrixWorld(true);
+      const [u, f, h] = armPose(t);
+      aim(bone.upperarmR, bone.lowerarmR, u);
+      aim(bone.lowerarmR, bone.handR, f);
+      aim(bone.handR, tip, h);
+      // the left arm holds the palette out in front, toward the camera
+      aim(bone.upperarmL, bone.lowerarmL, V(-.1, -1, .25));
+      aim(bone.lowerarmL, bone.handL, V(.25, -.15, 1));
+      // lean into each flick a little
+      const lean = t >= FLICKS[0] && t < 4.5 ? flickShape(((t - FLICKS[0]) % .5) / .5) * .06 : 0;
+      bone.spine2.rotation.z = -lean;
+      girl.updateMatrixWorld(true);
+      bone.handL.getWorldPosition(palette.position);
+      palette.position.add(V(.15, .05, .35));
+    }
+    // Where the brush tip is on screen, in room pixels.
+    function tipNow() {
+      tip.getWorldPosition(_a).project(cam3);
+      return [BOX.x + (_a.x + 1) / 2 * BOX.w, BOX.y + (1 - _a.y) / 2 * BOX.h];
+    }
+    window.painter3d = { THREE, gl, scene3, cam3, girl, bone, poseAt };   // for close-up checks
+    const launchTip = new Map();
+    for (const ft of FLICKS) { poseAt(ft + .08); launchTip.set(ft, tipNow()); }
+    function tipAt(t) { return launchTip.get(FLICKS.find((ft) => Math.abs(ft + .08 - t) < 1e-6)) ?? (poseAt(t), tipNow()); }
+
     function painterScene(t) {
-      const b = painterBob(t);
-      $('painter').setAttribute('transform', `translate(0 ${b})`);
-      const [up, bend] = armPose(t);
-      $('arm').setAttribute('transform', `translate(${SHOULDER[0]} ${SHOULDER[1]}) rotate(${up})`);
-      $('forearm').setAttribute('transform', `translate(${UPPER} 0) rotate(${bend})`);
+      poseAt(t);
       const loaded = FLICKS.findIndex((ft) => t < ft + .08);
-      $('bristles').setAttribute('fill', COLORS[loaded < 0 ? 4 : loaded]);
+      bristleMat.color.set(COLORS[loaded < 0 ? 4 : loaded]);
+      gl.render(scene3, cam3);
 
       for (const d of drops) {
         const launch = d.ft + .08;
