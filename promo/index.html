@@ -433,6 +433,31 @@
       glint.position.copy(at(.006, .06, .03));
       bone.head.add(pupil, glint);
     }
+    // A thin dark smile line along the mouth crease (bind pose: y 3.03 on the
+    // face's surface), curving up at the corners and wrapping with the face.
+    {
+      const at = (x, y, z) => bone.head.worldToLocal(girl.localToWorld(new THREE.Vector3(x, y, z)));
+      const pts = [];
+      for (let k = 0; k <= 12; k++) {
+        const z = -.13 + .26 * k / 12, u = z / .13;
+        pts.push(at(.436 - .9 * z * z, 3.03 + .03 * u * u, z));
+      }
+      const smile = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 24, .011, 6),
+        new THREE.MeshBasicMaterial({ color: 0x2a140c }));
+      bone.head.add(smile);
+    }
+    // Brown eyebrows: a soft arch above each eye, thicker toward the nose.
+    for (const c of [.25, -.26]) {
+      const at = (x, y, z) => bone.head.worldToLocal(girl.localToWorld(new THREE.Vector3(x, y, z)));
+      const pts = [];
+      for (let k = 0; k <= 10; k++) {
+        const u = -1 + 2 * k / 10, z = c + u * .1;
+        pts.push(at(.5 - .95 * z * z, 3.665 + .025 * (1 - u * u) - .01 * u * Math.sign(c), z));
+      }
+      const brow = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 20, .017, 6),
+        new THREE.MeshStandardMaterial({ color: 0x3e2414, roughness: .8 }));
+      bone.head.add(brow);
+    }
 
     const mat = (color, roughness = .6, metalness = 0) => new THREE.MeshStandardMaterial({ color, roughness, metalness });
     const brush = new THREE.Group();
