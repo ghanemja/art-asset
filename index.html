@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>art-medium</title>
+  <title>Splatform</title>
   <meta name="description" content="A UI component library where every component is painted: watercolor, acrylic, charcoal, torn paper and marker buttons, cards, inputs and more.">
-  <meta property="og:title" content="art-medium: components, painted">
+  <meta property="og:title" content="Splatform: splat your site">
   <meta property="og:description" content="A UI component library where every button, card and input is made of a real art medium: watercolor, acrylic, charcoal, paper, marker.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://ghanemja.github.io/art-asset/">
@@ -19,6 +19,8 @@
     (function () {
       var root = document.documentElement, m, s, t;
       var styles = window.amStyles = { acrylic: ['impasto', 'impressionist', 'realism'], charcoal: ['newsprint', 'sketchbook', 'kraft'], marker: ['plain', 'notebook', 'parchment'] };
+      // The site's pick when a visitor hasn't chosen one (otherwise the medium's own default, the first in its list).
+      var defaults = window.amDefaultStyles = { marker: 'notebook' };
       try {
         m = localStorage.getItem('am-medium');
         s = localStorage.getItem('am-style:' + m) || (m === 'acrylic' ? localStorage.getItem('am-style') : null);
@@ -26,6 +28,7 @@
       } catch (e) {}
       if (['watercolor', 'acrylic', 'charcoal', 'paper', 'marker'].indexOf(m) > -1) root.setAttribute('data-medium', m);
       if (styles[m] && styles[m].indexOf(s) > -1) root.setAttribute('data-style', s);
+      else if (defaults[m]) root.setAttribute('data-style', defaults[m]);
       if (t !== 'light' && t !== 'dark') t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
       root.setAttribute('data-theme', t);
     })();
@@ -58,8 +61,11 @@
     code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
     :not(pre) > code { font-size: .85em; padding: .1em .35em; border-radius: 4px; background: color-mix(in srgb, var(--am-ink) 8%, transparent); }
 
-    /* Top bar: a paper-coloured fade so the sticky nav reads over content. */
-    .topbar { position: sticky; top: 0; z-index: 20; padding: .75rem 0 1.25rem; background: linear-gradient(var(--am-paper) 65%, transparent); }
+    /* Top bar: a fade of the page's own paper (texture included, so textured
+       papers don't get a flat strip) so the sticky nav reads over content. */
+    .topbar { position: sticky; top: 0; z-index: 20; isolation: isolate; padding: .75rem 0 1.25rem; }
+    .topbar::before { content: ""; position: absolute; inset: 0; z-index: -1; background-color: var(--am-paper); background-image: var(--am-paper-texture);
+      -webkit-mask: linear-gradient(#000 65%, transparent); mask: linear-gradient(#000 65%, transparent); }
     .topbar .am-nav { gap: 1rem; }
     .topbar .am-nav__brand { white-space: nowrap; display: flex; align-items: center; gap: .5rem; }
     .topbar .am-nav__brand .am-splash { width: 1.4rem; }
@@ -112,6 +118,12 @@
     .plate p { margin: 0; line-height: 1.55; }
     .plate > code { justify-self: start; }
     .plate > .am-splash { position: absolute; width: 7rem; right: -2.5rem; top: -2.5rem; z-index: -1; }
+    /* Notebook paper has its red margin 64-66px in: write to the right of it,
+       on the plate and on the page (the centered column only needs the extra
+       room when the window is too narrow to clear the line on its own; the
+       top bar has its own paper, so it stays put). */
+    .plate[data-medium="marker"][data-style="notebook"] { padding-left: calc(66px + 1.25rem); }
+    [data-medium="marker"][data-style="notebook"] :is(main, footer).wrap { padding-left: max(1rem, calc(66px + 1rem - max(0px, (100vw - 1160px) / 2))); }
     /* Five across as 3 + 2 on wide screens */
     @media (min-width: 900px) {
       .grid5.grid5 { grid-template-columns: repeat(6, 1fr); }
@@ -150,7 +162,7 @@
   <div class="topbar">
     <div class="wrap">
       <nav class="am-nav" aria-label="Main">
-        <a class="am-nav__brand" href="#"><span class="am-splash" aria-hidden="true"></span>art-medium</a>
+        <a class="am-nav__brand" href="#"><span class="am-splash" aria-hidden="true"></span>Splatform</a>
         <ul class="am-nav__links">
           <li><a class="am-nav__link" href="#mediums">Mediums</a></li>
           <li><a class="am-nav__link" href="#components">Components</a></li>
@@ -172,7 +184,7 @@
         <span class="am-splash am--secondary s2"></span>
         <span class="am-splash am--accent s3"></span>
       </div>
-      <span class="am-badge am--secondary">v0.1 · MIT · no build step</span>
+      <span class="am-badge am--secondary">v0.2 · MIT · no build step</span>
       <h1>Components,<br><em>painted.</em></h1>
       <script>amHeadline();</script>
       <p class="hero__lede">A UI library where every button, card and input is made of a real art medium. One attribute paints your whole site in watercolor, acrylic, charcoal, torn paper or marker. Light or dark.</p>
@@ -262,17 +274,17 @@
           <code>data-medium="paper"</code>
           <div><button class="am-button am--secondary" data-set="paper">Paint the page</button></div>
         </article>
-        <article class="plate am-canvas" data-medium="marker" data-style="plain">
+        <article class="plate am-canvas" data-medium="marker" data-style="notebook">
           <span class="am-splash" aria-hidden="true"></span>
           <h3>Marker</h3>
           <p>A few fat felt-tip strokes in one back-and-forth scribble, with rounded hairpin turns and translucent ink that darkens where it overlaps. On plain paper, a ruled notebook or parchment.</p>
           <div class="row plate__styles" role="group" aria-label="Marker paper for this plate">
-            <button class="plate__style" data-plate-style="plain" aria-pressed="true">Plain</button>
-            <button class="plate__style" data-plate-style="notebook" aria-pressed="false">Notebook</button>
+            <button class="plate__style" data-plate-style="plain" aria-pressed="false">Plain</button>
+            <button class="plate__style" data-plate-style="notebook" aria-pressed="true">Notebook</button>
             <button class="plate__style" data-plate-style="parchment" aria-pressed="false">Parchment</button>
           </div>
           <div class="row"><button class="am-button am--accent">Button</button><span class="am-badge am--secondary">Badge</span></div>
-          <code data-plate-code>data-medium="marker" data-style="plain"</code>
+          <code data-plate-code>data-medium="marker" data-style="notebook"</code>
           <div><button class="am-button" data-set="marker">Paint the page</button></div>
         </article>
       </div>
@@ -444,9 +456,9 @@
           <span class="step">Option 1 · CDN</span>
           <h3 class="am-card__title">Drop it in</h3>
 <pre><code>&lt;link rel="stylesheet"
-  href="https://cdn.jsdelivr.net/gh/ghanemja/art-asset@v0.1.0/src/art-medium.css"&gt;
+  href="https://cdn.jsdelivr.net/gh/ghanemja/art-asset@v0.2.0/src/art-medium.css"&gt;
 &lt;script type="module"
-  src="https://cdn.jsdelivr.net/gh/ghanemja/art-asset@v0.1.0/src/art-medium.js"&gt;&lt;/script&gt;
+  src="https://cdn.jsdelivr.net/gh/ghanemja/art-asset@v0.2.0/src/art-medium.js"&gt;&lt;/script&gt;
 
 &lt;body class="am-canvas" data-medium="watercolor" data-theme="auto"&gt;
   &lt;button class="am-button"&gt;Hello&lt;/button&gt;
@@ -455,11 +467,11 @@
         <article class="am-card">
           <span class="step">Option 2 · npm</span>
           <h3 class="am-card__title">Install it</h3>
-<pre><code>npm i github:ghanemja/art-asset#v0.1.0
+<pre><code>npm i @ghanemja/splatform
 
 // in your app
-import 'art-medium/css';
-import { setMedium, setTheme } from 'art-medium';
+import '@ghanemja/splatform/css';
+import { setMedium, setTheme } from '@ghanemja/splatform';
 
 setMedium(document.documentElement, 'acrylic');
 setTheme(document.documentElement, 'dark');</code></pre>
@@ -467,9 +479,9 @@ setTheme(document.documentElement, 'dark');</code></pre>
         <article class="am-card">
           <span class="step">Option 3 · React</span>
           <h3 class="am-card__title">Use the wrappers</h3>
-<pre><code>import 'art-medium/css';
+<pre><code>import '@ghanemja/splatform/css';
 import { MediumProvider, Button, Card }
-  from 'art-medium/react';
+  from '@ghanemja/splatform/react';
 
 &lt;MediumProvider medium="charcoal" theme="auto"&gt;
   &lt;Card title="Still life"&gt;
@@ -484,7 +496,7 @@ import { MediumProvider, Button, Card }
 
   <footer class="wrap">
     <hr class="am-divider">
-    <p><span class="am-splash" aria-hidden="true"></span> This site is built entirely with art-medium.</p>
+    <p><span class="am-splash" aria-hidden="true"></span> This site is built entirely with Splatform.</p>
     <p><a href="https://github.com/ghanemja/art-asset">GitHub</a> · MIT license</p>
   </footer>
 
@@ -540,6 +552,7 @@ import { MediumProvider, Button, Card }
       const list = window.amStyles[root.dataset.medium];
       const saved = load(`am-style:${root.dataset.medium}`);
       if (list && list.includes(saved)) root.setAttribute('data-style', saved);
+      else if (window.amDefaultStyles[root.dataset.medium]) root.setAttribute('data-style', window.amDefaultStyles[root.dataset.medium]);
       else root.removeAttribute('data-style');
     };
     for (const btn of document.querySelectorAll('[data-set-style]')) {

@@ -1,8 +1,8 @@
 <!doctype html>
-<html lang="en" data-medium="watercolor" data-theme="light">
+<html lang="en" data-medium="acrylic" data-theme="light">
 <head>
   <meta charset="utf-8">
-  <title>art-medium promo</title>
+  <title>Splatform promo</title>
   <!-- A 1080x1080 promo video, driven frame by frame by render.mjs (window.at(t)). -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Caveat:wght@500;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Figtree:wght@400;700&family=Fredoka:wght@400;600&family=Kalam:wght@400;700&family=Nunito:wght@400;700;800&family=Permanent+Marker&family=Varela+Round&family=Work+Sans:wght@400;700&display=swap">
   <link rel="stylesheet" href="../src/art-medium.css">
@@ -11,14 +11,49 @@
     html, body { margin: 0; width: 1080px; height: 1080px; overflow: hidden; }
     body { position: relative; }
     .scene { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; visibility: hidden; }
-    .abs { position: absolute; }
 
-    /* A: hook */
-    #A .am-splash { position: absolute; }
-    #A h1 { margin: 0; font: 400 150px/0.95 var(--am-font-display); }
-    #A h1 span { display: block; }
-    #A h1 em { font-style: italic; }
-    #A .am-badge { font-size: 26px; margin-top: 48px; padding: .35em 1em; }
+    /* R: the painter's room. Everything in #room zooms together, so the
+       easel's canvas (#site, a real 1080px page scaled to 400px) ends up
+       filling the frame at exactly 1:1. */
+    #R { display: block; background: #ecdcc3; }
+    #room { position: absolute; inset: 0; transform-origin: 0 0; }
+    #room > svg { position: absolute; inset: 0; }
+    #site { position: absolute; left: 560px; top: 250px; width: 1080px; height: 1080px; transform: scale(.37037); transform-origin: 0 0; overflow: hidden; }
+    #site > div { position: absolute; inset: 0; }
+
+    /* The bland "every vibe-coded app" page on the canvas before the paint. */
+    #boring { background: #f6f6f8; font-family: Helvetica, Arial, sans-serif; color: #26262b; text-align: left; }
+    #boring .bar { height: 96px; background: #fff; border-bottom: 2px solid #e4e4e8; display: flex; align-items: center; gap: 18px; padding: 0 56px; font-size: 30px; color: #55555c; }
+    #boring .bar i { width: 44px; height: 44px; border-radius: 12px; background: #d6d6dc; }
+    #boring .bar b { margin-left: auto; width: 120px; height: 20px; border-radius: 10px; background: #e2e2e7; }
+    #boring .bar u { width: 56px; height: 56px; border-radius: 50%; background: #e2e2e7; }
+    #boring h2 { margin: 90px 56px 14px; font-size: 70px; font-weight: 700; letter-spacing: -.02em; }
+    #boring p { margin: 0 56px 56px; font-size: 32px; color: #8a8a92; }
+    #boring .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin: 0 56px; }
+    #boring .cards > div { height: 230px; background: #fff; border: 2px solid #e6e6ea; border-radius: 20px; box-shadow: 0 6px 18px rgb(0 0 0 / .05); padding: 30px; }
+    #boring .cards s { display: block; height: 18px; border-radius: 9px; background: #ececf0; margin-bottom: 18px; text-decoration: none; }
+    #boring .cards s:first-child { width: 50%; height: 26px; background: #dcdce2; }
+    #boring .cta { margin: 64px 56px 0; display: inline-block; padding: 26px 56px; border-radius: 16px; font-size: 34px; font-weight: 700; color: #fff; background: linear-gradient(135deg, #7c5cff, #a46bff); box-shadow: 0 10px 26px rgb(124 92 255 / .35); }
+
+    /* The painted page the canvas turns into. */
+    #paper, #content { clip-path: circle(var(--reveal, 0%) at 50% 52%); }
+    #splats > * { position: absolute; }
+    #splats i { border-radius: 50%; }
+    #content { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+    #content .am-nav { position: absolute; left: 40px; right: 40px; top: 30px; padding: 18px 30px; font-size: 26px; text-align: left; }
+    #content .am-nav__brand { font-size: 36px; display: flex; align-items: center; gap: 14px; }
+    #content .am-nav__brand .am-splash { width: 44px; }
+    #content h1 { margin: 60px 0 0; font: 400 158px/.92 var(--am-font-display); }
+    #content h1 span { display: block; }
+    #content .lede { margin: 34px 0 44px; font-size: 34px; max-width: 800px; line-height: 1.4; font-weight: 700; }
+    #content .row { display: flex; gap: 24px; }
+    #content .am-button { font-size: 32px; padding: .65em 1.3em; }
+
+    #caption { position: absolute; left: 0; right: 0; top: 34px; text-align: center; color: #2a2a2e; z-index: 5; }
+    #caption div { font: 400 74px/1.02 "Archivo Black", sans-serif; letter-spacing: -.01em; }
+    #caption p { margin: 18px 0 0; font: 700 34px/1 Figtree, sans-serif; color: #6d6458; }
+    .series { position: absolute; left: 40px; top: 36px; z-index: 6; font-size: 24px; padding: .4em 1em; }
+    #R .series { top: auto; bottom: 40px; }
 
     /* B: the swap */
     #B .label { font: 400 96px/1 var(--am-font-display); margin-bottom: 8px; }
@@ -46,31 +81,242 @@
 
     /* D: end card */
     #D .am-splash { position: absolute; }
-    #D .logo { display: flex; align-items: center; gap: 22px; font: 400 108px/1 var(--am-font-display); }
-    #D .logo .am-splash { position: static; width: 100px; }
-    #D .tag { font: 400 56px/1.2 var(--am-font-body); margin: 34px 0 54px; font-weight: 700; }
+    #D .logo { display: flex; align-items: center; gap: 22px; font: 400 120px/1 var(--am-font-display); }
+    #D .logo .am-splash { position: static; width: 110px; }
+    #D .tag { font: 400 64px/1.2 var(--am-font-display); margin: 30px 0 50px; }
     #D .am-button { font-size: 34px; padding: .7em 1.4em; }
     #D .small { margin-top: 40px; font-size: 26px; opacity: .8; font-weight: 700; letter-spacing: .04em; }
-
-    /* E: the soundtrack plug, chalk on slate */
-    #E .kicker { font: 400 44px/1 var(--am-font-display); opacity: .85; }
-    #E h2 { margin: 6px 0 34px; font: 400 128px/1 var(--am-font-display); }
-    #E .board { width: 1010px; padding: 30px 36px; text-align: left; font: 600 21px/1.9 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; white-space: pre; }
-    #E .board .k { color: var(--am-pigment-accent); }
-    #E .board .n { color: var(--am-pigment-secondary); }
-    #E .made { margin-top: 38px; display: flex; align-items: center; gap: 22px; font: 400 40px/1 var(--am-font-display); }
-    #E .made .am-button { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 28px; }
 
     #wipe { position: absolute; left: 50%; top: 50%; width: 2300px; margin: -1150px 0 0 -1150px; z-index: 50; visibility: hidden; }
   </style>
 </head>
 <body class="am-canvas">
-  <section class="scene" id="A">
-    <span class="am-splash" id="a1" style="width:560px; left:-120px; top:-80px"></span>
-    <span class="am-splash am--secondary" id="a2" style="width:440px; right:-110px; bottom:40px"></span>
-    <span class="am-splash am--accent" id="a3" style="width:260px; left:120px; bottom:-40px"></span>
-    <h1><span id="a-l1">Your UI,</span><span id="a-l2"><em>but painted.</em></span></h1>
-    <span class="am-badge" id="a-badge">art-medium</span>
+  <section class="scene" id="R">
+    <div id="room">
+<svg viewBox="0 0 1080 1080" width="1080" height="1080" aria-hidden="true">
+        <defs>
+          <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f3e6d2"/><stop offset=".8" stop-color="#e7d4b8"/><stop offset="1" stop-color="#d9c3a3"/></linearGradient>
+          <linearGradient id="floorShade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a2410" stop-opacity=".28"/><stop offset=".25" stop-color="#3a2410" stop-opacity="0"/><stop offset="1" stop-color="#2a1808" stop-opacity=".3"/></linearGradient>
+          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8fc3ea"/><stop offset=".7" stop-color="#d3e9f7"/><stop offset="1" stop-color="#eef6fb"/></linearGradient>
+          <radialGradient id="light" cx=".16" cy=".42" r=".55"><stop offset="0" stop-color="#fff6df" stop-opacity=".85"/><stop offset="1" stop-color="#fff6df" stop-opacity="0"/></radialGradient>
+          <radialGradient id="vignette" cx=".45" cy=".5" r=".75"><stop offset=".6" stop-color="#2b1a0c" stop-opacity="0"/><stop offset="1" stop-color="#2b1a0c" stop-opacity=".38"/></radialGradient>
+          <linearGradient id="beam" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff3d6" stop-opacity=".55"/><stop offset="1" stop-color="#fff3d6" stop-opacity="0"/></linearGradient>
+          <linearGradient id="wood" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#a87346"/><stop offset=".45" stop-color="#8d5d34"/><stop offset="1" stop-color="#5f3b1e"/></linearGradient>
+          <linearGradient id="skin" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#f1c6a2"/><stop offset="1" stop-color="#d39570"/></linearGradient>
+          <linearGradient id="shirt" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#4aa0ac"/><stop offset=".55" stop-color="#2f7a86"/><stop offset="1" stop-color="#1f5560"/></linearGradient>
+          <linearGradient id="jeans" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#43557a"/><stop offset="1" stop-color="#232d45"/></linearGradient>
+          <linearGradient id="apron" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#faf6ee"/><stop offset="1" stop-color="#d8cfbe"/></linearGradient>
+          <linearGradient id="hair" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5a3f2c"/><stop offset="1" stop-color="#22160f"/></linearGradient>
+          <radialGradient id="beret" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#ee6a5a"/><stop offset="1" stop-color="#a3261d"/></radialGradient>
+          <linearGradient id="can" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#e6e9ee"/><stop offset=".4" stop-color="#c3c8d0"/><stop offset="1" stop-color="#8d939c"/></linearGradient>
+          <linearGradient id="cloth" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f1ebdf"/><stop offset="1" stop-color="#d9d0bf"/></linearGradient>
+          <filter id="soft" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="9"/></filter>
+          <filter id="softer" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="4"/></filter>
+          <filter id="plaster" x="0" y="0" width="1" height="1"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="3"/><feColorMatrix values="0 0 0 0 .35  0 0 0 0 .24  0 0 0 0 .12  0 0 0 .16 0"/></filter>
+          <filter id="grain" x="0" y="0" width="1" height="1"><feTurbulence type="fractalNoise" baseFrequency=".006 .2" numOctaves="2" seed="8"/><feColorMatrix values="0 0 0 0 .25  0 0 0 0 .14  0 0 0 0 .05  0 0 0 .55 -.1"/></filter>
+        </defs>
+
+        <!-- wall: warm plaster, lit from the window -->
+        <rect width="1080" height="800" fill="url(#wall)"/>
+        <rect width="1080" height="800" filter="url(#plaster)"/>
+        <rect width="1080" height="800" fill="url(#light)"/>
+
+        <!-- window, with depth: frame, reveal, mullions, sill -->
+        <g transform="translate(40 290)">
+          <rect x="-16" y="-16" width="242" height="262" rx="4" fill="#fbf4e8"/>
+          <rect x="-16" y="-16" width="242" height="262" rx="4" fill="none" stroke="#c9b08c" stroke-width="2"/>
+          <rect width="210" height="230" fill="url(#sky)"/>
+          <circle cx="160" cy="56" r="30" fill="#fff7d6" opacity=".9"/>
+          <path d="M0 168c22-24 48-26 66-10 16-18 44-20 62 0 18-12 46-8 82 12v60H0z" fill="#b9d9ad"/>
+          <path d="M0 196c30-14 70-14 104-2 34-12 74-10 106 4v32H0z" fill="#9cc58f"/>
+          <rect width="210" height="10" fill="#000" opacity=".08"/>
+          <rect width="8" height="230" fill="#000" opacity=".06"/>
+          <path d="M105 0v230M0 115h210" stroke="#fbf4e8" stroke-width="10"/>
+          <path d="M110 0v230M0 120h210" stroke="#000" stroke-width="2" opacity=".07"/>
+          <rect x="-28" y="238" width="266" height="18" rx="3" fill="#f2e7d5"/>
+          <rect x="-28" y="254" width="266" height="10" fill="#000" opacity=".1" filter="url(#softer)"/>
+        </g>
+
+        <!-- floor: planks with grain, darker toward the wall and the viewer -->
+        <g><rect x='-47' y='800' width='277' height='50' fill='rgb(189 137 83)'/><path d='M-47 800v50' stroke='#7a512c' stroke-width='3' opacity='.55'/><rect x='229' y='800' width='285' height='50' fill='rgb(179 127 73)'/><path d='M229 800v50' stroke='#7a512c' stroke-width='3' opacity='.55'/><rect x='514' y='800' width='324' height='50' fill='rgb(203 151 97)'/><path d='M514 800v50' stroke='#7a512c' stroke-width='3' opacity='.55'/><rect x='838' y='800' width='388' height='50' fill='rgb(199 147 93)'/><path d='M838 800v50' stroke='#7a512c' stroke-width='3' opacity='.55'/><path d='M0 800h1080' stroke='#7a512c' stroke-width='3' opacity='.6'/><path d='M0 802h1080' stroke='#e9c393' stroke-width='1.5' opacity='.35'/><rect x='-44' y='850' width='346' height='64' fill='rgb(185 133 79)'/><path d='M-44 850v64' stroke='#7a512c' stroke-width='3' opacity='.55'/><rect x='301' y='850' width='288' height='64' fill='rgb(180 128 74)'/><path d='M301 850v64' stroke='#7a512c' stroke-width='3' opacity='.55'/><rect x='589' y='850' width='294' height='64' fill='rgb(203 151 97)'/><path d='M589 850v64' stroke='#7a512c' stroke-width='3' opacity='.55'/><rect x='883' y='850' width='393' height='64' fill='rgb(200 148 94)'/><path d='M883 850v64' stroke='#7a512c' stroke-width='3' opacity='.55'/><path d='M0 850h1080' stroke='#7a512c' stroke-width='3' opacity='.6'/><path d='M0 852h1080' stroke='#e9c393' stroke-width='1.5' opacity='.35'/><rect x='-160' y='914' width='291' height='78' fill='rgb(186 134 80)'/><path d='M-160 914v78' stroke='#7a512c' stroke-width='3' opacity='.55'/><rect x='131' y='914' width='360' height='78' fill='rgb(198 146 92)'/><path d='M131 914v78' stroke='#7a512c' stroke-width='3' opacity='.55'/><rect x='491' y='914' width='397' height='78' fill='rgb(202 150 96)'/><path d='M491 914v78' stroke='#7a512c' stroke-width='3' opacity='.55'/><rect x='888' y='914' width='274' height='78' fill='rgb(194 142 88)'/><path d='M888 914v78' stroke='#7a512c' stroke-width='3' opacity='.55'/><path d='M0 914h1080' stroke='#7a512c' stroke-width='3' opacity='.6'/><path d='M0 916h1080' stroke='#e9c393' stroke-width='1.5' opacity='.35'/><rect x='-134' y='992' width='341' height='88' fill='rgb(182 130 76)'/><path d='M-134 992v88' stroke='#7a512c' stroke-width='3' opacity='.55'/><rect x='207' y='992' width='336' height='88' fill='rgb(180 128 74)'/><path d='M207 992v88' stroke='#7a512c' stroke-width='3' opacity='.55'/><rect x='542' y='992' width='410' height='88' fill='rgb(202 150 96)'/><path d='M542 992v88' stroke='#7a512c' stroke-width='3' opacity='.55'/><rect x='952' y='992' width='348' height='88' fill='rgb(186 134 80)'/><path d='M952 992v88' stroke='#7a512c' stroke-width='3' opacity='.55'/><path d='M0 992h1080' stroke='#7a512c' stroke-width='3' opacity='.6'/><path d='M0 994h1080' stroke='#e9c393' stroke-width='1.5' opacity='.35'/></g>
+        <rect y="800" width="1080" height="280" filter="url(#grain)"/>
+        <rect y="800" width="1080" height="280" fill="url(#floorShade)"/>
+        <!-- window light on the floor -->
+        <path d="M60 800H262L620 1080H250z" fill="url(#beam)" filter="url(#softer)"/>
+
+        <!-- baseboard: highlight on top, shadow under -->
+        <rect y="784" width="1080" height="26" fill="#efe4d1"/>
+        <rect y="784" width="1080" height="3" fill="#fffaf0"/>
+        <rect y="808" width="1080" height="8" fill="#000" opacity=".18" filter="url(#softer)"/>
+
+        <!-- drop cloth, with folds -->
+        <ellipse cx="650" cy="944" rx="470" ry="84" fill="#000" opacity=".14" filter="url(#soft)"/>
+        <path d="M196 930c40-58 220-90 460-92 250-2 412 30 448 78 18 26-36 64-160 84-150 24-420 24-590 4-120-14-180-42-158-74z" fill="url(#cloth)"/>
+        <path d="M330 900c60 20 120 60 150 110M700 856c-20 40-10 100 30 150M930 880c-30 30-40 70-20 110" stroke="#b9ae99" stroke-width="10" fill="none" opacity=".35" filter="url(#softer)"/>
+        <g opacity=".9">
+          <ellipse cx="520" cy="922" rx="13" ry="6" fill="#2f5fd0"/><ellipse cx="560" cy="958" rx="7" ry="3.5" fill="#e2483d"/>
+          <ellipse cx="760" cy="905" rx="10" ry="5" fill="#f2b705"/><ellipse cx="850" cy="952" rx="15" ry="7" fill="#2f5fd0"/>
+          <ellipse cx="690" cy="978" rx="8" ry="4" fill="#e2483d"/><ellipse cx="430" cy="962" rx="9" ry="4.5" fill="#f2b705"/>
+          <ellipse cx="980" cy="930" rx="6" ry="3" fill="#e2483d"/><ellipse cx="610" cy="900" rx="5" ry="2.5" fill="#2f5fd0"/>
+        </g>
+
+        <!-- paint cans: cylinders with rims and drips -->
+        <g transform="translate(470 856)">
+          <ellipse cx="38" cy="86" rx="46" ry="10" fill="#000" opacity=".25" filter="url(#softer)"/>
+          <path d="M0 10V78a35 9 0 0 0 70 0V10z" fill="url(#can)"/>
+          <ellipse cx="35" cy="10" rx="35" ry="9" fill="#2f5fd0"/>
+          <ellipse cx="35" cy="10" rx="35" ry="9" fill="none" stroke="#9aa1aa" stroke-width="3"/>
+          <path d="M12 14v24a5 5 0 0 0 10 0V16M44 17v12a4 4 0 0 0 8 0V16" fill="#2f5fd0"/>
+          <rect x="6" y="40" width="58" height="22" fill="#fff" opacity=".55"/>
+        </g>
+        <g transform="translate(990 876)">
+          <ellipse cx="34" cy="78" rx="42" ry="9" fill="#000" opacity=".25" filter="url(#softer)"/>
+          <path d="M0 9V70a31 8 0 0 0 62 0V9z" fill="url(#can)"/>
+          <ellipse cx="31" cy="9" rx="31" ry="8" fill="#e2483d"/>
+          <ellipse cx="31" cy="9" rx="31" ry="8" fill="none" stroke="#9aa1aa" stroke-width="3"/>
+          <path d="M10 12v20a5 5 0 0 0 10 0V13" fill="#e2483d"/>
+        </g>
+
+        <!-- easel and its shadow (light from the left: shadows fall right) -->
+        <path d="M606 900L760 200L940 900" stroke="#000" stroke-width="22" fill="none" opacity=".12" filter="url(#soft)" transform="translate(70 0) skewX(-12)"/>
+        <path d="M752 196h16L772 872h-24z" fill="#5a381c"/>
+        <path d="M752 192L590 902l20 4L770 200z" fill="url(#wood)"/>
+        <path d="M768 192L930 902l-20 4L752 200z" fill="url(#wood)"/>
+        <path d="M630 722H890v14H626z" fill="url(#wood)"/>
+        <rect x="726" y="224" width="68" height="30" rx="5" fill="url(#wood)"/>
+        <rect x="726" y="224" width="68" height="4" rx="2" fill="#c08a5a"/>
+        <!-- canvas depth: shadow on the wall and the canvas's own edge -->
+        <rect x="578" y="270" width="400" height="400" fill="#2b1a0c" opacity=".3" filter="url(#soft)"/>
+        <rect x="960" y="254" width="12" height="400" fill="#cfc9bd"/>
+        <rect x="960" y="254" width="12" height="400" fill="#000" opacity=".12"/>
+        <rect x="536" y="648" width="448" height="26" rx="4" fill="url(#wood)"/>
+        <rect x="536" y="648" width="448" height="4" rx="2" fill="#c08a5a"/>
+
+        <!-- the painter, lit from the window on the left -->
+        <g id="painter">
+          <ellipse cx="300" cy="890" rx="120" ry="16" fill="#000" opacity=".3" filter="url(#soft)"/>
+          <path d="M240 886C320 880 470 884 560 900 500 912 330 912 240 900z" fill="#000" opacity=".12" filter="url(#soft)"/>
+          <!-- legs, with a knee crease, and shoes with a highlight -->
+          <path d="M234 628h48l-4 248h-38z" fill="url(#jeans)"/>
+          <path d="M288 628h50l-6 248h-40z" fill="url(#jeans)"/>
+          <path d="M242 760q18 6 34 0M296 764q18 6 34 0" stroke="#1b2336" stroke-width="3" fill="none" opacity=".6"/>
+          <path d="M284 640v230" stroke="#1b2336" stroke-width="4" opacity=".5"/>
+          <path d="M226 872c4-10 52-12 56 0 6 18-4 22-30 22h-30c-8 0-6-14 4-22z" fill="#2a2420"/>
+          <path d="M286 872c4-10 52-12 58 0 10 18 0 22-28 22h-34c-8 0-6-14 4-22z" fill="#2a2420"/>
+          <path d="M236 874q20-4 38 0M296 874q20-4 40 0" stroke="#5b524b" stroke-width="3" fill="none"/>
+
+          <!-- back arm holding the palette -->
+          <path d="M236 470c-18 26-30 54-38 86" stroke="url(#shirt)" stroke-width="38" stroke-linecap="round" fill="none"/>
+          <path d="M198 556c-6 20-12 38-18 58" stroke="url(#skin)" stroke-width="24" stroke-linecap="round" fill="none"/>
+          <g transform="translate(150 630) rotate(-14)">
+            <path d="M-78 6c0-34 40-52 84-48 46 4 76 30 70 58-6 26-44 36-70 24-12-6-14 8-30 12-28 6-54-16-54-46z" fill="#000" opacity=".25" transform="translate(4 6)" filter="url(#softer)"/>
+            <path d="M-78 2c0-34 40-52 84-48 46 4 76 30 70 58-6 26-44 36-70 24-12-6-14 8-30 12-28 6-54-16-54-46z" fill="#d6ab72"/>
+            <path d="M-70 0c4-28 40-44 78-40" stroke="#ecc995" stroke-width="5" fill="none" stroke-linecap="round"/>
+            <ellipse cx="-28" cy="10" rx="13" ry="10" fill="#b48852"/>
+            <path d="M0-30c8-6 22-4 22 6 0 10-16 12-22 4z" fill="#2f5fd0"/><path d="M34-20c10-4 22 2 20 10-2 10-18 10-22 2z" fill="#e2483d"/>
+            <path d="M52 8c10-2 18 6 14 14-4 8-18 6-18-2z" fill="#f2b705"/><path d="M16 26c8-4 18 0 16 8-2 6-16 6-18 0z" fill="#fbfaf6"/>
+            <circle cx="4" cy="-28" r="3" fill="#fff" opacity=".6"/><circle cx="38" cy="-17" r="3" fill="#fff" opacity=".6"/>
+            <path d="M-48 18c-14 6-14 18-2 20" stroke="url(#skin)" stroke-width="14" stroke-linecap="round" fill="none"/>
+          </g>
+
+          <!-- torso: shirt, then the apron over it -->
+          <path d="M226 452c30-14 92-14 122 0 12 30 6 120-2 178H222c-8-58-12-148 4-178z" fill="url(#shirt)"/>
+          <path d="M240 480c-6 40-6 100 0 140M330 486c6 40 4 92-2 130" stroke="#164650" stroke-width="5" fill="none" opacity=".4"/>
+          <path d="M244 506h88c6 40 6 118-2 188H246c-8-70-8-148-2-188z" fill="url(#apron)"/>
+          <path d="M244 506c-6-18-10-36-14-52M332 506c4-18 8-36 12-52" stroke="#e8dfce" stroke-width="7" stroke-linecap="round" fill="none"/>
+          <path d="M262 590h52v34h-52z" fill="none" stroke="#c4b9a4" stroke-width="3"/>
+          <path d="M256 556c6-6 16-4 16 4s-12 10-16 4z" fill="#2f5fd0"/><path d="M300 600c10-6 20 0 18 8-2 10-20 10-20 0z" fill="#e2483d"/>
+          <path d="M270 650c4-4 12-2 10 4-2 4-10 4-10-4z" fill="#f2b705"/><path d="M306 538c4-2 8 0 7 4-1 3-7 3-7-4z" fill="#f2b705"/>
+          <path d="M318 520c2 14-2 30 0 44" stroke="#2f5fd0" stroke-width="3" opacity=".7" fill="none"/>
+          <path d="M246 506h86" stroke="#000" stroke-width="4" opacity=".08"/>
+
+          <!-- neck, head in three-quarter view -->
+          <path d="M266 398h34v52c-10 8-24 8-34 0z" fill="#cf916b"/>
+          <path d="M266 420c12 8 24 8 34 0v-8c-10 6-24 6-34 0z" fill="#000" opacity=".15"/>
+          <path d="M246 352c0-34 18-54 42-54s42 22 40 56c0 14-4 22-2 30 2 6 8 10 6 14-2 6-10 4-10 10 0 10-6 22-20 24-26 4-56-14-56-80z" fill="url(#skin)"/>
+          <path d="M318 336c4-4 14-4 18 0" stroke="#3a281d" stroke-width="4" stroke-linecap="round" fill="none"/>
+          <ellipse cx="324" cy="350" rx="6" ry="5" fill="#fff"/>
+          <circle cx="326" cy="350" r="3.6" fill="#3b2a20"/>
+          <circle cx="327" cy="349" r="1.2" fill="#fff"/>
+          <path d="M318 344q8-4 14 0" stroke="#3a281d" stroke-width="1.5" fill="none" opacity=".6"/>
+          <path d="M326 388q-8 4-16 1" stroke="#9c5a48" stroke-width="3" stroke-linecap="round" fill="none"/>
+          <circle cx="310" cy="372" r="9" fill="#f08c7a" opacity=".3"/>
+          <path d="M256 360c-10-2-14 8-10 18 4 8 12 8 14 2" fill="#d99a74"/>
+          <path d="M254 366c-4 2-4 8 0 10" stroke="#a96b4c" stroke-width="2" fill="none"/>
+          <path d="M244 360c-10-40 10-70 48-70 24 0 40 12 44 30-10-8-28-10-40-6-8 14-14 26-26 34-6 4-6 12-8 18z" fill="url(#hair)"/>
+          <path d="M262 318c10-10 26-14 40-12M254 334c6-12 16-20 28-24" stroke="#7a5a42" stroke-width="2.5" fill="none" opacity=".7" stroke-linecap="round"/>
+          <path d="M246 362c-4 16-2 34 6 44" stroke="url(#hair)" stroke-width="8" stroke-linecap="round" fill="none"/>
+          <!-- beret -->
+          <g transform="rotate(-12 282 306)">
+            <ellipse cx="284" cy="312" rx="60" ry="14" fill="#000" opacity=".2" filter="url(#softer)"/>
+            <ellipse cx="282" cy="304" rx="62" ry="22" fill="url(#beret)"/>
+            <path d="M226 308c20 8 92 8 114 0" stroke="#8a1f17" stroke-width="3" fill="none" opacity=".6"/>
+            <path d="M282 284v-11" stroke="#a3261d" stroke-width="6" stroke-linecap="round"/>
+          </g>
+
+          <!-- brush arm: upper arm turns at the shoulder, the forearm bends at the elbow -->
+          <g id="arm" transform="translate(330 470)">
+            <path d="M0 0H92" stroke="#2f7a86" stroke-width="34" stroke-linecap="round"/>
+            <path d="M4 -10H88" stroke="#4aa0ac" stroke-width="7" stroke-linecap="round" opacity=".7"/>
+            <path d="M58 -15v30" stroke="#1f5560" stroke-width="5" opacity=".6"/>
+            <g id="forearm" transform="translate(92 0)">
+              <path d="M0 0H84" stroke="#e2a988" stroke-width="24" stroke-linecap="round"/>
+              <path d="M4 -6H80" stroke="#f1c6a2" stroke-width="6" stroke-linecap="round" opacity=".8"/>
+              <path d="M6 9H78" stroke="#b9805e" stroke-width="5" stroke-linecap="round" opacity=".45"/>
+              <path d="M80 0H200" stroke="#b07440" stroke-width="10" stroke-linecap="round"/>
+              <path d="M84 -3H198" stroke="#d29a62" stroke-width="3" stroke-linecap="round"/>
+              <path d="M76-14c12-4 24 0 26 12 2 12-6 18-18 18-10 0-16-8-14-18z" fill="#e2a988"/>
+              <path d="M84-12c8 0 14 4 14 10" stroke="#c4876a" stroke-width="3" fill="none"/>
+              <rect x="198" y="-7" width="18" height="14" rx="2" fill="#c3c7cd"/>
+              <rect x="198" y="-7" width="18" height="4" rx="2" fill="#eef0f3"/>
+              <path id="bristles" d="M214-9Q236-8 248 0Q236 8 214 9z" fill="#2f5fd0"/>
+            </g>
+          </g>
+        </g>
+
+        <!-- a soft vignette, like a real camera -->
+        <rect width="1080" height="1080" fill="url(#vignette)"/>
+        <!-- paint in flight -->
+        <g id="drops"></g>
+      </svg>
+      <div id="site" data-medium="acrylic" data-style="impasto" data-theme="light">
+        <div id="boring">
+          <div class="bar"><i></i>Dashboard<b></b><u></u></div>
+          <h2>Welcome back</h2>
+          <p>Here's what's happening with your projects today.</p>
+          <div class="cards">
+            <div><s></s><s></s><s></s><s style="width:70%"></s></div>
+            <div><s></s><s></s><s></s><s style="width:60%"></s></div>
+            <div><s></s><s></s><s></s><s style="width:80%"></s></div>
+          </div>
+          <span class="cta">Get started</span>
+        </div>
+        <div id="paper" class="am-canvas"></div>
+        <div id="splats"></div>
+        <div id="content">
+          <nav class="am-nav">
+            <a class="am-nav__brand"><span class="am-splash am--secondary"></span>Splatform</a>
+            <ul class="am-nav__links">
+              <li><a class="am-nav__link" aria-current="page">Mediums</a></li>
+              <li><a class="am-nav__link">Components</a></li>
+              <li><a class="am-nav__link">Docs</a></li>
+            </ul>
+          </nav>
+          <h1 id="s-h1"><span>Splat</span><span>your site.</span></h1>
+          <p class="lede" id="s-lede">Every button, card and input, painted in a real art medium.</p>
+          <div class="row">
+            <span class="am-button" id="s-b1">Get started</span>
+            <span class="am-button am--secondary" id="s-b2">See it live</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="caption">
+      <div id="cap1">Every vibe-coded app</div>
+      <div id="cap2">looks the same.</div>
+      <p id="cap3">Gray cards. Purple button. Zero soul.</p>
+    </div>
+    <span class="am-badge am--accent series" id="r-series" data-medium="marker" data-style="plain">7 Days of Vibes · Part 1</span>
   </section>
 
   <section class="scene" id="B">
@@ -106,29 +352,23 @@
     <div class="am-card code" id="c-code"></div>
     <div class="chips">
       <span class="am-badge" id="c1">5 mediums</span>
-      <span class="am-badge am--secondary" id="c2">Light + dark</span>
-      <span class="am-badge am--accent" id="c3">No build step</span>
-      <span class="am-badge" id="c4">React ready</span>
-      <span class="am-badge am--secondary" id="c5">Open source</span>
+      <span class="am-badge am--secondary" id="c2">9 styles</span>
+      <span class="am-badge am--accent" id="c3">Light + dark</span>
+      <span class="am-badge" id="c4">No build step</span>
+      <span class="am-badge am--secondary" id="c5">React ready</span>
     </div>
   </section>
 
   <section class="scene" id="D">
-    <span class="am-splash" id="d1" style="width:380px; left:-110px; top:-90px"></span>
-    <span class="am-splash am--secondary" id="d2" style="width:300px; right:-110px; top:-70px"></span>
-    <span class="am-splash am--accent" id="d3" style="width:340px; left:60px; bottom:-120px"></span>
-    <span class="am-splash" id="d4" style="width:160px; right:150px; bottom:90px"></span>
-    <div class="logo" id="d-logo"><span class="am-splash am--secondary"></span>art-medium</div>
-    <div class="tag" id="d-tag">Components, painted.</div>
+    <span class="am-badge am--accent series" id="d-series">7 Days of Vibes · Part 1</span>
+    <span class="am-splash" id="d1" style="width:380px; left:-110px; top:-60px"></span>
+    <span class="am-splash am--secondary" id="d2" style="width:300px; right:-90px; top:-40px"></span>
+    <span class="am-splash am--accent" id="d3" style="width:340px; left:40px; bottom:-130px"></span>
+    <span class="am-splash" id="d4" style="width:180px; right:130px; bottom:70px"></span>
+    <div class="logo" id="d-logo"><span class="am-splash am--secondary"></span>Splatform</div>
+    <div class="tag" id="d-tag">Splat your site.</div>
     <span class="am-button" id="d-url">ghanemja.github.io/art-asset</span>
-    <div class="small" id="d-small">Free &amp; open source · MIT</div>
-  </section>
-
-  <section class="scene" id="E">
-    <div class="kicker" id="e-kicker">The soundtrack you're hearing</div>
-    <h2 id="e-title">is 100% math.</h2>
-    <div class="am-card board" id="e-board"></div>
-    <div class="made" id="e-made">Made with <span class="am-button am--accent">ghanemja.github.io/equalizer</span></div>
+    <div class="small" id="d-small">Free &amp; open source · MIT · v0.2</div>
   </section>
 
   <span class="am-splash" id="wipe" data-medium="acrylic" data-theme="light"></span>
@@ -144,6 +384,7 @@
     const back = (x) => (x <= 0 ? 0 : 1 + 2.70158 * (x - 1) ** 3 + 1.70158 * (x - 1) ** 2);
     const outCubic = (x) => 1 - (1 - x) ** 3;
     const inOut = (x) => (x < .5 ? 4 * x ** 3 : 1 - (-2 * x + 2) ** 3 / 2);
+    const lerp = (a, b, k) => a + (b - a) * k;
 
     // Pop: scale up from nothing with overshoot, slight rotation settle.
     function pop(el, t, start, dur = .5, rot = -8) {
@@ -157,98 +398,210 @@
       el.style.opacity = k;
       el.style.transform = `translateY(${(1 - k) * dist}px)`;
     }
-
-    // Paint-splat wipes: grow to cover the frame, repaint at the peak, then fly off.
-    const GROW = .38, OUT = .42;
-    const wipes = [
-      { t: 7.4,  medium: 'acrylic',  theme: 'light', variant: 'am--secondary' },
-      { t: 8.6,  medium: 'paper',    theme: 'light', variant: 'am--accent' },
-      { t: 9.8,  medium: 'marker',   theme: 'light', variant: '' },
-      { t: 11.0, medium: 'charcoal', theme: 'light', variant: 'am--secondary' },
-      { t: 12.3, medium: 'charcoal', theme: 'dark',  pigment: '#23282b' },
-      { t: 16.2, medium: 'acrylic',  theme: 'light', variant: '' },
-      { t: 18.2, medium: 'acrylic',  theme: 'light', variant: 'am--secondary' },
-      { t: 22.1, medium: 'charcoal', theme: 'dark',  pigment: '#23282b' },
-    ];
-    const labels = { watercolor: 'Watercolor', acrylic: 'Acrylic', charcoal: 'Charcoal', paper: 'Paper', marker: 'Marker' };
-
-    function stateAt(t) {
-      let medium = 'watercolor', theme = 'light', lastPeak = -1;
-      // Hook: the frame flickers through mediums.
-      if (t >= 4.3 && t < 5.9) medium = ['acrylic', 'paper', 'marker', 'charcoal'][Math.floor((t - 4.3) / .4)] ?? 'watercolor';
-      for (const w of wipes) if (t >= w.t + GROW) { medium = w.medium; theme = w.theme; lastPeak = w.t + GROW; }
-      return { medium, theme, lastPeak };
-    }
-
     function show(id, on) { $(id).style.visibility = on ? 'visible' : 'hidden'; }
 
+    // --- R: the painter ------------------------------------------------------
+    // The beat is 120 bpm, so a beat is 0.5s. Five flicks on the beat, each
+    // throwing paint that lands on the canvas LAND seconds later.
+    const FLICKS = [2.0, 2.5, 3.0, 3.5, 4.0];
+    const LAND = .6;
+    const ZOOM = [4.5, 6.0];            // camera pushes into the canvas
+    const COLORS = ['#2f5fd0', '#e2483d', '#f2b705', '#2f5fd0', '#e2483d'];
+    const VARIANT = { '#2f5fd0': '', '#e2483d': 'am--secondary', '#f2b705': 'am--accent' };
+    const SHOULDER = [330, 470], UPPER = 92, BRUSH = 248;   // shoulder, upper arm, elbow to brush tip
+    const CANVAS = { x: 560, y: 250, k: 400 / 1080 };   // where #site sits in the room
+    let seed = 7;
+    const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+
+    // Where each flick's big splats land (page coordinates, 0-1080) and how big.
+    const BIG = [
+      [[180, 250, 430], [900, 830, 320]],
+      [[920, 240, 380], [150, 870, 280]],
+      [[560, 990, 320], [1000, 560, 220]],
+      [[70, 570, 250], [690, 110, 210]],
+      [[400, 120, 230], [870, 990, 260]],
+    ];
+    const drops = [];
+    FLICKS.forEach((ft, i) => {
+      const color = COLORS[i];
+      for (const [x, y, size] of BIG[i]) drops.push({ ft, color, x, y, size, big: true, dur: LAND + rnd() * .08, r: 13 + rnd() * 4 });
+      // specks fly wide ("everywhere") and still curve back onto the canvas
+      for (let s = 0; s < 4; s++) drops.push({ ft, color, x: 60 + rnd() * 960, y: 60 + rnd() * 960, size: 10 + rnd() * 22, big: false, dur: LAND - .1 + rnd() * .25, r: 5 + rnd() * 3, wide: true });
+    });
+    drops.forEach((d) => { d.bend = [(rnd() - .5) * (d.wide ? 900 : 420), -120 - rnd() * (d.wide ? 420 : 220)]; d.rot = (rnd() - .5) * 80; });
+
+    // Build the splats on the canvas page, hidden until their drop lands.
+    const splats = $('splats');
+    for (const d of drops) {
+      const el = document.createElement(d.big ? 'span' : 'i');
+      if (d.big) { el.className = `am-splash ${VARIANT[d.color]}`; el.style.width = `${d.size}px`; }
+      else { el.style.width = el.style.height = `${d.size}px`; el.style.background = d.color; }
+      el.style.left = `${d.x - d.size / 2}px`;
+      el.style.top = `${d.y - d.size / 2}px`;
+      splats.append(el);
+      d.el = el;
+      const dot = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
+      dot.setAttribute('fill', d.color);
+      $('drops').append(dot);
+      d.dot = dot;
+    }
+
+    // [upper arm angle, elbow bend] in degrees. Each flick whips the arm
+    // down and the wrist snaps a beat behind it, like a real flick.
+    const flickShape = (p) => (p < 0 ? 0 : p < .16 ? outCubic(p / .16) : 1 - inOut(Math.min(1, (p - .16) / .84)));
+    function armPose(t) {
+      if (t < 1.5) return [-22 + 5 * Math.sin(t * 2.2), -38 + 4 * Math.sin(t * 1.7)];
+      if (t < FLICKS[0]) {
+        const k = inOut(prog(t, 1.5, .5));
+        return [lerp(-22 + 5 * Math.sin(3.3), -68, k), lerp(-38 + 4 * Math.sin(2.55), -55, k)];
+      }
+      if (t < 4.5) {
+        const p = ((t - FLICKS[0]) % .5) / .5;
+        return [-68 + 78 * flickShape(p), -55 + 80 * flickShape(p - .05)];
+      }
+      const k = outCubic(prog(t, 4.5, .5));
+      return [lerp(-68, -30, k), lerp(-55, -20, k)];
+    }
+    function painterBob(t) { return t < 2 ? Math.sin(t * 2.4) * 3 : -Math.abs(Math.sin((t - 2) * Math.PI * 2)) * 10; }
+    function tipAt(t) {
+      const [up, bend] = armPose(t), b = painterBob(t);
+      const a1 = up * Math.PI / 180, a2 = (up + bend) * Math.PI / 180;
+      return [SHOULDER[0] + Math.cos(a1) * UPPER + Math.cos(a2) * BRUSH, SHOULDER[1] + b + Math.sin(a1) * UPPER + Math.sin(a2) * BRUSH];
+    }
+
+    function painterScene(t) {
+      const b = painterBob(t);
+      $('painter').setAttribute('transform', `translate(0 ${b})`);
+      const [up, bend] = armPose(t);
+      $('arm').setAttribute('transform', `translate(${SHOULDER[0]} ${SHOULDER[1]}) rotate(${up})`);
+      $('forearm').setAttribute('transform', `translate(${UPPER} 0) rotate(${bend})`);
+      const loaded = FLICKS.findIndex((ft) => t < ft + .08);
+      $('bristles').setAttribute('fill', COLORS[loaded < 0 ? 4 : loaded]);
+
+      for (const d of drops) {
+        const launch = d.ft + .08;
+        const k = (t - launch) / d.dur;
+        // in flight: a quadratic arc from the brush tip to the landing spot
+        if (k > 0 && k < 1) {
+          const [sx, sy] = tipAt(launch);
+          const ex = CANVAS.x + d.x * CANVAS.k, ey = CANVAS.y + d.y * CANVAS.k;
+          const cx = (sx + ex) / 2 + d.bend[0], cy = Math.min(sy, ey) + d.bend[1];
+          const u = inOut(k) * .4 + k * .6;
+          const x = (1 - u) ** 2 * sx + 2 * (1 - u) * u * cx + u * u * ex;
+          const y = (1 - u) ** 2 * sy + 2 * (1 - u) * u * cy + u * u * ey;
+          const dx = 2 * (1 - u) * (cx - sx) + 2 * u * (ex - cx), dy = 2 * (1 - u) * (cy - sy) + 2 * u * (ey - cy);
+          d.dot.setAttribute('cx', x); d.dot.setAttribute('cy', y);
+          d.dot.setAttribute('rx', d.r * 1.9); d.dot.setAttribute('ry', d.r * .8);
+          d.dot.setAttribute('transform', `rotate(${Math.atan2(dy, dx) * 180 / Math.PI} ${x} ${y})`);
+          d.dot.style.display = '';
+        } else d.dot.style.display = 'none';
+        // landed: the splat bursts onto the canvas
+        const s = prog(t, launch + d.dur, d.big ? .28 : .12);
+        d.el.style.opacity = s > 0 ? 1 : 0;
+        d.el.style.transform = `scale(${d.big ? back(s) : outCubic(s)}) rotate(${d.rot}deg)`;
+      }
+
+      // Camera: push into the canvas until it fills the frame at 1:1.
+      const z = inOut(prog(t, ZOOM[0], ZOOM[1] - ZOOM[0]));
+      const S = (1 / CANVAS.k) ** z;
+      const fx = CANVAS.x * (1 - z), fy = CANVAS.y * (1 - z);
+      $('room').style.transform = `translate(${fx - CANVAS.x * S}px, ${fy - CANVAS.y * S}px) scale(${S})`;
+
+      // The paint spreads over the bland page and the painted site comes through.
+      $('site').style.setProperty('--reveal', `${outCubic(prog(t, 4.75, 1.05)) * 80}%`);
+      pop($('s-h1'), t, 6.0, .55, -5);
+      rise($('s-lede'), t, 6.35, .45, 40);
+      pop($('s-b1'), t, 6.6, .45, -6);
+      pop($('s-b2'), t, 6.75, .45, 6);
+
+      rise($('cap1'), t, .35, .45, 40);
+      rise($('cap2'), t, .85, .45, 40);
+      rise($('cap3'), t, 1.45, .45, 30);
+      const capOut = outCubic(prog(t, 4.2, .4));
+      $('caption').style.opacity = 1 - capOut;
+      $('caption').style.transform = `translateY(${-capOut * 60}px)`;
+      pop($('r-series'), t, .15, .45, -8);
+      $('r-series').style.opacity = t < 4.3 ? 1 : 1 - prog(t, 4.3, .3);
+    }
+
+    // --- Paint-splat wipes: grow to cover the frame, repaint at the peak ----
+    const GROW = .38, OUT = .42;
+    const wipes = [
+      { peak: 8,  medium: 'watercolor', theme: 'light', variant: '' },
+      { peak: 9.5, medium: 'acrylic',  style: 'impasto',       theme: 'light', variant: 'am--secondary' },
+      { peak: 11, medium: 'paper',    theme: 'light', variant: 'am--accent' },
+      { peak: 12.5, medium: 'marker', style: 'notebook',      theme: 'light', variant: '' },
+      { peak: 14, medium: 'charcoal', style: 'newsprint',     theme: 'light', variant: 'am--secondary' },
+      { peak: 15.5, medium: 'marker', style: 'parchment',     theme: 'light', variant: 'am--accent' },
+      { peak: 17, medium: 'acrylic',  style: 'impressionist', theme: 'light', variant: '' },
+      { peak: 18.5, medium: 'charcoal', theme: 'dark', pigment: '#23282b' },
+      { peak: 22, medium: 'acrylic',  style: 'impasto',       theme: 'light', variant: '' },
+      { peak: 24, medium: 'marker',   style: 'notebook',      theme: 'light', variant: 'am--secondary' },
+    ].map((w) => ({ ...w, t: w.peak - GROW }));
+    const labels = { watercolor: 'Watercolor', acrylic: 'Acrylic', charcoal: 'Charcoal', paper: 'Paper', marker: 'Marker' };
+    const styleNames = { notebook: 'notebook', parchment: 'parchment', impressionist: 'impressionist' };
+
+    function stateAt(t) {
+      let state = { medium: 'acrylic', style: 'impasto', theme: 'light', lastPeak: -1 };
+      for (const w of wipes) if (t >= w.peak) state = { medium: w.medium, style: w.style, theme: w.theme, lastPeak: w.peak };
+      return state;
+    }
+
     window.at = function (t) {
-      const { medium, theme, lastPeak } = stateAt(t);
+      const { medium, style, theme, lastPeak } = stateAt(t);
       root.dataset.medium = medium;
       root.dataset.theme = theme;
+      if (style) root.dataset.style = style; else delete root.dataset.style;
 
       // Wipe
       const wipe = $('wipe');
-      const w = wipes.find((w) => t >= w.t && t < w.t + GROW + OUT);
+      const w = wipes.find((w) => t >= w.t && t < w.peak + OUT);
       if (w) {
         wipe.style.visibility = 'visible';
         wipe.className = `am-splash ${w.variant ?? ''}`;
         wipe.dataset.theme = w.theme === 'dark' ? 'dark' : 'light';
-        wipe.style.setProperty('--am-pigment', w.pigment ?? '');
-        if (!w.pigment) wipe.style.removeProperty('--am-pigment');
-        if (t < w.t + GROW) {
+        if (w.pigment) wipe.style.setProperty('--am-pigment', w.pigment); else wipe.style.removeProperty('--am-pigment');
+        if (t < w.peak) {
           const k = inOut(prog(t, w.t, GROW));
           wipe.style.opacity = 1;
           wipe.style.transform = `scale(${k * 1.05}) rotate(${(1 - k) * 60}deg)`;
         } else {
-          const k = outCubic(prog(t, w.t + GROW, OUT));
+          const k = outCubic(prog(t, w.peak, OUT));
           wipe.style.opacity = 1 - k;
           wipe.style.transform = `scale(${1.05 + k * .5}) rotate(${-k * 12}deg)`;
         }
       } else wipe.style.visibility = 'hidden';
 
       // Scene windows
-      const peak = (i) => wipes[i].t + GROW;
-      show('A', t < 6.6);
-      show('B', t >= 6.4 && t < 14.1);
-      show('C', t >= 14.0 && t < peak(6));
-      show('D', t >= peak(6) && t < peak(7));
-      show('E', t >= peak(7));
+      show('R', t < 8);
+      // The room's SVG filters can keep painting while hidden, so take it out of rendering entirely.
+      $('R').style.display = t < 8 ? '' : 'none';
+      show('B', t >= 8 && t < 20.05);
+      show('C', t >= 19.95 && t < 24);
+      show('D', t >= 24);
 
-      // A: hook
-      const drift = (i) => `translate(${Math.sin(t * .9 + i) * 10}px, ${Math.cos(t * .7 + i) * 10}px)`;
-      ['a1', 'a2', 'a3'].forEach((id, i) => {
-        const k = prog(t, .15 + i * .3, .55);
-        $(id).style.transform = `${drift(i)} scale(${back(k)}) rotate(${t * 4 * (i % 2 ? -1 : 1)}deg)`;
-      });
-      pop($('a-l1'), t, 1.1, .5, -6);
-      pop($('a-l2'), t, 1.7, .55, 6);
-      pop($('a-badge'), t, 2.8, .45, -10);
-      const aOut = outCubic(prog(t, 6.05, .5));
-      $('A').style.opacity = 1 - aOut;
-      $('A').style.transform = `scale(${1 + aOut * .15})`;
+      if (t < 8) painterScene(t);
 
       // B: the swap
-      const bIn = outCubic(prog(t, 6.4, .6));
-      const bOut = outCubic(prog(t, 13.6, .45));
-      $('B').style.opacity = bIn * (1 - bOut);
-      $('B').style.transform = `translateY(${(1 - bIn) * 80}px) scale(${1 - bOut * .08})`;
-      $('b-label').textContent = labels[medium] + (theme === 'dark' ? ', dark' : '');
+      const bOut = outCubic(prog(t, 19.6, .45));
+      $('B').style.opacity = 1 - bOut;
+      $('B').style.transform = `scale(${1 - bOut * .08})`;
+      $('b-label').textContent = labels[medium] + (styleNames[style] ? ` · ${styleNames[style]}` : '') + (theme === 'dark' ? ', dark' : '');
       // After each repaint: the label pops, the rule paints in, the app settles.
-      const since = lastPeak > 6 ? t - lastPeak : t - 6.4;
+      const since = t - lastPeak;
       const s = clamp(since / .45);
       $('b-label').style.transform = `scale(${.85 + .15 * back(s)})`;
       $('b-rule').style.transform = `scaleX(${outCubic(clamp((since - .1) / .5))})`;
       $('b-app').style.transform = `scale(${.96 + .04 * back(s)}) rotate(${(1 - outCubic(s)) * -1.2}deg)`;
 
-      // C: one attribute
-      const cIn = outCubic(prog(t, 14.0, .5));
+      // C: one attribute, typed out, then the page repaints to match on the drop
+      const cIn = outCubic(prog(t, 19.95, .45));
       $('C').style.opacity = cIn;
-      pop($('c-title'), t, 14.05, .5, -6);
-      rise($('c-code'), t, 14.5, .45);
+      pop($('c-title'), t, 20.0, .5, -6);
+      rise($('c-code'), t, 20.45, .45);
       const pre = '<html data-medium=', val = '"acrylic"', post = '>';
       const full = pre + val + post;
-      const n = Math.round(clamp((t - 14.9) / 1.0) * full.length);
+      const n = Math.round(clamp((t - 20.9) / 1.0) * full.length);
       const typed = full.slice(0, n);
       const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
       const html = esc(typed.slice(0, pre.length)) +
@@ -256,55 +609,22 @@
         esc(typed.slice(pre.length + val.length));
       const caretOn = n < full.length || Math.floor(t * 2.5) % 2 === 0;
       $('c-code').innerHTML = html + (caretOn ? '<span class="caret"></span>' : '');
-      ['c1', 'c2', 'c3', 'c4', 'c5'].forEach((id, i) => pop($(id), t, 16.75 + i * .18, .42, i % 2 ? 8 : -8));
+      ['c1', 'c2', 'c3', 'c4', 'c5'].forEach((id, i) => pop($(id), t, 22.25 + i * .25, .42, i % 2 ? 8 : -8));
 
       // D: end card
+      const drift = (i) => `translate(${Math.sin(t * .9 + i) * 10}px, ${Math.cos(t * .7 + i) * 10}px)`;
       ['d1', 'd2', 'd3', 'd4'].forEach((id, i) => {
-        const k = prog(t, peak(6) + .05 + i * .12, .5);
+        const k = prog(t, 24.05 + i * .12, .5);
         $(id).style.transform = `${drift(i + 2)} scale(${back(k)}) rotate(${t * 5 * (i % 2 ? -1 : 1)}deg)`;
       });
-      pop($('d-logo'), t, peak(6) + .15, .55, -6);
-      rise($('d-tag'), t, peak(6) + .55, .5);
-      pop($('d-url'), t, peak(6) + .95, .5, 4);
-      rise($('d-small'), t, peak(6) + 1.3, .5, 30);
-
-      // E: the soundtrack plug. These are the real equations from promo/soundtrack.song.js.
-      const E0 = peak(7);
-      rise($('e-kicker'), t, E0 + .1, .45, 40);
-      pop($('e-title'), t, E0 + .3, .55, -5);
-      rise($('e-board'), t, E0 + .55, .4, 40);
-      const lines = [
-        ['kick ', 'sin(TAU*(48*tau + 5.7*(1 - exp(-28*tau)))) * exp(-7*tau)'],
-        ['bass ', '(saw(f*tau) + sin(TAU*f*tau/2)) * exp(-3*tau)'],
-        ['pluck', '(sin(TAU*f*tau) + 0.3*sin(TAU*2*f*tau)) * exp(-9*tau)'],
-        ['hat  ', 'noise() * exp(-55*tau)'],
-      ];
-      const total = lines.reduce((n, [, eq]) => n + eq.length, 0);
-      let left = Math.round(clamp((t - (E0 + .65)) / 1.25) * total);
-      const board = $('e-board');
-      board.textContent = '';
-      for (const [name, eq] of lines) {
-        const shown = eq.slice(0, Math.max(0, left));
-        left -= eq.length;
-        const row = document.createElement('div');
-        const k = document.createElement('span');
-        k.className = 'k';
-        k.textContent = `${name} = `;
-        row.append(k);
-        // numbers in the second pigment, everything else in chalk
-        for (const part of shown.split(/(\d+\.?\d*)/)) {
-          const sp = document.createElement('span');
-          if (/^\d/.test(part)) sp.className = 'n';
-          sp.textContent = part;
-          row.append(sp);
-        }
-        row.style.visibility = shown || left > -eq.length ? 'visible' : 'hidden';
-        board.append(row);
-      }
-      pop($('e-made'), t, E0 + 1.95, .5, 3);
+      pop($('d-logo'), t, 24.15, .55, -6);
+      pop($('d-tag'), t, 24.6, .5, 5);
+      pop($('d-url'), t, 25.0, .5, 4);
+      rise($('d-small'), t, 25.4, .5, 30);
+      pop($('d-series'), t, 25.7, .45, -8);
     };
 
-    window.DURATION = 25.5;
+    window.DURATION = 29;
     // Load every medium's fonts up front so no frame renders a fallback.
     await Promise.all([
       '500 40px "Cormorant Garamond"', 'italic 500 40px "Cormorant Garamond"', '400 20px Nunito', '700 20px Nunito',

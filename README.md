@@ -1,6 +1,6 @@
-# art-medium
+# Splatform
 
-A UI component library where the components are made of art. Buttons, cards, inputs and nav bars are painted in a real medium instead of being flat rectangles.
+**Splat your site.** A UI component library where the components are made of art. Buttons, cards, inputs and nav bars are painted in a real medium instead of being flat rectangles.
 
 | Medium | Looks like |
 | --- | --- |
@@ -10,9 +10,11 @@ A UI component library where the components are made of art. Buttons, cards, inp
 | `paper` | Cut and torn construction-paper collage: fibrous torn edges, paper grain, soft layered shadows, washi tape on cards |
 | `marker` | Felt-tip scribbles: a few fat strokes in one back-and-forth zig-zag with rounded hairpin turns, translucent ink that darkens where it overlaps, streaky nibs; panels get a wobbly marker outline and a highlighter swipe |
 
-![art-medium demo](docs/screenshot.png)
+![Splatform demo](docs/screenshot.png)
 
 Components: **button, badge, card, input, divider, nav, modal, splash**, plus **canvas** (the page background). Every medium has a light and a dark theme.
+
+Splatform was called art-medium before v0.2.0. Only the name changed: the files (`src/art-medium.css`, `src/art-medium.js`), the `am-` class names and the `--am-*` tokens are the same, so existing markup keeps working.
 
 ## Try the demo
 
@@ -29,19 +31,21 @@ npm run demo   # then open http://localhost:8080/
 From the CDN (pinned to a release):
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ghanemja/art-asset@v0.1.0/src/art-medium.css">
-<script type="module" src="https://cdn.jsdelivr.net/gh/ghanemja/art-asset@v0.1.0/src/art-medium.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ghanemja/art-asset@v0.2.0/src/art-medium.css">
+<script type="module" src="https://cdn.jsdelivr.net/gh/ghanemja/art-asset@v0.2.0/src/art-medium.js"></script>
 ```
 
-Or from GitHub with npm:
+Or with npm:
 
 ```sh
-npm i github:ghanemja/art-asset#v0.1.0
+npm i @ghanemja/splatform
 ```
 
+(or straight from GitHub: `npm i github:ghanemja/art-asset#v0.2.0`)
+
 ```js
-import 'art-medium/css';
-import { setMedium, setTheme } from 'art-medium';
+import '@ghanemja/splatform/css';
+import { setMedium, setTheme } from '@ghanemja/splatform';
 ```
 
 ## Use it
@@ -83,7 +87,7 @@ The JS module is required. It injects the SVG filters that the CSS refers to (`f
 To switch at runtime:
 
 ```js
-import { setMedium } from 'art-medium';
+import { setMedium } from '@ghanemja/splatform';
 setMedium(document.documentElement, 'acrylic');
 ```
 
@@ -104,7 +108,7 @@ Acrylic comes in three styles, picked with `data-style` on the acrylic element o
 ```
 
 ```js
-import { setStyle, STYLES } from 'art-medium';
+import { setStyle, STYLES } from '@ghanemja/splatform';
 setStyle(document.documentElement, 'realism');
 ```
 
@@ -121,7 +125,7 @@ Charcoal and marker take `data-style` too, to pick the paper they're drawn on:
 | | `kraft` | Brown kraft paper with short fibers |
 | `marker` | `plain` (default) | Clean white paper |
 | | `notebook` | Ruled notebook paper with a red margin line |
-| | `parchment` | Warm aged parchment with soft mottling and darker edges |
+| | `parchment` | Embossed aged parchment with faintly scorched edges, inked in lapis, cinnabar and gold ochre with an iron-gall outline |
 
 ```html
 <body class="am-canvas" data-medium="marker" data-style="notebook">
@@ -134,7 +138,7 @@ Charcoal and marker take `data-style` too, to pick the paper they're drawn on:
 `data-theme="light" | "dark" | "auto"` works the same way: put it on `<html>` or on any section. `auto` follows the visitor's system setting. With no `data-theme`, everything is light, so adding the library never darkens a site that wasn't designed for it.
 
 ```js
-import { setTheme } from 'art-medium';
+import { setTheme } from '@ghanemja/splatform';
 setTheme(document.documentElement, 'dark');
 ```
 
@@ -155,8 +159,8 @@ In dark mode watercolor sits on indigo paper, acrylic on black gesso, charcoal b
 ### React
 
 ```jsx
-import 'art-medium/css';
-import { MediumProvider, Button, Card, Input, Badge, Divider, Nav, Modal, Splash } from 'art-medium/react';
+import '@ghanemja/splatform/css';
+import { MediumProvider, Button, Card, Input, Badge, Divider, Nav, Modal, Splash } from '@ghanemja/splatform/react';
 
 <MediumProvider medium="watercolor" theme="auto">
   <Nav brand="Studio" links={[{ href: '/', label: 'Work', current: true }]} />
