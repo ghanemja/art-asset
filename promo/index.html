@@ -530,16 +530,16 @@
       aim(bone.upperarmR, bone.lowerarmR, u);
       aim(bone.lowerarmR, bone.handR, f);
       aim(bone.handR, tip, h);
-      // the left arm holds the palette out in front, toward the camera
-      aim(bone.upperarmL, bone.lowerarmL, V(-.1, -1, .25));
-      aim(bone.lowerarmL, bone.handL, V(.25, -.15, 1));
+      // the left arm holds the palette out at her left side
+      aim(bone.upperarmL, bone.lowerarmL, V(-.35, -1, .05));
+      aim(bone.lowerarmL, bone.handL, V(-.55, -.05, .45));
       // lean into each flick a little
       const lean = t >= FLICKS[0] && t < 4.5 ? flickShape(((t - FLICKS[0]) % .5) / .5) * .03 : 0;
       bone.spine2.rotation.z = -lean;
       girl.updateMatrixWorld(true);
       bone.handL.getWorldPosition(palette.position);
       bone.handL.scale.setScalar(.01);   // the palette covers her left hand: fold it away so no fingers poke through
-      palette.position.add(V(-.2, -.3, .5));   // low on her left, in front of her fingers and clear of the brush arm
+      palette.position.add(V(-.25, -.1, .15));   // on her left, at the hand   // low on her left, in front of her fingers and clear of the brush arm
     }
     // Where the brush tip is on screen, in room pixels.
     function tipNow() {
