@@ -11,7 +11,7 @@ const out = process.argv[2] ?? 'promo-out';
 const stillsArg = process.argv.indexOf('--stills');
 const FPS = 30;
 
-const browser = await chromium.launch({ args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });   // WebGL for the 3D painter
+const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1080, height: 1080 } });
 page.on('pageerror', (e) => console.error('page error:', e.message));
 await page.goto('http://localhost:8765/promo/', { waitUntil: 'networkidle' });
