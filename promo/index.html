@@ -416,6 +416,23 @@
       o.geometry = geo;
     });
     scene3.add(girl);
+    // A thin dark outline (an "inverted hull": the mesh again, pushed out along
+    // its normals and drawn back faces only), so where her sleeve crosses her
+    // sweater, or her hair crosses her face, there's a line between them.
+    const OUTLINE = .035;
+    const hulls = [];
+    girl.traverse((o) => {
+      if (!o.isSkinnedMesh) return;
+      const m = new THREE.MeshBasicMaterial({ color: 0x24170f, side: THREE.BackSide });
+      m.onBeforeCompile = (sh) => {
+        sh.vertexShader = sh.vertexShader.replace('#include <begin_vertex>', `#include <begin_vertex>\n  transformed += normalize(objectNormal) * ${OUTLINE.toFixed(3)};`);
+      };
+      const hull = new THREE.SkinnedMesh(o.geometry, m);
+      hull.bind(o.skeleton, o.bindMatrix);
+      hull.frustumCulled = false;
+      hulls.push([o.parent, hull]);
+    });
+    for (const [parent, hull] of hulls) parent.add(hull);
     const bone = {};
     girl.traverse((o) => { if (o.isBone) bone[o.name] = o; });
 
