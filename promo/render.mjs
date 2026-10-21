@@ -1,10 +1,10 @@
 // Renders promo/index.html to an MP4, one frame at a time.
-// Usage: node promo/render.mjs <out-dir> [--stills t1,t2,...]
+// Usage: node promo/render.mjs <out-dir> [--stills t1,t2,...] [--resume]
 // Needs the repo served at http://localhost:8765 (python3 -m http.server 8765),
 // Playwright and ffmpeg with libx264. The soundtrack is promo/soundtrack.song.js.
 import { chromium } from 'playwright';
 import { execFileSync } from 'node:child_process';
-import { mkdirSync, rmSync } from 'node:fs';
+import { existsSync, mkdirSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 
 const out = process.argv[2] ?? 'promo-out';
@@ -19,7 +19,7 @@ await page.waitForFunction(() => window.ready === true, null, { timeout: 600000 
 
 const shoot = async (t, file) => {
   await page.evaluate((t) => window.at(t), t);
-  await page.screenshot({ path: file });
+  await page.screenshot({ path: file, timeout: 300000 });   // the zoom's frames are slow in software WebGL
 };
 
 if (stillsArg > 0) {
@@ -27,11 +27,13 @@ if (stillsArg > 0) {
   for (const t of process.argv[stillsArg + 1].split(',').map(Number)) await shoot(t, join(out, `still-${t}.png`));
 } else {
   const frames = join(out, 'frames');
-  rmSync(frames, { recursive: true, force: true });
+  if (!process.argv.includes('--resume')) rmSync(frames, { recursive: true, force: true });   // --resume keeps frames already rendered
   mkdirSync(frames, { recursive: true });
   const total = Math.round((await page.evaluate(() => window.DURATION)) * FPS);
   for (let i = 0; i < total; i++) {
-    await shoot(i / FPS, join(frames, `${String(i).padStart(5, '0')}.png`));
+    const file = join(frames, `${String(i).padStart(5, '0')}.png`);
+    if (existsSync(file)) continue;
+    await shoot(i / FPS, file);
     if (i % 60 === 0) console.log(`frame ${i}/${total}`);
   }
   execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-framerate', String(FPS), '-i', join(frames, '%05d.png'),
