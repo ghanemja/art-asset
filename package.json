@@ -24,6 +24,7 @@
     "demo": "python3 -m http.server 8080"
   },
   "keywords": ["splatform", "ui", "components", "watercolor", "acrylic", "charcoal", "paper", "collage", "marker", "design-system", "svg-filters"],
+  "author": "Janelle Ghanem",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
