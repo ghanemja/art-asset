@@ -598,13 +598,11 @@
       // after the last splat she settles to rest before the camera pushes in
       return FORWARD.map((v, i) => mixV(v, idle[i], inOut(prog(t, FLICKS[last] + .08, .4))));
     }
-    function painterBob(t) { return Math.sin(t * 2.4) * 1.5; }   // breathing only: the flick is in the arm, her feet stay planted
+    function painterBob(t) { return 0; }   // she stands still: only the brush arm moves, so the palette stays put
     function poseAt(t) {
       girl.position.y = -painterBob(t) * PX;
       girl.updateMatrixWorld(true);
       // lean into each flick a little
-      const lean = t >= FLICKS[0] && t < 4.5 ? flickShape(((t - FLICKS[0]) % .5) / .5) * .03 : 0;
-      bone.spine2.rotation.z = -lean;
       girl.updateMatrixWorld(true);
       // the left hand holds the palette out in front of her, at her waist on the left
       // her left arm stays close to how she was rigged (hanging at her side), with
