@@ -527,7 +527,9 @@
     });
     palette.rotation.set(Math.PI / 2 - .55, 0, -.25);           // tilted toward the camera
     scene3.add(palette);
-    const PALETTE_AT_HAND = new THREE.Vector3(-.62, .02, -.14);  // palette center from her left hand: she grips its near edge
+    // She faces the easel (FWD); her left side (LEFT) is the far side from the camera.
+    const FWD = new THREE.Vector3(.85, 0, .52), LEFT = new THREE.Vector3(.52, 0, -.85);
+    const PALETTE_AT_HAND = FWD.clone().multiplyScalar(.55).addScaledVector(LEFT, .12).add(new THREE.Vector3(0, -.04, .05));  // she grips its near edge
 
     // Aim a bone so it points at its child along a direction in world space
     // (x right, y up, z toward the camera).
@@ -551,8 +553,8 @@
     const L1 = bone.upperarmR.getWorldPosition(V(0, 0, 0)).distanceTo(bone.lowerarmR.getWorldPosition(V(0, 0, 0)));
     const L2 = bone.lowerarmR.getWorldPosition(V(0, 0, 0)).distanceTo(bone.handR.getWorldPosition(V(0, 0, 0)));
     const BRUSH_LEN = bone.handR.getWorldPosition(V(0, 0, 0)).distanceTo(tip.getWorldPosition(V(0, 0, 0)));
-    const APPROACH = V(.75, .38, .55).normalize();                  // the brush comes down into the paint from up, right and front
-    const POLE = V(.8, -1, .5);                                    // elbow out to her right and down
+    const APPROACH = V(-.7, .22, .68).normalize();                  // the brush comes down into the paint from in front of her chest
+    const POLE = V(-.2, -1, .3);                                    // elbow down, out to her right
     function dipPose(color) {
       const blob = blobs[color];
       const target = blob.getWorldPosition(V(0, 0, 0));
@@ -594,9 +596,9 @@
       const lean = t >= FLICKS[0] && t < 4.5 ? flickShape(((t - FLICKS[0]) % .5) / .5) * .03 : 0;
       bone.spine2.rotation.z = -lean;
       girl.updateMatrixWorld(true);
-      // the left arm holds the palette at her left side, gripping its near edge
-      aim(bone.upperarmL, bone.lowerarmL, V(-.35, -1, .05));
-      aim(bone.lowerarmL, bone.handL, V(-.55, -.05, .45));
+      // the left hand holds the palette out in front of her, at her waist on the left
+      aim(bone.upperarmL, bone.lowerarmL, V(.3, -.92, .2));
+      aim(bone.lowerarmL, bone.handL, FWD.clone().addScaledVector(LEFT, .15).add(V(0, .05, .1)));
       bone.handL.getWorldPosition(palette.position).add(PALETTE_AT_HAND);
       palette.updateMatrixWorld(true);
       const [u, f, h] = armPose(t);
