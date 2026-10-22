@@ -564,7 +564,7 @@
     const L2 = bone.lowerarmR.getWorldPosition(V(0, 0, 0)).distanceTo(bone.handR.getWorldPosition(V(0, 0, 0)));
     const BRUSH_LEN = bone.handR.getWorldPosition(V(0, 0, 0)).distanceTo(tip.getWorldPosition(V(0, 0, 0)));
     const APPROACH = V(-.45, .3, .85).normalize();                  // the brush comes down into the paint from in front of her chest
-    const POLE = V(-.2, -1, .3);                                    // elbow down, out to her right
+    const POLE = V(0, -.6, 1);                                    // elbow down, out to her right
     function dipPose(color) {
       const blob = blobs[color];
       const target = blob.getWorldPosition(V(0, 0, 0));
