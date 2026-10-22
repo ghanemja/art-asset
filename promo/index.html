@@ -423,6 +423,7 @@
       }
       col.needsUpdate = true;
       o.geometry = geo;
+      o.material.side = THREE.DoubleSide;   // gaps in the sweater show its inside, not the outline behind it
     });
     scene3.add(girl);
     // A thin dark outline (an "inverted hull": the mesh again, pushed out along
@@ -517,6 +518,10 @@
     const board = new THREE.Mesh(new THREE.CylinderGeometry(.85, .85, .07, 32), mat(0xd6ab72, .7));
     board.scale.set(1, 1, .72);
     palette.add(board);
+    const hole = new THREE.Mesh(new THREE.TorusGeometry(.11, .035, 8, 20), mat(0x9c7444, .8));
+    hole.rotation.x = Math.PI / 2;
+    hole.position.set(-.55, .04, -.25);   // thumb hole, at the edge she holds
+    palette.add(hole);
     const blobs = {};                                              // '#2f5fd0' -> the blob of that paint
     [[0x2f5fd0, .35, .2], [0xe2483d, -.1, .38], [0xf2b705, -.45, .1], [0xfbfaf6, .05, -.3]].forEach(([c, x, z]) => {
       const blob = new THREE.Mesh(new THREE.SphereGeometry(.16, 16, 10), mat(c, .3));
@@ -525,12 +530,12 @@
       palette.add(blob);
       blobs['#' + c.toString(16).padStart(6, '0')] = blob;
     });
-    palette.rotation.set(Math.PI / 2 - .55, 0, -.25);           // tilted toward the camera
+    palette.rotation.set(.45, -girl.rotation.y + Math.PI, 0);    // flat on her palm, tipped toward the camera, the thumb-hole end toward her
     scene3.add(palette);
     // She faces the easel (FWD); her left side (LEFT) is the far side from the camera.
     const FWD = new THREE.Vector3(Math.cos(girl.rotation.y), 0, -Math.sin(girl.rotation.y));
     const LEFT = new THREE.Vector3(-Math.sin(girl.rotation.y), 0, -Math.cos(girl.rotation.y));
-    const PALETTE_AT_HAND = new THREE.Vector3(.48, -.2, -.25);   // its rim in her fingers, just behind them  // she grips its near edge
+    const PALETTE_GRIP = new THREE.Vector3(-.55, 0, -.25);          // where her hand is, in the palette's own coordinates (the thumb hole)
 
     // Aim a bone so it points at its child along a direction in world space
     // (x right, y up, z toward the camera).
@@ -601,8 +606,12 @@
       // her left arm stays close to how she was rigged (hanging at her side), with
       // just a little bend: moving it further stretches her sweater with it
       aim(bone.upperarmL, bone.lowerarmL, V(0, -1, 0).addScaledVector(LEFT, .08));
-      aim(bone.lowerarmL, bone.handL, V(0, -1, 0).addScaledVector(FWD, .45).addScaledVector(LEFT, .12));
-      bone.handL.getWorldPosition(palette.position).add(PALETTE_AT_HAND);
+      // the forearm comes up and forward, palm up, carrying the palette flat
+      aim(bone.lowerarmL, bone.handL, FWD.clone().multiplyScalar(.9).add(V(0, -.25, 0)).addScaledVector(LEFT, .25));
+      aim(bone.handL, bone.lowerarmL, FWD.clone().multiplyScalar(-1).add(V(0, .3, 0)));   // wrist cocked up so the palm faces up
+      // the palette sits flat on her palm, thumb through the hole, tilted a little toward the camera
+      const hand = bone.handL.getWorldPosition(V(0, 0, 0));
+      palette.position.copy(hand).sub(PALETTE_GRIP.clone().applyEuler(palette.rotation)).add(V(0, .12, 0));
       palette.updateMatrixWorld(true);
       const [u, f, h] = armPose(t);
       aim(bone.upperarmR, bone.lowerarmR, u);
@@ -615,6 +624,21 @@
       return [BOX.x + (_a.x + 1) / 2 * BOX.w, BOX.y + (1 - _a.y) / 2 * BOX.h];
     }
     window.painter3d = { THREE, gl, scene3, cam3, girl, bone, poseAt };   // for close-up checks
+    // A sweater patch over the slit between the sweater's front and side panels
+    // at her right hip (the jeans showed through it). Placed on the camera ray
+    // through the slit, just in front of her body, and carried by her hips.
+    {
+      poseAt(0);
+      const ndc = new THREE.Vector3((295 - BOX.x) / BOX.w * 2 - 1, 1 - (552 - BOX.y) / BOX.h * 2, .5).unproject(cam3);
+      const dir = ndc.sub(cam3.position).normalize();
+      const hip = bone.hips.getWorldPosition(new THREE.Vector3());
+      const at = cam3.position.clone().addScaledVector(dir, hip.distanceTo(cam3.position) - .55);
+      const patch = new THREE.Mesh(new THREE.CircleGeometry(.2, 16), new THREE.MeshStandardMaterial({ color: '#2f2f34', roughness: .9 }));
+      patch.scale.set(.55, 1.2, 1);
+      patch.position.copy(bone.hips.worldToLocal(at));
+      patch.quaternion.copy(bone.hips.getWorldQuaternion(new THREE.Quaternion()).invert().multiply(cam3.quaternion));
+      bone.hips.add(patch);
+    }
     const launchTip = new Map();
     for (const ft of FLICKS) { poseAt(ft + .08); launchTip.set(ft, tipNow()); }
     function tipAt(t) { return launchTip.get(FLICKS.find((ft) => Math.abs(ft + .08 - t) < 1e-6)) ?? (poseAt(t), tipNow()); }
