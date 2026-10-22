@@ -511,7 +511,11 @@
     const tip = new THREE.Object3D();
     tip.position.y = 2.2;
     brush.add(handle, ferrule, bristles, tip);
-    brush.position.y = .15;
+    // through her fist (the hand mesh sits off the hand bone): in the bind pose
+    // the fist's center is at (-.215, -.8, .961) in model coordinates
+    girl.updateMatrixWorld(true);
+    const fist = bone.handR.worldToLocal(girl.localToWorld(new THREE.Vector3(-.215, -.8, .961)));
+    brush.position.set(fist.x, .15, fist.z);
     bone.handR.add(brush);
 
     const palette = new THREE.Group();
@@ -624,21 +628,6 @@
       return [BOX.x + (_a.x + 1) / 2 * BOX.w, BOX.y + (1 - _a.y) / 2 * BOX.h];
     }
     window.painter3d = { THREE, gl, scene3, cam3, girl, bone, poseAt };   // for close-up checks
-    // A sweater patch over the slit between the sweater's front and side panels
-    // at her right hip (the jeans showed through it). Placed on the camera ray
-    // through the slit, just in front of her body, and carried by her hips.
-    {
-      poseAt(0);
-      const ndc = new THREE.Vector3((295 - BOX.x) / BOX.w * 2 - 1, 1 - (552 - BOX.y) / BOX.h * 2, .5).unproject(cam3);
-      const dir = ndc.sub(cam3.position).normalize();
-      const hip = bone.hips.getWorldPosition(new THREE.Vector3());
-      const at = cam3.position.clone().addScaledVector(dir, hip.distanceTo(cam3.position) - .55);
-      const patch = new THREE.Mesh(new THREE.CircleGeometry(.2, 16), new THREE.MeshStandardMaterial({ color: '#2f2f34', roughness: .9 }));
-      patch.scale.set(.55, 1.2, 1);
-      patch.position.copy(bone.hips.worldToLocal(at));
-      patch.quaternion.copy(bone.hips.getWorldQuaternion(new THREE.Quaternion()).invert().multiply(cam3.quaternion));
-      bone.hips.add(patch);
-    }
     const launchTip = new Map();
     for (const ft of FLICKS) { poseAt(ft + .08); launchTip.set(ft, tipNow()); }
     function tipAt(t) { return launchTip.get(FLICKS.find((ft) => Math.abs(ft + .08 - t) < 1e-6)) ?? (poseAt(t), tipNow()); }
