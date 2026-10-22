@@ -501,21 +501,21 @@
     }
     const mat = (color, roughness = .6, metalness = 0) => new THREE.MeshStandardMaterial({ color, roughness, metalness });
     const brush = new THREE.Group();
-    const handle = new THREE.Mesh(new THREE.CylinderGeometry(.05, .075, 1.5, 14), mat(0xb07440, .45));
-    handle.position.y = .8;            // starts at her fist: nothing pokes back into the wrist
+    const handle = new THREE.Mesh(new THREE.CylinderGeometry(.05, .075, 1, 14), mat(0xb07440, .45));
+    handle.position.y = .55;           // starts at her fist: nothing pokes back into the wrist
     const ferrule = new THREE.Mesh(new THREE.CylinderGeometry(.08, .075, .22, 14), mat(0xc8ccd2, .25, .8));
-    ferrule.position.y = 1.65;
+    ferrule.position.y = 1.15;
     const bristleMat = mat(0x2f5fd0, .35);
     const bristles = new THREE.Mesh(new THREE.ConeGeometry(.09, .42, 14), bristleMat);
-    bristles.position.y = 1.97;
+    bristles.position.y = 1.47;
     const tip = new THREE.Object3D();
-    tip.position.y = 2.2;
+    tip.position.y = 1.7;
     brush.add(handle, ferrule, bristles, tip);
     // through her fist (the hand mesh sits off the hand bone): in the bind pose
     // the fist's center is at (-.215, -.8, .961) in model coordinates
     girl.updateMatrixWorld(true);
     const fist = bone.handR.worldToLocal(girl.localToWorld(new THREE.Vector3(-.215, -.8, .961)));
-    brush.position.set(fist.x, .15, fist.z);
+    brush.position.set(fist.x, fist.y - .2, fist.z);   // handle starts just behind her fist, nothing runs back up the sleeve
     bone.handR.add(brush);
 
     const palette = new THREE.Group();
