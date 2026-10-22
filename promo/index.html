@@ -599,7 +599,12 @@
       return FORWARD.map((v, i) => mixV(v, idle[i], inOut(prog(t, FLICKS[last] + .08, .4))));
     }
     function painterBob(t) { return 0; }   // she stands still: only the brush arm moves, so the palette stays put
+    // Every pose starts from the bind pose: aim() only sets where a bone points,
+    // not its twist, so posing from the previous frame let the twist drift
+    // (her palette wrist slowly spun).
+    const BIND = Object.values(bone).map((b) => [b, b.quaternion.clone()]);
     function poseAt(t) {
+      for (const [b, q] of BIND) b.quaternion.copy(q);
       girl.position.y = -painterBob(t) * PX;
       girl.updateMatrixWorld(true);
       // lean into each flick a little
