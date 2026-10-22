@@ -435,9 +435,9 @@
       const m = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.BackSide, vertexColors: true });
       const hair = new THREE.Color('#6e4529');   // linear, like the vertex colors
       m.onBeforeCompile = (sh) => {
-        sh.vertexShader = sh.vertexShader.replace('#include <begin_vertex>', `#include <begin_vertex>\n  transformed += normalize(objectNormal) * ${OUTLINE.toFixed(3)};`);
+        sh.vertexShader = sh.vertexShader.replace('#include <begin_vertex>', `#include <begin_vertex>\n  float isHair = step(distance(color.rgb, vec3(${hair.r.toFixed(4)}, ${hair.g.toFixed(4)}, ${hair.b.toFixed(4)})), .03);\n  transformed += normalize(objectNormal) * mix(${OUTLINE.toFixed(3)}, .018, isHair);`);
         sh.fragmentShader = sh.fragmentShader.replace('#include <color_fragment>',
-          `if (distance(vColor.rgb, vec3(${hair.r.toFixed(4)}, ${hair.g.toFixed(4)}, ${hair.b.toFixed(4)})) < .03) discard;\n  diffuseColor.rgb = vec3(.018, .009, .006);`);
+          `diffuseColor.rgb = vec3(.018, .009, .006);`);
       };
       const hull = new THREE.SkinnedMesh(o.geometry, m);
       hull.bind(o.skeleton, o.bindMatrix);
@@ -492,10 +492,10 @@
     // at the face), so the gaps between strands read as more hair, not as wall.
     {
       const at = (x, y, z) => bone.head.worldToLocal(girl.localToWorld(new THREE.Vector3(x, y, z)));
-      const geo = new THREE.SphereGeometry(.86, 32, 20, Math.PI + 1.15, 2 * Math.PI - 2.3, 0, 2.55);
+      const geo = new THREE.SphereGeometry(.78, 32, 20, Math.PI + 1.55, 2 * Math.PI - 3.1, .75, 1.85);   // open at the face, starting below the beret
       const mass = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ color: '#5a3820', roughness: .85, side: THREE.DoubleSide }));
       mass.scale.set(1, 1.08, 1.12);
-      mass.position.copy(at(-.2, 3.32, .02));
+      mass.position.copy(at(-.32, 3.3, .02));
       bone.head.add(mass);
     }
     const mat = (color, roughness = .6, metalness = 0) => new THREE.MeshStandardMaterial({ color, roughness, metalness });
@@ -597,7 +597,7 @@
       bone.spine2.rotation.z = -lean;
       girl.updateMatrixWorld(true);
       // the left hand holds the palette out in front of her, at her waist on the left
-      aim(bone.upperarmL, bone.lowerarmL, V(.3, -.92, .2));
+      aim(bone.upperarmL, bone.lowerarmL, V(.05, -1, -.08));   // upper arm hangs at her side, so the sleeve doesn't drag the sweater forward
       aim(bone.lowerarmL, bone.handL, FWD.clone().addScaledVector(LEFT, .15).add(V(0, .05, .1)));
       bone.handL.getWorldPosition(palette.position).add(PALETTE_AT_HAND);
       palette.updateMatrixWorld(true);
